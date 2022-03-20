@@ -124,7 +124,7 @@ public class GUI {
                 pHEntranceHallPanel,
                 pHCashierPanel
         }) {
-            panel.setBorder(new SoftBevelBorder(1));
+            panel.setBorder(new SoftBevelBorder(0));
         }
         ImageIcon imageIcon = new ImageIcon("resources/user32.png");
         for (JLabel seat: new JLabel[] {
@@ -148,7 +148,7 @@ public class GUI {
                 pHEHSeat1Label,
                 pHCSeatLabel
         }) {
-            seat.setBorder(new CompoundBorder(new EmptyBorder(2,2,2,2), new SoftBevelBorder(0)));
+            seat.setBorder(new CompoundBorder(new EmptyBorder(2,2,2,2), new SoftBevelBorder(1)));
             seat.setMinimumSize(new Dimension(48, 48));
             seat.setMaximumSize(new Dimension(48, 48));
             seat.setPreferredSize(new Dimension(48, 48));
@@ -170,7 +170,7 @@ public class GUI {
                 mHCR1SeatLabel,
                 mHCR2SeatLabel
         }) {
-            seat.setBorder(new CompoundBorder(new EmptyBorder(2,2,2,2), new SoftBevelBorder(0)));
+            seat.setBorder(new CompoundBorder(new EmptyBorder(2,2,2,2), new SoftBevelBorder(1)));
             seat.setMinimumSize(new Dimension(40, 40));
             seat.setMaximumSize(new Dimension(40, 40));
             seat.setPreferredSize(new Dimension(40, 40));
