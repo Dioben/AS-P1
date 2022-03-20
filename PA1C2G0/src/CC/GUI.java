@@ -1,6 +1,7 @@
 package CC;
 
 import javax.swing.*;
+import javax.swing.UIManager.LookAndFeelInfo;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -56,7 +57,29 @@ public class GUI {
         });
     }
 
-    public JPanel getMainPanel() {
-        return mainPanel;
+    public void start() {
+        JFrame frame = new JFrame("CCP");
+        frame.setContentPane(this.mainPanel);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setMinimumSize(new Dimension(380, 310));
+        frame.setPreferredSize(new Dimension(400, 310));
+        frame.pack();
+        frame.setVisible(true);
+    }
+
+    public static void setGUILook(String wantedLook) {
+        LookAndFeelInfo[] looks = UIManager.getInstalledLookAndFeels();
+        String chosenLook = null;
+        for (LookAndFeelInfo look: looks)
+            if (wantedLook.equals(look.getName()))
+                chosenLook = look.getClassName();
+        if (chosenLook == null)
+            chosenLook = UIManager.getSystemLookAndFeelClassName();
+        try {
+            UIManager.setLookAndFeel(chosenLook);
+            JFrame.setDefaultLookAndFeelDecorated(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
