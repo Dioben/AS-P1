@@ -7,17 +7,19 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-public class TCommsClient extends Thread{
+public class TCommsClient extends Thread {
 
-    private Socket comms;
     PrintWriter out;
     BufferedReader in;
     String host;
     int port;
-    TCommsClient(String host, int port){
+    private Socket comms;
+
+    TCommsClient(String host, int port) {
         this.host = host;
         this.port = port;
     }
+
     @Override
     public void run() {
         try {
@@ -50,40 +52,44 @@ public class TCommsClient extends Thread{
         }
     }
 
-    public void start(int adults, int children, int seats, String evalTime, String medicTime, String payTime, String getUpTime) {
-        String msg = "START "+
-                adults + " "+
-                children+ " "+
-                seats+ " "+
-                evalTime+ " "+
-                medicTime+ " "+
-                payTime+ " "+
+    public void startSim(int adults, int children, int seats, String evalTime, String medicTime, String payTime, String getUpTime) {
+        String msg = "START " +
+                adults + " " +
+                children + " " +
+                seats + " " +
+                evalTime + " " +
+                medicTime + " " +
+                payTime + " " +
                 getUpTime;
         out.println(msg);
     }
-    public void progress(){
+
+    public void resumeSim() {
         out.println("RESUME");
     }
-    public void pause(){
+
+    public void pauseSim() {
         out.println("SUSPEND");
     }
-    public void cleanUp(){
+
+    public void stopSim() {
         out.println("STOP");
     }
-    public void end(){
+
+    public void endSim() {
         out.println("END");
         System.exit(0);
     }
 
-    public void SwapAuto(){
+    public void SwapAuto() {
         out.println("SWAP AUTO");
     }
 
-    public void SwapManual(){
+    public void SwapManual() {
         out.println("SWAP MANUAL");
     }
 
-    public void authorize(int id, String to){
-        out.println("AUTH "+id+" "+to);
+    public void authorize(int id, String to) {
+        out.println("AUTH " + id + " " + to);
     }
 }

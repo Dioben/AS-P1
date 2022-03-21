@@ -1,12 +1,8 @@
 package HC;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
-import java.util.Objects;
 
 public class GUI {
     private JPanel mainPanel;
@@ -71,7 +67,24 @@ public class GUI {
     private JLabel pHEHSeat1Label;
     private JLabel pHCSeatLabel;
 
-    public GUI() {}
+    public GUI() {
+    }
+
+    public static void setGUILook(String wantedLook) {
+        UIManager.LookAndFeelInfo[] looks = UIManager.getInstalledLookAndFeels();
+        String chosenLook = null;
+        for (UIManager.LookAndFeelInfo look : looks)
+            if (wantedLook.equals(look.getName()))
+                chosenLook = look.getClassName();
+        if (chosenLook == null)
+            chosenLook = UIManager.getSystemLookAndFeelClassName();
+        try {
+            UIManager.setLookAndFeel(chosenLook);
+            JFrame.setDefaultLookAndFeelDecorated(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public void start() {
         addExtraStyle();
@@ -88,7 +101,7 @@ public class GUI {
     private void addExtraStyle() {
         inLabel.setBorder(new EmptyBorder(new Insets(0, 5, 0, 5)));
         outLabel.setBorder(new EmptyBorder(new Insets(0, 5, 0, 5)));
-        for (JLabel line: new JLabel[] {
+        for (JLabel line : new JLabel[]{
                 inLine,
                 outLine,
                 midLine1,
@@ -98,7 +111,7 @@ public class GUI {
         }) {
             line.setBorder(new LineBorder(line.getForeground(), 1));
         }
-        for (JPanel panel: new JPanel[] {
+        for (JPanel panel : new JPanel[]{
                 entranceHallPanel,
                 evaluationHallPanel,
                 waitingHallPanel,
@@ -107,7 +120,7 @@ public class GUI {
         }) {
             panel.setBorder(new MatteBorder(0, 1, 0, 1, panel.getForeground()));
         }
-        for (JPanel panel: new JPanel[]{
+        for (JPanel panel : new JPanel[]{
                 enHAdultRoomPanel,
                 enHChildRoomPanel,
                 evHRoom1Panel,
@@ -127,7 +140,7 @@ public class GUI {
             panel.setBorder(new SoftBevelBorder(0));
         }
         ImageIcon imageIcon = new ImageIcon("resources/user32.png");
-        for (JLabel seat: new JLabel[] {
+        for (JLabel seat : new JLabel[]{
                 enHARSeat1Label,
                 enHARSeat2Label,
                 enHARSeat3Label,
@@ -148,14 +161,14 @@ public class GUI {
                 pHEHSeat1Label,
                 pHCSeatLabel
         }) {
-            seat.setBorder(new CompoundBorder(new EmptyBorder(2,2,2,2), new SoftBevelBorder(1)));
+            seat.setBorder(new CompoundBorder(new EmptyBorder(2, 2, 2, 2), new SoftBevelBorder(1)));
             seat.setMinimumSize(new Dimension(48, 48));
             seat.setMaximumSize(new Dimension(48, 48));
             seat.setPreferredSize(new Dimension(48, 48));
             seat.setIcon(imageIcon);
         }
         imageIcon = new ImageIcon("resources/user24.png");
-        for (JLabel seat: new JLabel[] {
+        for (JLabel seat : new JLabel[]{
                 enHCRSeat1Label,
                 enHCRSeat2Label,
                 enHCRSeat3Label,
@@ -170,27 +183,11 @@ public class GUI {
                 mHCR1SeatLabel,
                 mHCR2SeatLabel
         }) {
-            seat.setBorder(new CompoundBorder(new EmptyBorder(2,2,2,2), new SoftBevelBorder(1)));
+            seat.setBorder(new CompoundBorder(new EmptyBorder(2, 2, 2, 2), new SoftBevelBorder(1)));
             seat.setMinimumSize(new Dimension(40, 40));
             seat.setMaximumSize(new Dimension(40, 40));
             seat.setPreferredSize(new Dimension(40, 40));
             seat.setIcon(imageIcon);
-        }
-    }
-
-    public static void setGUILook(String wantedLook) {
-        UIManager.LookAndFeelInfo[] looks = UIManager.getInstalledLookAndFeels();
-        String chosenLook = null;
-        for (UIManager.LookAndFeelInfo look: looks)
-            if (wantedLook.equals(look.getName()))
-                chosenLook = look.getClassName();
-        if (chosenLook == null)
-            chosenLook = UIManager.getSystemLookAndFeelClassName();
-        try {
-            UIManager.setLookAndFeel(chosenLook);
-            JFrame.setDefaultLookAndFeelDecorated(true);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }

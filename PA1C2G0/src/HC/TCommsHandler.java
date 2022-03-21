@@ -8,17 +8,18 @@ import java.net.Socket;
 import java.util.UUID;
 
 
-public class TCommsHandler extends Thread{
+public class TCommsHandler extends Thread {
 
-    private Socket comms;
-    private String instanceName;
+    private final Socket comms;
+    private final String instanceName;
     private PrintWriter out;
     private BufferedReader in;
     private String mode = "AUTO";
 
     //TODO: this object class is functionally empty
     private HCInstance instance;
-    public TCommsHandler(Socket accept){
+
+    public TCommsHandler(Socket accept) {
         comms = accept;
         instanceName = UUID.randomUUID().toString();
 
@@ -32,39 +33,41 @@ public class TCommsHandler extends Thread{
 
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
+                System.out.println(inputLine);
                 String[] command = inputLine.split(" ");
-                switch (command[0]){
+                switch (command[0]) {
                     case "START":
                         startInstance(command);
                         break;
                     case "RESUME":
-                        if (instance!=null)
-                           instance.progress();
+                        if (instance != null)
+                            instance.progress();
                         break;
                     case "SUSPEND":
-                        if (instance!=null)
+                        if (instance != null)
                             instance.pause();
                         break;
                     case "STOP":
-                        if (instance!=null)
+                        if (instance != null)
                             instance.cleanUp();
                         instance = null;
                         break;
                     case "END":
-                        if (instance!=null)
+                        if (instance != null)
                             instance.cleanUp(); //probably not strictly necessary
                         System.exit(0);
                     case "SWAP":
                         mode = command[1];
-                        if (instance!=null)
+                        if (instance != null)
                             instance.setControls(mode);
                         break;
                     case "AUTH":
                         int patientID = Integer.parseInt(command[1]);
                         String destination = command[2];
-                        instance.permitMovement(patientID,destination);
+                        instance.permitMovement(patientID, destination);
                         break;
-                    default: break;
+                    default:
+                        break;
                 }
             }
 
@@ -86,14 +89,15 @@ public class TCommsHandler extends Thread{
         String payTime = command[6];
         String getUpTime = command[7];
         //consider using a Builder here?
-        instance = new HCInstance(adults,children,seats,evalTime,medicTime,payTime,getUpTime);
+        instance = new HCInstance(adults, children, seats, evalTime, medicTime, payTime, getUpTime);
     }
 
-    public void requestPermission(int patientID, String from, String to){
+    public void requestPermission(int patientID, String from, String to) {
         //TODO: MAYBE ADD MORE PATIENT INFO, NAMELY ARMBAND COLOR? -> should probably be in notifyMovement?
-        out.println("REQ "+patientID+ " "+ from + " "+ to);
+        out.println("REQ " + patientID + " " + from + " " + to);
     }
-    public void notifyMovement(int patientID, String from, String to){
+
+    public void notifyMovement(int patientID, String from, String to) {
         //TODO: DETERMINE WHETHER THIS WILL BE NECESSARY
     }
 }
