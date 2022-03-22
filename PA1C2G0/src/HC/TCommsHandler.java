@@ -30,6 +30,7 @@ public class TCommsHandler extends Thread{
             out = new PrintWriter(comms.getOutputStream(), true);
             in = new BufferedReader(
                     new InputStreamReader(comms.getInputStream()));
+            logger = new HCPLogger(instanceName);
 
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
