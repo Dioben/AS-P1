@@ -10,6 +10,7 @@ import java.util.UUID;
 
 public class TCommsHandler extends Thread{
 
+    private HCPLogger logger;
     private Socket comms;
     private String instanceName;
     private PrintWriter out;

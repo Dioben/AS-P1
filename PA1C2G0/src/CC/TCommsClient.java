@@ -10,10 +10,10 @@ import java.net.UnknownHostException;
 public class TCommsClient extends Thread{
 
     private Socket comms;
-    PrintWriter out;
-    BufferedReader in;
-    String host;
-    int port;
+    private PrintWriter out;
+    private BufferedReader in;
+    private String host;
+    private int port;
     TCommsClient(String host, int port){
         this.host = host;
         this.port = port;
