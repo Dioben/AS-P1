@@ -65,7 +65,14 @@ public class GUI {
     private JLabel mHAR1SeatLabel;
     private JLabel mHAR2SeatLabel;
     private JLabel pHEHSeat1Label;
+    private JLayeredPane testLayered;
     private JLabel pHCSeatLabel;
+
+    private enum SeverityColor {
+        BLUE,
+        YELLOW,
+        RED
+    }
 
     public GUI() {
     }
@@ -158,8 +165,7 @@ public class GUI {
                 mHWRAdultSeatLabel,
                 mHAR1SeatLabel,
                 mHAR2SeatLabel,
-                pHEHSeat1Label,
-                pHCSeatLabel
+                pHEHSeat1Label
         }) {
             seat.setBorder(new CompoundBorder(new EmptyBorder(2, 2, 2, 2), new SoftBevelBorder(1)));
             seat.setMinimumSize(new Dimension(48, 48));
@@ -189,5 +195,43 @@ public class GUI {
             seat.setPreferredSize(new Dimension(40, 40));
             seat.setIcon(imageIcon);
         }
+    }
+
+    private void createUIComponents() {
+        ImageIcon imageIcon = new ImageIcon("resources/user32.png");
+        testLayered = new JLayeredPane();
+        testLayered.setMinimumSize(new Dimension(48, 48));
+        testLayered.setMaximumSize(new Dimension(48, 48));
+        testLayered.setPreferredSize(new Dimension(48, 48));
+        testLayered.setBorder(new CompoundBorder(new EmptyBorder(2, 2, 2, 2), new SoftBevelBorder(1)));
+//        testLayered.setBackground(Color.GRAY);
+//        testLayered.setOpaque(true);
+        addIcon(testLayered, false, SeverityColor.YELLOW, "50");
+    }
+
+    private void addIcon(JLayeredPane seat, boolean isChild, SeverityColor severityColor, String id) {
+        String imagePath;
+        switch (severityColor) {
+            case BLUE -> imagePath = isChild ? "resources/user24blue.png" : "resources/user32blue.png";
+            case YELLOW -> imagePath = isChild ? "resources/user24yellow.png" : "resources/user32yellow.png";
+            case RED -> imagePath = isChild ? "resources/user24red.png" : "resources/user32red.png";
+            default -> imagePath = isChild ? "resources/user24.png" : "resources/user32.png";
+        }
+        ImageIcon imageIcon = new ImageIcon(imagePath);
+        JLabel iconLabel = new JLabel(imageIcon);
+        int seatWidth = seat.getPreferredSize().width;
+        int seatHeight = seat.getPreferredSize().height;
+        int iconWidth = iconLabel.getIcon().getIconWidth();
+        int iconHeight = iconLabel.getIcon().getIconHeight();
+        iconLabel.setBounds(seatWidth/2-iconWidth/2, seatHeight/2-iconHeight/2, iconWidth, iconHeight);
+        seat.add(iconLabel, 1);
+
+        JLabel idLabel = new JLabel(id);
+        idLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        Font oldFont = idLabel.getFont();
+        idLabel.setFont(new Font(oldFont.getName(), Font.BOLD, iconHeight/2 - (isChild ? 2 : 4)));
+        idLabel.setForeground(Color.BLACK);
+        idLabel.setBounds(0, seatHeight/2 + (isChild ? 1 : 2), seatWidth, iconHeight/2 - (isChild ? 2 : 4));
+        seat.add(idLabel, 0);
     }
 }

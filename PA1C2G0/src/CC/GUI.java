@@ -2,6 +2,7 @@ package CC;
 
 import javax.swing.*;
 import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -22,10 +23,10 @@ public class GUI {
     private JSpinner adultPatientsSpinner;
     private JSpinner childrenPatientsSpinner;
     private JSpinner seatsSpinner;
-    private JComboBox moveTimeSpinner;
+    private JComboBox moveTimeComboBox;
     private JComboBox evaluationTimeComboBox;
     private JComboBox appointmentTimeSpinner;
-    private JComboBox paymentTimeSpinner;
+    private JComboBox paymentTimeComboBox;
     private JButton cancelFormButton;
     private JButton startFormButton;
 
@@ -38,6 +39,10 @@ public class GUI {
         resumeButton.setEnabled(false);
         stopButton.setEnabled(false);
         allowPatientButton.setEnabled(false);
+
+        if (UIManager.getLookAndFeel().getName().equals("GTK look and feel"))
+            for (JSpinner spinner : new JSpinner[] {adultPatientsSpinner, childrenPatientsSpinner, seatsSpinner})
+                spinner.setBorder(new LineBorder(new Color(39, 39, 39), 1, true));
 
         startButton.addActionListener(new ActionListener() {
             @Override

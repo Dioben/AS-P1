@@ -171,7 +171,8 @@
                     <properties>
                       <horizontalAlignment value="0"/>
                       <horizontalTextPosition value="0"/>
-                      <text value=""/>
+                      <text value="A"/>
+                      <verticalTextPosition value="0"/>
                     </properties>
                   </component>
                   <component id="29b84" class="javax.swing.JLabel" binding="enHARSeat2Label">
@@ -1023,17 +1024,15 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="4fe56" class="javax.swing.JLabel" binding="pHCSeatLabel">
+                  <grid id="9938f" class="javax.swing.JLayeredPane" binding="testLayered" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
-                    <properties>
-                      <horizontalAlignment value="0"/>
-                      <horizontalTextPosition value="0"/>
-                      <text value=""/>
-                    </properties>
-                  </component>
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
                 </children>
               </grid>
             </children>
