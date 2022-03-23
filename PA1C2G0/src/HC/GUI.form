@@ -155,7 +155,7 @@
                   <gridbag weightx="0.0" weighty="0.0"/>
                 </constraints>
               </hspacer>
-              <grid id="154ce" layout-manager="GridBagLayout">
+              <grid id="82d4b" layout-manager="GridBagLayout">
                 <constraints>
                   <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                   <gridbag weightx="0.0" weighty="0.0"/>
@@ -163,62 +163,51 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="3193" class="javax.swing.JLabel" binding="enHARSeat1Label">
+                  <grid id="f1f95" class="javax.swing.JLayeredPane" binding="enHARSeat1" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
-                    <properties>
-                      <horizontalAlignment value="0"/>
-                      <horizontalTextPosition value="0"/>
-                      <text value="A"/>
-                      <verticalTextPosition value="0"/>
-                    </properties>
-                  </component>
-                  <component id="29b84" class="javax.swing.JLabel" binding="enHARSeat2Label">
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
+                  <grid id="bc7b0" class="javax.swing.JLayeredPane" binding="enHARSeat2" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
-                    <properties>
-                      <horizontalAlignment value="0"/>
-                      <horizontalTextPosition value="0"/>
-                      <text value=""/>
-                    </properties>
-                  </component>
-                  <component id="9cef9" class="javax.swing.JLabel" binding="enHARSeat3Label">
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
+                  <grid id="f477a" class="javax.swing.JLayeredPane" binding="enHARSeat3" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
-                    <properties>
-                      <horizontalAlignment value="0"/>
-                      <horizontalTextPosition value="0"/>
-                      <text value=""/>
-                    </properties>
-                  </component>
-                  <component id="3e918" class="javax.swing.JLabel" binding="enHARSeat4Label">
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
+                  <grid id="387d5" class="javax.swing.JLayeredPane" binding="enHARSeat4" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
-                    <properties>
-                      <horizontalAlignment value="0"/>
-                      <horizontalTextPosition value="0"/>
-                      <text value=""/>
-                    </properties>
-                  </component>
-                  <component id="b6a12" class="javax.swing.JLabel" binding="enHARSeat5Label">
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
+                  <grid id="7d4fa" class="javax.swing.JLayeredPane" binding="enHARSeat5" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
-                    <properties>
-                      <horizontalAlignment value="0"/>
-                      <horizontalTextPosition value="0"/>
-                      <text value=""/>
-                    </properties>
-                  </component>
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
                 </children>
               </grid>
             </children>
@@ -264,7 +253,7 @@
                   <gridbag weightx="0.0" weighty="0.0"/>
                 </constraints>
               </hspacer>
-              <grid id="4bc15" layout-manager="GridBagLayout">
+              <grid id="16096" layout-manager="GridBagLayout">
                 <constraints>
                   <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                   <gridbag weightx="0.0" weighty="0.0"/>
@@ -272,61 +261,51 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="7a93e" class="javax.swing.JLabel" binding="enHCRSeat1Label">
+                  <grid id="d7c0d" class="javax.swing.JLayeredPane" binding="enHCRSeat1" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
-                    <properties>
-                      <horizontalAlignment value="0"/>
-                      <horizontalTextPosition value="0"/>
-                      <text value=""/>
-                    </properties>
-                  </component>
-                  <component id="b556a" class="javax.swing.JLabel" binding="enHCRSeat2Label">
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
+                  <grid id="c7d8d" class="javax.swing.JLayeredPane" binding="enHCRSeat2" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
-                    <properties>
-                      <horizontalAlignment value="0"/>
-                      <horizontalTextPosition value="0"/>
-                      <text value=""/>
-                    </properties>
-                  </component>
-                  <component id="d1741" class="javax.swing.JLabel" binding="enHCRSeat3Label">
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
+                  <grid id="befde" class="javax.swing.JLayeredPane" binding="enHCRSeat3" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
-                    <properties>
-                      <horizontalAlignment value="0"/>
-                      <horizontalTextPosition value="0"/>
-                      <text value=""/>
-                    </properties>
-                  </component>
-                  <component id="d1427" class="javax.swing.JLabel" binding="enHCRSeat4Label">
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
+                  <grid id="4d028" class="javax.swing.JLayeredPane" binding="enHCRSeat4" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
-                    <properties>
-                      <horizontalAlignment value="0"/>
-                      <horizontalTextPosition value="0"/>
-                      <text value=""/>
-                    </properties>
-                  </component>
-                  <component id="b0e57" class="javax.swing.JLabel" binding="enHCRSeat5Label">
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
+                  <grid id="8092b" class="javax.swing.JLayeredPane" binding="enHCRSeat5" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
-                    <properties>
-                      <horizontalAlignment value="0"/>
-                      <horizontalTextPosition value="0"/>
-                      <text value=""/>
-                    </properties>
-                  </component>
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
                 </children>
               </grid>
             </children>
@@ -402,7 +381,7 @@
                   <gridbag weightx="0.0" weighty="0.0"/>
                 </constraints>
               </hspacer>
-              <grid id="42140" layout-manager="GridBagLayout">
+              <grid id="537dc" layout-manager="GridBagLayout">
                 <constraints>
                   <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                   <gridbag weightx="0.0" weighty="0.0"/>
@@ -410,17 +389,15 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="c734f" class="javax.swing.JLabel" binding="evHR1SeatLabel">
+                  <grid id="b0fa3" class="javax.swing.JLayeredPane" binding="evHR1Seat" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
-                    <properties>
-                      <horizontalAlignment value="0"/>
-                      <horizontalTextPosition value="0"/>
-                      <text value=""/>
-                    </properties>
-                  </component>
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
                 </children>
               </grid>
             </children>
@@ -466,7 +443,7 @@
                   <gridbag weightx="0.0" weighty="0.0"/>
                 </constraints>
               </hspacer>
-              <grid id="bf8c" layout-manager="GridBagLayout">
+              <grid id="53d9b" layout-manager="GridBagLayout">
                 <constraints>
                   <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                   <gridbag weightx="0.0" weighty="0.0"/>
@@ -474,17 +451,15 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="49a6b" class="javax.swing.JLabel" binding="evHR2SeatLabel">
+                  <grid id="2ef8d" class="javax.swing.JLayeredPane" binding="evHR2Seat" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
-                    <properties>
-                      <horizontalAlignment value="0"/>
-                      <horizontalTextPosition value="0"/>
-                      <text value=""/>
-                    </properties>
-                  </component>
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
                 </children>
               </grid>
             </children>
@@ -530,7 +505,7 @@
                   <gridbag weightx="0.0" weighty="0.0"/>
                 </constraints>
               </hspacer>
-              <grid id="b21c3" layout-manager="GridBagLayout">
+              <grid id="3d03a" layout-manager="GridBagLayout">
                 <constraints>
                   <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                   <gridbag weightx="0.0" weighty="0.0"/>
@@ -538,17 +513,15 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="ce8f6" class="javax.swing.JLabel" binding="evHR3SeatLabel">
+                  <grid id="ea0a6" class="javax.swing.JLayeredPane" binding="evHR3Seat" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
-                    <properties>
-                      <horizontalAlignment value="0"/>
-                      <horizontalTextPosition value="0"/>
-                      <text value=""/>
-                    </properties>
-                  </component>
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
                 </children>
               </grid>
             </children>
@@ -594,7 +567,7 @@
                   <gridbag weightx="0.0" weighty="0.0"/>
                 </constraints>
               </hspacer>
-              <grid id="2f65d" layout-manager="GridBagLayout">
+              <grid id="e53c8" layout-manager="GridBagLayout">
                 <constraints>
                   <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                   <gridbag weightx="0.0" weighty="0.0"/>
@@ -602,17 +575,15 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="28b4f" class="javax.swing.JLabel" binding="evHR4SeatLabel">
+                  <grid id="bce23" class="javax.swing.JLayeredPane" binding="evHR4Seat" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
-                    <properties>
-                      <horizontalAlignment value="0"/>
-                      <horizontalTextPosition value="0"/>
-                      <text value=""/>
-                    </properties>
-                  </component>
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
                 </children>
               </grid>
             </children>
@@ -688,7 +659,7 @@
                   <gridbag weightx="0.0" weighty="0.0"/>
                 </constraints>
               </hspacer>
-              <grid id="600de" layout-manager="GridBagLayout">
+              <grid id="68791" layout-manager="GridBagLayout">
                 <constraints>
                   <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                   <gridbag weightx="0.0" weighty="0.0"/>
@@ -696,61 +667,51 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="a359a" class="javax.swing.JLabel" binding="wHARSeat1Label">
+                  <grid id="e6be0" class="javax.swing.JLayeredPane" binding="wHARSeat1" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
-                    <properties>
-                      <horizontalAlignment value="0"/>
-                      <horizontalTextPosition value="0"/>
-                      <text value=""/>
-                    </properties>
-                  </component>
-                  <component id="f744" class="javax.swing.JLabel" binding="wHARSeat2Label">
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
+                  <grid id="2cf5b" class="javax.swing.JLayeredPane" binding="wHARSeat2" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
-                    <properties>
-                      <horizontalAlignment value="0"/>
-                      <horizontalTextPosition value="0"/>
-                      <text value=""/>
-                    </properties>
-                  </component>
-                  <component id="f06e3" class="javax.swing.JLabel" binding="wHARSeat3Label">
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
+                  <grid id="9d385" class="javax.swing.JLayeredPane" binding="wHARSeat3" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
-                    <properties>
-                      <horizontalAlignment value="0"/>
-                      <horizontalTextPosition value="0"/>
-                      <text value=""/>
-                    </properties>
-                  </component>
-                  <component id="9ffad" class="javax.swing.JLabel" binding="wHARSeat4Label">
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
+                  <grid id="3ad10" class="javax.swing.JLayeredPane" binding="wHARSeat4" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
-                    <properties>
-                      <horizontalAlignment value="0"/>
-                      <horizontalTextPosition value="0"/>
-                      <text value=""/>
-                    </properties>
-                  </component>
-                  <component id="f325c" class="javax.swing.JLabel" binding="wHARSeat5Label">
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
+                  <grid id="35eb4" class="javax.swing.JLayeredPane" binding="wHARSeat5" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
-                    <properties>
-                      <horizontalAlignment value="0"/>
-                      <horizontalTextPosition value="0"/>
-                      <text value=""/>
-                    </properties>
-                  </component>
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
                 </children>
               </grid>
             </children>
@@ -796,7 +757,7 @@
                   <gridbag weightx="0.0" weighty="0.0"/>
                 </constraints>
               </hspacer>
-              <grid id="303a6" layout-manager="GridBagLayout">
+              <grid id="8962" layout-manager="GridBagLayout">
                 <constraints>
                   <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                   <gridbag weightx="0.0" weighty="0.0"/>
@@ -804,61 +765,51 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="ee8a5" class="javax.swing.JLabel" binding="wHCRSeat1Label">
+                  <grid id="a085a" class="javax.swing.JLayeredPane" binding="wHCRSeat1" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
-                    <properties>
-                      <horizontalAlignment value="0"/>
-                      <horizontalTextPosition value="0"/>
-                      <text value=""/>
-                    </properties>
-                  </component>
-                  <component id="7d3a3" class="javax.swing.JLabel" binding="wHCRSeat2Label">
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
+                  <grid id="c4bca" class="javax.swing.JLayeredPane" binding="wHCRSeat2" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
-                    <properties>
-                      <horizontalAlignment value="0"/>
-                      <horizontalTextPosition value="0"/>
-                      <text value=""/>
-                    </properties>
-                  </component>
-                  <component id="ae2c1" class="javax.swing.JLabel" binding="wHCRSeat3Label">
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
+                  <grid id="9c4a9" class="javax.swing.JLayeredPane" binding="wHCRSeat3" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
-                    <properties>
-                      <horizontalAlignment value="0"/>
-                      <horizontalTextPosition value="0"/>
-                      <text value=""/>
-                    </properties>
-                  </component>
-                  <component id="d3bb1" class="javax.swing.JLabel" binding="wHCRSeat4Label">
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
+                  <grid id="476ac" class="javax.swing.JLayeredPane" binding="wHCRSeat4" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
-                    <properties>
-                      <horizontalAlignment value="0"/>
-                      <horizontalTextPosition value="0"/>
-                      <text value=""/>
-                    </properties>
-                  </component>
-                  <component id="a4256" class="javax.swing.JLabel" binding="wHCRSeat5Label">
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
+                  <grid id="2d114" class="javax.swing.JLayeredPane" binding="wHCRSeat5" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
-                    <properties>
-                      <horizontalAlignment value="0"/>
-                      <horizontalTextPosition value="0"/>
-                      <text value=""/>
-                    </properties>
-                  </component>
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
                 </children>
               </grid>
             </children>
@@ -934,7 +885,7 @@
                   <gridbag weightx="0.0" weighty="0.0"/>
                 </constraints>
               </hspacer>
-              <grid id="5e982" layout-manager="GridBagLayout">
+              <grid id="1c67a" layout-manager="GridBagLayout">
                 <constraints>
                   <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                   <gridbag weightx="0.0" weighty="0.0"/>
@@ -942,33 +893,40 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="2b925" class="javax.swing.JLabel" binding="pHEHSeat1Label">
+                  <grid id="aab3c" class="javax.swing.JLayeredPane" binding="pHEHOverflow3" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <gridbag weightx="0.0" weighty="0.0"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
+                  <grid id="2b3fc" class="javax.swing.JLayeredPane" binding="pHEHOverflow2" custom-create="true" layout-manager="GridBagLayout">
+                    <constraints>
+                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <gridbag weightx="0.0" weighty="0.0"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
+                  <grid id="efbc0" class="javax.swing.JLayeredPane" binding="pHEHOverflow1" custom-create="true" layout-manager="GridBagLayout">
+                    <constraints>
+                      <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <gridbag weightx="0.0" weighty="0.0"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
+                  <component id="d4651" class="javax.swing.JLabel" binding="pHEHOverflowLabel">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
                     <properties>
-                      <horizontalAlignment value="0"/>
-                      <horizontalTextPosition value="0"/>
-                      <text value=""/>
-                    </properties>
-                  </component>
-                  <component id="a82f2" class="javax.swing.JLabel">
-                    <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                      <gridbag weightx="0.0" weighty="0.0"/>
-                    </constraints>
-                    <properties>
-                      <text value="x"/>
-                    </properties>
-                  </component>
-                  <component id="e8134" class="javax.swing.JLabel">
-                    <constraints>
-                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                      <gridbag weightx="0.0" weighty="0.0"/>
-                    </constraints>
-                    <properties>
-                      <text value="0"/>
+                      <text value="+5"/>
                     </properties>
                   </component>
                 </children>
@@ -1024,7 +982,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <grid id="9938f" class="javax.swing.JLayeredPane" binding="testLayered" custom-create="true" layout-manager="GridBagLayout">
+                  <grid id="9938f" class="javax.swing.JLayeredPane" binding="pHCSeat" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
@@ -1099,7 +1057,7 @@
                   <gridbag weightx="0.0" weighty="0.0"/>
                 </constraints>
               </hspacer>
-              <grid id="4c975" layout-manager="GridBagLayout">
+              <grid id="e0d06" layout-manager="GridBagLayout">
                 <constraints>
                   <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                   <gridbag weightx="0.0" weighty="0.0"/>
@@ -1107,17 +1065,15 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="13a98" class="javax.swing.JLabel" binding="mHCR2SeatLabel">
+                  <grid id="f9caa" class="javax.swing.JLayeredPane" binding="mHCR2Seat" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
-                    <properties>
-                      <horizontalAlignment value="0"/>
-                      <horizontalTextPosition value="0"/>
-                      <text value=""/>
-                    </properties>
-                  </component>
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
                 </children>
               </grid>
             </children>
@@ -1157,7 +1113,7 @@
                   <gridbag weightx="0.0" weighty="0.0"/>
                 </constraints>
               </hspacer>
-              <grid id="73ce5" layout-manager="GridBagLayout">
+              <grid id="d240f" layout-manager="GridBagLayout">
                 <constraints>
                   <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                   <gridbag weightx="0.0" weighty="0.0"/>
@@ -1165,17 +1121,15 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="3973f" class="javax.swing.JLabel" binding="mHCR1SeatLabel">
+                  <grid id="aad4c" class="javax.swing.JLayeredPane" binding="mHCR1Seat" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
-                    <properties>
-                      <horizontalAlignment value="0"/>
-                      <horizontalTextPosition value="0"/>
-                      <text value=""/>
-                    </properties>
-                  </component>
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
                 </children>
               </grid>
             </children>
@@ -1221,7 +1175,7 @@
                   <gridbag weightx="0.0" weighty="0.0"/>
                 </constraints>
               </hspacer>
-              <grid id="69ad6" layout-manager="GridBagLayout">
+              <grid id="59306" layout-manager="GridBagLayout">
                 <constraints>
                   <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                   <gridbag weightx="0.0" weighty="0.0"/>
@@ -1229,28 +1183,24 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="39664" class="javax.swing.JLabel" binding="mHWRAdultSeatLabel">
+                  <grid id="e4a6" class="javax.swing.JLayeredPane" binding="mHWRAdultSeat" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
-                    <properties>
-                      <horizontalAlignment value="0"/>
-                      <horizontalTextPosition value="0"/>
-                      <text value=""/>
-                    </properties>
-                  </component>
-                  <component id="b0c4" class="javax.swing.JLabel" binding="mHWRChildSeatLabel">
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
+                  <grid id="b77f9" class="javax.swing.JLayeredPane" binding="mHWRChildSeat" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
-                    <properties>
-                      <horizontalAlignment value="0"/>
-                      <horizontalTextPosition value="0"/>
-                      <text value=""/>
-                    </properties>
-                  </component>
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
                 </children>
               </grid>
             </children>
@@ -1296,7 +1246,7 @@
                   <gridbag weightx="0.0" weighty="0.0"/>
                 </constraints>
               </hspacer>
-              <grid id="bbdfe" layout-manager="GridBagLayout">
+              <grid id="a00e0" layout-manager="GridBagLayout">
                 <constraints>
                   <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                   <gridbag weightx="0.0" weighty="0.0"/>
@@ -1304,17 +1254,15 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="589ac" class="javax.swing.JLabel" binding="mHAR1SeatLabel">
+                  <grid id="597eb" class="javax.swing.JLayeredPane" binding="mHAR1Seat" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
-                    <properties>
-                      <horizontalAlignment value="0"/>
-                      <horizontalTextPosition value="0"/>
-                      <text value=""/>
-                    </properties>
-                  </component>
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
                 </children>
               </grid>
             </children>
@@ -1354,7 +1302,7 @@
                   <gridbag weightx="0.0" weighty="0.0"/>
                 </constraints>
               </hspacer>
-              <grid id="3a802" layout-manager="GridBagLayout">
+              <grid id="7ac06" layout-manager="GridBagLayout">
                 <constraints>
                   <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                   <gridbag weightx="0.0" weighty="0.0"/>
@@ -1362,17 +1310,15 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="7a24e" class="javax.swing.JLabel" binding="mHAR2SeatLabel">
+                  <grid id="e8d18" class="javax.swing.JLayeredPane" binding="mHAR2Seat" custom-create="true" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
-                    <properties>
-                      <horizontalAlignment value="0"/>
-                      <horizontalTextPosition value="0"/>
-                      <text value=""/>
-                    </properties>
-                  </component>
+                    <properties/>
+                    <border type="none"/>
+                    <children/>
+                  </grid>
                 </children>
               </grid>
             </children>

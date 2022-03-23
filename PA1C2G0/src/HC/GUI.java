@@ -34,44 +34,47 @@ public class GUI {
     private JPanel mHAdultRoom2Panel;
     private JPanel pHEntranceHallPanel;
     private JPanel pHCashierPanel;
-    private JLabel enHARSeat1Label;
-    private JLabel enHARSeat2Label;
-    private JLabel enHARSeat3Label;
-    private JLabel enHARSeat4Label;
-    private JLabel enHARSeat5Label;
-    private JLabel enHCRSeat1Label;
-    private JLabel enHCRSeat2Label;
-    private JLabel enHCRSeat3Label;
-    private JLabel enHCRSeat4Label;
-    private JLabel enHCRSeat5Label;
-    private JLabel evHR1SeatLabel;
-    private JLabel evHR2SeatLabel;
-    private JLabel evHR3SeatLabel;
-    private JLabel evHR4SeatLabel;
-    private JLabel wHARSeat1Label;
-    private JLabel wHARSeat2Label;
-    private JLabel wHARSeat3Label;
-    private JLabel wHARSeat4Label;
-    private JLabel wHARSeat5Label;
-    private JLabel wHCRSeat1Label;
-    private JLabel wHCRSeat2Label;
-    private JLabel wHCRSeat3Label;
-    private JLabel wHCRSeat4Label;
-    private JLabel wHCRSeat5Label;
-    private JLabel mHWRAdultSeatLabel;
-    private JLabel mHWRChildSeatLabel;
-    private JLabel mHCR1SeatLabel;
-    private JLabel mHCR2SeatLabel;
-    private JLabel mHAR1SeatLabel;
-    private JLabel mHAR2SeatLabel;
-    private JLabel pHEHSeat1Label;
-    private JLayeredPane testLayered;
-    private JLabel pHCSeatLabel;
+    private JLayeredPane pHCSeat;
+    private JLayeredPane enHARSeat1;
+    private JLayeredPane enHARSeat2;
+    private JLayeredPane enHARSeat3;
+    private JLayeredPane enHARSeat4;
+    private JLayeredPane enHARSeat5;
+    private JLayeredPane enHCRSeat1;
+    private JLayeredPane enHCRSeat2;
+    private JLayeredPane enHCRSeat3;
+    private JLayeredPane enHCRSeat4;
+    private JLayeredPane enHCRSeat5;
+    private JLayeredPane evHR1Seat;
+    private JLayeredPane evHR2Seat;
+    private JLayeredPane evHR3Seat;
+    private JLayeredPane evHR4Seat;
+    private JLayeredPane wHARSeat1;
+    private JLayeredPane wHARSeat2;
+    private JLayeredPane wHARSeat3;
+    private JLayeredPane wHARSeat4;
+    private JLayeredPane wHARSeat5;
+    private JLayeredPane wHCRSeat1;
+    private JLayeredPane wHCRSeat2;
+    private JLayeredPane wHCRSeat3;
+    private JLayeredPane wHCRSeat4;
+    private JLayeredPane wHCRSeat5;
+    private JLayeredPane mHWRAdultSeat;
+    private JLayeredPane mHWRChildSeat;
+    private JLayeredPane mHCR1Seat;
+    private JLayeredPane mHCR2Seat;
+    private JLayeredPane mHAR1Seat;
+    private JLayeredPane mHAR2Seat;
+    private JLayeredPane pHEHOverflow1;
+    private JLayeredPane pHEHOverflow2;
+    private JLayeredPane pHEHOverflow3;
+    private JLabel pHEHOverflowLabel;
 
     private enum SeverityColor {
         BLUE,
         YELLOW,
-        RED
+        RED,
+        UNASSIGNED
     }
 
     public GUI() {
@@ -146,70 +149,143 @@ public class GUI {
         }) {
             panel.setBorder(new SoftBevelBorder(0));
         }
-        ImageIcon imageIcon = new ImageIcon("resources/user32.png");
-        for (JLabel seat : new JLabel[]{
-                enHARSeat1Label,
-                enHARSeat2Label,
-                enHARSeat3Label,
-                enHARSeat4Label,
-                enHARSeat5Label,
-                evHR1SeatLabel,
-                evHR2SeatLabel,
-                evHR3SeatLabel,
-                evHR4SeatLabel,
-                wHARSeat1Label,
-                wHARSeat2Label,
-                wHARSeat3Label,
-                wHARSeat4Label,
-                wHARSeat5Label,
-                mHWRAdultSeatLabel,
-                mHAR1SeatLabel,
-                mHAR2SeatLabel,
-                pHEHSeat1Label
-        }) {
-            seat.setBorder(new CompoundBorder(new EmptyBorder(2, 2, 2, 2), new SoftBevelBorder(1)));
-            seat.setMinimumSize(new Dimension(48, 48));
-            seat.setMaximumSize(new Dimension(48, 48));
-            seat.setPreferredSize(new Dimension(48, 48));
-            seat.setIcon(imageIcon);
-        }
-        imageIcon = new ImageIcon("resources/user24.png");
-        for (JLabel seat : new JLabel[]{
-                enHCRSeat1Label,
-                enHCRSeat2Label,
-                enHCRSeat3Label,
-                enHCRSeat4Label,
-                enHCRSeat5Label,
-                wHCRSeat1Label,
-                wHCRSeat2Label,
-                wHCRSeat3Label,
-                wHCRSeat4Label,
-                wHCRSeat5Label,
-                mHWRChildSeatLabel,
-                mHCR1SeatLabel,
-                mHCR2SeatLabel
-        }) {
-            seat.setBorder(new CompoundBorder(new EmptyBorder(2, 2, 2, 2), new SoftBevelBorder(1)));
-            seat.setMinimumSize(new Dimension(40, 40));
-            seat.setMaximumSize(new Dimension(40, 40));
-            seat.setPreferredSize(new Dimension(40, 40));
-            seat.setIcon(imageIcon);
-        }
     }
 
     private void createUIComponents() {
-        ImageIcon imageIcon = new ImageIcon("resources/user32.png");
-        testLayered = new JLayeredPane();
-        testLayered.setMinimumSize(new Dimension(48, 48));
-        testLayered.setMaximumSize(new Dimension(48, 48));
-        testLayered.setPreferredSize(new Dimension(48, 48));
-        testLayered.setBorder(new CompoundBorder(new EmptyBorder(2, 2, 2, 2), new SoftBevelBorder(1)));
-//        testLayered.setBackground(Color.GRAY);
-//        testLayered.setOpaque(true);
-        addIcon(testLayered, false, SeverityColor.YELLOW, "50");
+        pHCSeat = new JLayeredPane();
+        enHARSeat1 = new JLayeredPane();
+        enHARSeat2 = new JLayeredPane();
+        enHARSeat3 = new JLayeredPane();
+        enHARSeat4 = new JLayeredPane();
+        enHARSeat5 = new JLayeredPane();
+        enHCRSeat1 = new JLayeredPane();
+        enHCRSeat2 = new JLayeredPane();
+        enHCRSeat3 = new JLayeredPane();
+        enHCRSeat4 = new JLayeredPane();
+        enHCRSeat5 = new JLayeredPane();
+        evHR1Seat = new JLayeredPane();
+        evHR2Seat = new JLayeredPane();
+        evHR3Seat = new JLayeredPane();
+        evHR4Seat = new JLayeredPane();
+        wHARSeat1 = new JLayeredPane();
+        wHARSeat2 = new JLayeredPane();
+        wHARSeat3 = new JLayeredPane();
+        wHARSeat4 = new JLayeredPane();
+        wHARSeat5 = new JLayeredPane();
+        wHCRSeat1 = new JLayeredPane();
+        wHCRSeat2 = new JLayeredPane();
+        wHCRSeat3 = new JLayeredPane();
+        wHCRSeat4 = new JLayeredPane();
+        wHCRSeat5 = new JLayeredPane();
+        mHWRAdultSeat = new JLayeredPane();
+        mHWRChildSeat = new JLayeredPane();
+        mHCR1Seat = new JLayeredPane();
+        mHCR2Seat = new JLayeredPane();
+        mHAR1Seat = new JLayeredPane();
+        mHAR2Seat = new JLayeredPane();
+        pHEHOverflow1 = new JLayeredPane();
+        pHEHOverflow2 = new JLayeredPane();
+        pHEHOverflow3 = new JLayeredPane();
+
+        for (JLayeredPane adultSeat: new JLayeredPane[] {
+                enHARSeat1,
+                enHARSeat2,
+                enHARSeat3,
+                enHARSeat4,
+                enHARSeat5,
+                evHR1Seat,
+                evHR2Seat,
+                evHR3Seat,
+                evHR4Seat,
+                wHARSeat1,
+                wHARSeat2,
+                wHARSeat3,
+                wHARSeat4,
+                wHARSeat5,
+                mHWRAdultSeat,
+                mHAR1Seat,
+                mHAR2Seat,
+                pHCSeat
+        }) {
+            adultSeat.setMinimumSize(new Dimension(48, 48));
+            adultSeat.setMaximumSize(new Dimension(48, 48));
+            adultSeat.setPreferredSize(new Dimension(48, 48));
+            adultSeat.setBorder(new CompoundBorder(new EmptyBorder(2, 2, 2, 2), new SoftBevelBorder(1)));
+//            setIcon(pHCSeat, false, SeverityColor.YELLOW, "50");
+        }
+        for (JLayeredPane childSeat : new JLayeredPane[] {
+                enHCRSeat1,
+                enHCRSeat2,
+                enHCRSeat3,
+                enHCRSeat4,
+                enHCRSeat5,
+                wHCRSeat1,
+                wHCRSeat2,
+                wHCRSeat3,
+                wHCRSeat4,
+                mHWRChildSeat,
+                mHCR1Seat,
+                mHCR2Seat,
+                wHCRSeat5
+        }) {
+            childSeat.setMinimumSize(new Dimension(40, 40));
+            childSeat.setMaximumSize(new Dimension(40, 40));
+            childSeat.setPreferredSize(new Dimension(40, 40));
+            childSeat.setBorder(new CompoundBorder(new EmptyBorder(2, 2, 2, 2), new SoftBevelBorder(1)));
+        }
+        for (JLayeredPane[] fifo3 : new JLayeredPane[][] {
+                {pHEHOverflow1, pHEHOverflow2, pHEHOverflow3}
+        }) {
+            fifo3[0].setMinimumSize(new Dimension(46,48));
+            fifo3[0].setMaximumSize(new Dimension(46,48));
+            fifo3[0].setPreferredSize(new Dimension(46,48));
+            fifo3[1].setMinimumSize(new Dimension(44,44));
+            fifo3[1].setMaximumSize(new Dimension(44,44));
+            fifo3[1].setPreferredSize(new Dimension(44,44));
+            fifo3[2].setMinimumSize(new Dimension(40,40));
+            fifo3[2].setMaximumSize(new Dimension(40,40));
+            fifo3[2].setPreferredSize(new Dimension(40,40));
+            fifo3[0].setBorder(new CompoundBorder(new EmptyBorder(2, 0, 2, 2), new SoftBevelBorder(1)));
+            fifo3[1].setBorder(new CompoundBorder(new EmptyBorder(2, 0, 2, 0), new SoftBevelBorder(1)));
+            fifo3[2].setBorder(new CompoundBorder(new EmptyBorder(2, 2, 2, 0), new SoftBevelBorder(1)));
+        }
+
+        setIcon(enHARSeat1, false, SeverityColor.BLUE, "1");
+        setIcon(enHARSeat2, false, SeverityColor.BLUE, "2");
+        setIcon(enHARSeat3, false, SeverityColor.BLUE, "3");
+        setIcon(enHARSeat4, false, SeverityColor.BLUE, "4");
+        setIcon(enHARSeat5, false, SeverityColor.BLUE, "5");
+        setIcon(enHCRSeat1, true, SeverityColor.BLUE, "1");
+        setIcon(enHCRSeat2, true, SeverityColor.BLUE, "2");
+        setIcon(enHCRSeat3, true, SeverityColor.BLUE, "3");
+        setIcon(enHCRSeat4, true, SeverityColor.BLUE, "4");
+        setIcon(enHCRSeat5, true, SeverityColor.BLUE, "5");
+        setIcon(evHR1Seat, false, SeverityColor.BLUE, "1");
+        setIcon(evHR2Seat, false, SeverityColor.BLUE, "2");
+        setIcon(evHR3Seat, false, SeverityColor.BLUE, "3");
+        setIcon(evHR4Seat, false, SeverityColor.BLUE, "4");
+        setIcon(wHARSeat1, false, SeverityColor.BLUE, "1");
+        setIcon(wHARSeat2, false, SeverityColor.BLUE, "2");
+        setIcon(wHARSeat3, false, SeverityColor.BLUE, "3");
+        setIcon(wHARSeat4, false, SeverityColor.BLUE, "4");
+        setIcon(wHARSeat5, false, SeverityColor.BLUE, "5");
+        setIcon(wHCRSeat1, true, SeverityColor.BLUE, "1");
+        setIcon(wHCRSeat2, true, SeverityColor.BLUE, "2");
+        setIcon(wHCRSeat3, true, SeverityColor.BLUE, "3");
+        setIcon(wHCRSeat4, true, SeverityColor.BLUE, "4");
+        setIcon(wHCRSeat5, true, SeverityColor.BLUE, "5");
+        setIcon(mHWRAdultSeat, false, SeverityColor.BLUE, "0");
+        setIcon(mHWRChildSeat, true, SeverityColor.BLUE, "0");
+        setIcon(mHCR1Seat, true, SeverityColor.BLUE, "0");
+        setIcon(mHCR2Seat, true, SeverityColor.BLUE, "0");
+        setIcon(mHAR1Seat, false, SeverityColor.BLUE, "0");
+        setIcon(mHAR2Seat, false, SeverityColor.BLUE, "0");
+        setIcon(pHEHOverflow1, false, SeverityColor.BLUE, "1");
+        setIcon(pHEHOverflow2, false, SeverityColor.BLUE, "2");
+        setIcon(pHEHOverflow3, false, SeverityColor.BLUE, "3");
     }
 
-    private void addIcon(JLayeredPane seat, boolean isChild, SeverityColor severityColor, String id) {
+    private void setIcon(JLayeredPane seat, boolean isChild, SeverityColor severityColor, String id) {
         String imagePath;
         switch (severityColor) {
             case BLUE -> imagePath = isChild ? "resources/user24blue.png" : "resources/user32blue.png";
