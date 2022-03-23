@@ -27,8 +27,10 @@ public class GUI {
     private JComboBox evaluationTimeComboBox;
     private JComboBox appointmentTimeSpinner;
     private JComboBox paymentTimeComboBox;
-    private JButton cancelFormButton;
-    private JButton startFormButton;
+    private JButton resetFormButton;
+    private JTextField hostField;
+    private JSpinner portSpinner;
+    private JButton confirmLoginButton;
 
     public GUI(TCommsClient commsClient) {
         this.commsClient = commsClient;
@@ -41,24 +43,16 @@ public class GUI {
         allowPatientButton.setEnabled(false);
 
         if (UIManager.getLookAndFeel().getName().equals("GTK look and feel"))
-            for (JSpinner spinner : new JSpinner[] {adultPatientsSpinner, childrenPatientsSpinner, seatsSpinner})
+            for (JSpinner spinner : new JSpinner[] {adultPatientsSpinner, childrenPatientsSpinner, seatsSpinner, portSpinner})
                 spinner.setBorder(new LineBorder(new Color(39, 39, 39), 1, true));
 
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                ((CardLayout) cardPanel.getLayout()).next(cardPanel);
-            }
-        });
-        startFormButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // startButton.setEnabled(false);
-                ((CardLayout) cardPanel.getLayout()).next(cardPanel);
                 commsClient.startSim(10, 10, 4, "100", "100", "100", "100");
             }
         });
-        cancelFormButton.addActionListener(new ActionListener() {
+        confirmLoginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ((CardLayout) cardPanel.getLayout()).next(cardPanel);
@@ -86,8 +80,8 @@ public class GUI {
         JFrame frame = new JFrame("CCP");
         frame.setContentPane(this.mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setMinimumSize(new Dimension(380, 310));
-        frame.setPreferredSize(new Dimension(400, 310));
+        frame.setMinimumSize(new Dimension(380, 340));
+        frame.setPreferredSize(new Dimension(280, 340));
         frame.pack();
         frame.setVisible(true);
     }

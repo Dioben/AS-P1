@@ -3,6 +3,12 @@ package HC;
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.AffineTransform;
+
+import static java.lang.Math.ceil;
 
 public class GUI {
     private JPanel mainPanel;
@@ -65,10 +71,21 @@ public class GUI {
     private JLayeredPane mHCR2Seat;
     private JLayeredPane mHAR1Seat;
     private JLayeredPane mHAR2Seat;
-    private JLayeredPane pHEHOverflow1;
-    private JLayeredPane pHEHOverflow2;
-    private JLayeredPane pHEHOverflow3;
-    private JLabel pHEHOverflowLabel;
+    private JLayeredPane pHOverflow1;
+    private JLayeredPane pHOverflow2;
+    private JLayeredPane pHOverflow3;
+    private JLayeredPane enHOverflow1;
+    private JLayeredPane enHOverflow2;
+    private JLayeredPane enHOverflow3;
+    private JLayeredPane wHOverflow1;
+    private JLayeredPane wHOverflow2;
+    private JLayeredPane wHOverflow3;
+    private JLabel pHOverflowLabel;
+    private JLabel enHOverflowLabel;
+    private JLabel wHOverflowLabel;
+    private JPanel cardPanel;
+    private JButton confirmLoginButton;
+    private JSpinner portSpinner;
 
     private enum SeverityColor {
         BLUE,
@@ -78,6 +95,12 @@ public class GUI {
     }
 
     public GUI() {
+        confirmLoginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ((CardLayout) cardPanel.getLayout()).next(cardPanel);
+            }
+        });
     }
 
     public static void setGUILook(String wantedLook) {
@@ -101,8 +124,8 @@ public class GUI {
         JFrame frame = new JFrame("HCP");
         frame.setContentPane(this.mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setMinimumSize(new Dimension(870, 450));
-        frame.setPreferredSize(new Dimension(870, 450));
+        frame.setMinimumSize(new Dimension(1010, 450));
+        frame.setPreferredSize(new Dimension(1010, 450));
         frame.pack();
         frame.setVisible(true);
         frame.setTitle("HCP - Unknown");
@@ -119,7 +142,7 @@ public class GUI {
                 midLine3,
                 midLine4
         }) {
-            line.setBorder(new LineBorder(line.getForeground(), 1));
+            line.setBorder(new LineBorder(new Color(128, 128, 128), 1));
         }
         for (JPanel panel : new JPanel[]{
                 entranceHallPanel,
@@ -128,7 +151,7 @@ public class GUI {
                 medicalHallPanel,
                 paymentHallPanel
         }) {
-            panel.setBorder(new MatteBorder(0, 1, 0, 1, panel.getForeground()));
+            panel.setBorder(new MatteBorder(0, 1, 0, 1, new Color(128, 128, 128)));
         }
         for (JPanel panel : new JPanel[]{
                 enHAdultRoomPanel,
@@ -149,6 +172,10 @@ public class GUI {
         }) {
             panel.setBorder(new SoftBevelBorder(0));
         }
+        enHOverflowLabel.setBorder(new EmptyBorder(0,0,0,8));
+        wHOverflowLabel.setBorder(new EmptyBorder(0,0,0,8));
+        if (UIManager.getLookAndFeel().getName().equals("GTK look and feel"))
+            portSpinner.setBorder(new LineBorder(new Color(39, 39, 39), 1, true));
     }
 
     private void createUIComponents() {
@@ -183,9 +210,15 @@ public class GUI {
         mHCR2Seat = new JLayeredPane();
         mHAR1Seat = new JLayeredPane();
         mHAR2Seat = new JLayeredPane();
-        pHEHOverflow1 = new JLayeredPane();
-        pHEHOverflow2 = new JLayeredPane();
-        pHEHOverflow3 = new JLayeredPane();
+        pHOverflow1 = new JLayeredPane();
+        pHOverflow2 = new JLayeredPane();
+        pHOverflow3 = new JLayeredPane();
+        enHOverflow1 = new JLayeredPane();
+        enHOverflow2 = new JLayeredPane();
+        enHOverflow3 = new JLayeredPane();
+        wHOverflow1 = new JLayeredPane();
+        wHOverflow2 = new JLayeredPane();
+        wHOverflow3 = new JLayeredPane();
 
         for (JLayeredPane adultSeat: new JLayeredPane[] {
                 enHARSeat1,
@@ -211,7 +244,6 @@ public class GUI {
             adultSeat.setMaximumSize(new Dimension(48, 48));
             adultSeat.setPreferredSize(new Dimension(48, 48));
             adultSeat.setBorder(new CompoundBorder(new EmptyBorder(2, 2, 2, 2), new SoftBevelBorder(1)));
-//            setIcon(pHCSeat, false, SeverityColor.YELLOW, "50");
         }
         for (JLayeredPane childSeat : new JLayeredPane[] {
                 enHCRSeat1,
@@ -233,81 +265,70 @@ public class GUI {
             childSeat.setPreferredSize(new Dimension(40, 40));
             childSeat.setBorder(new CompoundBorder(new EmptyBorder(2, 2, 2, 2), new SoftBevelBorder(1)));
         }
-        for (JLayeredPane[] fifo3 : new JLayeredPane[][] {
-                {pHEHOverflow1, pHEHOverflow2, pHEHOverflow3}
+        for (JLayeredPane[] hFifo3 : new JLayeredPane[][] {
+                {pHOverflow1, pHOverflow2, pHOverflow3}
         }) {
-            fifo3[0].setMinimumSize(new Dimension(46,48));
-            fifo3[0].setMaximumSize(new Dimension(46,48));
-            fifo3[0].setPreferredSize(new Dimension(46,48));
-            fifo3[1].setMinimumSize(new Dimension(44,44));
-            fifo3[1].setMaximumSize(new Dimension(44,44));
-            fifo3[1].setPreferredSize(new Dimension(44,44));
-            fifo3[2].setMinimumSize(new Dimension(40,40));
-            fifo3[2].setMaximumSize(new Dimension(40,40));
-            fifo3[2].setPreferredSize(new Dimension(40,40));
-            fifo3[0].setBorder(new CompoundBorder(new EmptyBorder(2, 0, 2, 2), new SoftBevelBorder(1)));
-            fifo3[1].setBorder(new CompoundBorder(new EmptyBorder(2, 0, 2, 0), new SoftBevelBorder(1)));
-            fifo3[2].setBorder(new CompoundBorder(new EmptyBorder(2, 2, 2, 0), new SoftBevelBorder(1)));
+            hFifo3[0].setMinimumSize(new Dimension(46,48));
+            hFifo3[0].setMaximumSize(new Dimension(46,48));
+            hFifo3[0].setPreferredSize(new Dimension(46,48));
+            hFifo3[1].setMinimumSize(new Dimension(40,44));
+            hFifo3[1].setMaximumSize(new Dimension(40,44));
+            hFifo3[1].setPreferredSize(new Dimension(40,44));
+            hFifo3[2].setMinimumSize(new Dimension(40,40));
+            hFifo3[2].setMaximumSize(new Dimension(40,40));
+            hFifo3[2].setPreferredSize(new Dimension(40,40));
+            hFifo3[0].setBorder(new CompoundBorder(new EmptyBorder(2, 0, 2, 2), new SoftBevelBorder(1)));
+            hFifo3[1].setBorder(new CompoundBorder(new EmptyBorder(2, 0, 2, 0), new SoftBevelBorder(1)));
+            hFifo3[2].setBorder(new CompoundBorder(new EmptyBorder(2, 4, 2, 0), new SoftBevelBorder(1)));
         }
-
-        setIcon(enHARSeat1, false, SeverityColor.BLUE, "1");
-        setIcon(enHARSeat2, false, SeverityColor.BLUE, "2");
-        setIcon(enHARSeat3, false, SeverityColor.BLUE, "3");
-        setIcon(enHARSeat4, false, SeverityColor.BLUE, "4");
-        setIcon(enHARSeat5, false, SeverityColor.BLUE, "5");
-        setIcon(enHCRSeat1, true, SeverityColor.BLUE, "1");
-        setIcon(enHCRSeat2, true, SeverityColor.BLUE, "2");
-        setIcon(enHCRSeat3, true, SeverityColor.BLUE, "3");
-        setIcon(enHCRSeat4, true, SeverityColor.BLUE, "4");
-        setIcon(enHCRSeat5, true, SeverityColor.BLUE, "5");
-        setIcon(evHR1Seat, false, SeverityColor.BLUE, "1");
-        setIcon(evHR2Seat, false, SeverityColor.BLUE, "2");
-        setIcon(evHR3Seat, false, SeverityColor.BLUE, "3");
-        setIcon(evHR4Seat, false, SeverityColor.BLUE, "4");
-        setIcon(wHARSeat1, false, SeverityColor.BLUE, "1");
-        setIcon(wHARSeat2, false, SeverityColor.BLUE, "2");
-        setIcon(wHARSeat3, false, SeverityColor.BLUE, "3");
-        setIcon(wHARSeat4, false, SeverityColor.BLUE, "4");
-        setIcon(wHARSeat5, false, SeverityColor.BLUE, "5");
-        setIcon(wHCRSeat1, true, SeverityColor.BLUE, "1");
-        setIcon(wHCRSeat2, true, SeverityColor.BLUE, "2");
-        setIcon(wHCRSeat3, true, SeverityColor.BLUE, "3");
-        setIcon(wHCRSeat4, true, SeverityColor.BLUE, "4");
-        setIcon(wHCRSeat5, true, SeverityColor.BLUE, "5");
-        setIcon(mHWRAdultSeat, false, SeverityColor.BLUE, "0");
-        setIcon(mHWRChildSeat, true, SeverityColor.BLUE, "0");
-        setIcon(mHCR1Seat, true, SeverityColor.BLUE, "0");
-        setIcon(mHCR2Seat, true, SeverityColor.BLUE, "0");
-        setIcon(mHAR1Seat, false, SeverityColor.BLUE, "0");
-        setIcon(mHAR2Seat, false, SeverityColor.BLUE, "0");
-        setIcon(pHEHOverflow1, false, SeverityColor.BLUE, "1");
-        setIcon(pHEHOverflow2, false, SeverityColor.BLUE, "2");
-        setIcon(pHEHOverflow3, false, SeverityColor.BLUE, "3");
+        for (JLayeredPane[] vFifo3 : new JLayeredPane[][] {
+                {enHOverflow1, enHOverflow2, enHOverflow3},
+                {wHOverflow1, wHOverflow2, wHOverflow3}
+        }) {
+            vFifo3[0].setMinimumSize(new Dimension(52,48));
+            vFifo3[0].setMaximumSize(new Dimension(52,48));
+            vFifo3[0].setPreferredSize(new Dimension(52,48));
+            vFifo3[1].setMinimumSize(new Dimension(48,44));
+            vFifo3[1].setMaximumSize(new Dimension(48,44));
+            vFifo3[1].setPreferredSize(new Dimension(48,44));
+            vFifo3[2].setMinimumSize(new Dimension(44,40));
+            vFifo3[2].setMaximumSize(new Dimension(44,40));
+            vFifo3[2].setPreferredSize(new Dimension(44,40));
+            vFifo3[0].setBorder(new CompoundBorder(new EmptyBorder(0, 0, 2, 8), new SoftBevelBorder(1)));
+            vFifo3[1].setBorder(new CompoundBorder(new EmptyBorder(0, 0, 0, 8), new SoftBevelBorder(1)));
+            vFifo3[2].setBorder(new CompoundBorder(new EmptyBorder(2, 0, 0, 8), new SoftBevelBorder(1)));
+        }
     }
 
     private void setIcon(JLayeredPane seat, boolean isChild, SeverityColor severityColor, String id) {
         String imagePath;
         switch (severityColor) {
-            case BLUE -> imagePath = isChild ? "resources/user24blue.png" : "resources/user32blue.png";
-            case YELLOW -> imagePath = isChild ? "resources/user24yellow.png" : "resources/user32yellow.png";
-            case RED -> imagePath = isChild ? "resources/user24red.png" : "resources/user32red.png";
-            default -> imagePath = isChild ? "resources/user24.png" : "resources/user32.png";
+            case BLUE -> imagePath = isChild ? "resources/childBlue.png" : "resources/adultBlue.png";
+            case YELLOW -> imagePath = isChild ? "resources/childYellow.png" : "resources/adultYellow.png";
+            case RED -> imagePath = isChild ? "resources/childRed.png" : "resources/adultRed.png";
+            default -> imagePath = isChild ? "resources/child.png" : "resources/adult.png";
         }
         ImageIcon imageIcon = new ImageIcon(imagePath);
         JLabel iconLabel = new JLabel(imageIcon);
-        int seatWidth = seat.getPreferredSize().width;
-        int seatHeight = seat.getPreferredSize().height;
+        Insets seatBorderInsets = seat.getBorder().getBorderInsets(null);
+        int seatWidthBorders = seat.getPreferredSize().width + (seatBorderInsets.left - seatBorderInsets.right);
+        int seatHeightBorders = seat.getPreferredSize().height + (seatBorderInsets.top - seatBorderInsets.bottom);
         int iconWidth = iconLabel.getIcon().getIconWidth();
         int iconHeight = iconLabel.getIcon().getIconHeight();
-        iconLabel.setBounds(seatWidth/2-iconWidth/2, seatHeight/2-iconHeight/2, iconWidth, iconHeight);
+        iconLabel.setBounds(seatWidthBorders/2-iconWidth/2, seatHeightBorders/2-iconHeight/2, iconWidth, iconHeight);
         seat.add(iconLabel, 1);
 
         JLabel idLabel = new JLabel(id);
         idLabel.setHorizontalAlignment(SwingConstants.CENTER);
         Font oldFont = idLabel.getFont();
-        idLabel.setFont(new Font(oldFont.getName(), Font.BOLD, iconHeight/2 - (isChild ? 2 : 4)));
-        idLabel.setForeground(Color.BLACK);
-        idLabel.setBounds(0, seatHeight/2 + (isChild ? 1 : 2), seatWidth, iconHeight/2 - (isChild ? 2 : 4));
+        int idLabelWidth = (int) ceil(oldFont.getStringBounds("50", new FontRenderContext(new AffineTransform(), true, true)).getWidth()) + 4;
+        idLabel.setBounds(seat.getPreferredSize().width - idLabelWidth - seatBorderInsets.right + 2, seatHeightBorders - oldFont.getSize() - seatBorderInsets.bottom + 2, idLabelWidth, oldFont.getSize());
+        idLabel.setOpaque(true);
+        idLabel.setBorder(new LineBorder(new Color(39, 39, 39), 1, true));
         seat.add(idLabel, 0);
+    }
+
+    private void removeIcon(JLayeredPane seat) {
+        seat.removeAll();
     }
 }

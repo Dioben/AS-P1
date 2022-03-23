@@ -19,6 +19,74 @@
         <properties/>
         <border type="none"/>
         <children>
+          <grid id="b71b9" layout-manager="GridLayoutManager" row-count="5" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <card name="Card2"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="2915e" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Host:"/>
+                </properties>
+              </component>
+              <component id="c2a9a" class="javax.swing.JLabel">
+                <constraints>
+                  <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Port:"/>
+                </properties>
+              </component>
+              <component id="e8fee" class="javax.swing.JSpinner" binding="portSpinner">
+                <constraints>
+                  <grid row="2" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+              </component>
+              <component id="1f0d7" class="javax.swing.JTextField" binding="hostField">
+                <constraints>
+                  <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                    <preferred-size width="150" height="-1"/>
+                  </grid>
+                </constraints>
+                <properties/>
+              </component>
+              <component id="7bac" class="javax.swing.JButton" binding="confirmLoginButton">
+                <constraints>
+                  <grid row="3" column="1" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Confirm"/>
+                </properties>
+              </component>
+              <hspacer id="e0021">
+                <constraints>
+                  <grid row="0" column="0" row-span="5" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </hspacer>
+              <hspacer id="6f5b0">
+                <constraints>
+                  <grid row="0" column="3" row-span="5" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </hspacer>
+              <vspacer id="d3bd6">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </vspacer>
+              <vspacer id="97d00">
+                <constraints>
+                  <grid row="4" column="1" row-span="1" col-span="2" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </vspacer>
+            </children>
+          </grid>
           <grid id="72fa0" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
@@ -27,361 +95,362 @@
             <properties/>
             <border type="none"/>
             <children>
-              <grid id="46745" layout-manager="GridBagLayout">
+              <tabbedpane id="60062" default-binding="true">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
-                    <maximum-size width="370" height="180"/>
+                    <preferred-size width="200" height="200"/>
                   </grid>
-                </constraints>
-                <properties>
-                  <maximumSize width="360" height="180"/>
-                  <minimumSize width="-1" height="-1"/>
-                  <preferredSize width="360" height="180"/>
-                </properties>
-                <border type="none"/>
-                <children>
-                  <grid id="36bec" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                    <margin top="0" left="0" bottom="0" right="0"/>
-                    <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
-                        <preferred-size width="106" height="52"/>
-                      </grid>
-                      <gridbag weightx="1.0" weighty="1.0"/>
-                    </constraints>
-                    <properties/>
-                    <border type="none"/>
-                    <children>
-                      <component id="40c20" class="javax.swing.JLabel" binding="statusLabel">
-                        <constraints>
-                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <text value="Status: Unknown"/>
-                        </properties>
-                      </component>
-                    </children>
-                  </grid>
-                  <grid id="e467e" layout-manager="GridLayoutManager" row-count="1" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                    <margin top="0" left="0" bottom="0" right="0"/>
-                    <constraints>
-                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
-                        <preferred-size width="445" height="190"/>
-                      </grid>
-                      <gridbag weightx="1.0" weighty="1.0"/>
-                    </constraints>
-                    <properties/>
-                    <border type="none"/>
-                    <children>
-                      <component id="b3c92" class="javax.swing.JButton" binding="startButton" default-binding="true">
-                        <constraints>
-                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <text value="Start"/>
-                        </properties>
-                      </component>
-                      <component id="ed097" class="javax.swing.JButton" binding="suspendButton" default-binding="true">
-                        <constraints>
-                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <text value="Suspend"/>
-                        </properties>
-                      </component>
-                      <component id="4ebb" class="javax.swing.JButton" binding="resumeButton" default-binding="true">
-                        <constraints>
-                          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <text value="Resume"/>
-                        </properties>
-                      </component>
-                      <component id="e8a7" class="javax.swing.JButton" binding="stopButton" default-binding="true">
-                        <constraints>
-                          <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <text value="Stop"/>
-                        </properties>
-                      </component>
-                      <component id="ed3f7" class="javax.swing.JButton" binding="endButton" default-binding="true">
-                        <constraints>
-                          <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <text value="End"/>
-                        </properties>
-                      </component>
-                    </children>
-                  </grid>
-                  <grid id="65cf1" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                    <margin top="0" left="0" bottom="0" right="0"/>
-                    <constraints>
-                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                      <gridbag weightx="1.0" weighty="1.0"/>
-                    </constraints>
-                    <properties/>
-                    <border type="none" title="Operating mode"/>
-                    <children>
-                      <component id="83e8a" class="javax.swing.JComboBox" binding="operatingModeComboBox">
-                        <constraints>
-                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <model>
-                            <item value="Automatic"/>
-                            <item value="Manual"/>
-                          </model>
-                        </properties>
-                      </component>
-                      <component id="b60e6" class="javax.swing.JButton" binding="allowPatientButton" default-binding="true">
-                        <constraints>
-                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                        </constraints>
-                        <properties>
-                          <text value="Allow patient"/>
-                        </properties>
-                      </component>
-                    </children>
-                  </grid>
-                </children>
-              </grid>
-            </children>
-          </grid>
-          <grid id="2c1e6" layout-manager="GridBagLayout">
-            <constraints>
-              <card name="Card2"/>
-            </constraints>
-            <properties/>
-            <border type="none"/>
-            <children>
-              <component id="d9c77" class="javax.swing.JLabel">
-                <constraints>
-                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                  <gridbag weightx="0.0" weighty="0.0"/>
-                </constraints>
-                <properties>
-                  <labelFor value="d6847"/>
-                  <text value="Number of adult patients:"/>
-                </properties>
-              </component>
-              <component id="d6847" class="javax.swing.JSpinner" binding="adultPatientsSpinner">
-                <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                  <gridbag weightx="0.0" weighty="0.0"/>
-                </constraints>
-                <properties>
-                  <toolTipText value="Number of adult patients."/>
-                </properties>
-              </component>
-              <hspacer id="47b6b">
-                <constraints>
-                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                  <gridbag weightx="0.0" weighty="0.0"/>
-                </constraints>
-              </hspacer>
-              <component id="d1307" class="javax.swing.JLabel">
-                <constraints>
-                  <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                  <gridbag weightx="0.0" weighty="0.0"/>
-                </constraints>
-                <properties>
-                  <labelFor value="e22f"/>
-                  <text value="Number of children patients:"/>
-                </properties>
-              </component>
-              <component id="e22f" class="javax.swing.JSpinner" binding="childrenPatientsSpinner">
-                <constraints>
-                  <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-                  <gridbag weightx="0.0" weighty="0.0"/>
-                </constraints>
-                <properties>
-                  <toolTipText value="Number of children patients."/>
-                </properties>
-              </component>
-              <vspacer id="ea335">
-                <constraints>
-                  <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                  <gridbag weightx="0.0" weighty="0.0"/>
-                </constraints>
-              </vspacer>
-              <component id="5184f" class="javax.swing.JLabel">
-                <constraints>
-                  <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                  <gridbag weightx="0.0" weighty="0.0"/>
-                </constraints>
-                <properties>
-                  <labelFor value="3ca4"/>
-                  <text value="Number of seats:"/>
-                  <toolTipText value="Number of seats in each Hall."/>
-                </properties>
-              </component>
-              <component id="3ca4" class="javax.swing.JSpinner" binding="seatsSpinner">
-                <constraints>
-                  <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-                  <gridbag weightx="0.0" weighty="0.0"/>
-                </constraints>
-                <properties>
-                  <toolTipText value="Number of seats in each Hall."/>
-                </properties>
-              </component>
-              <vspacer id="9a206">
-                <constraints>
-                  <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                  <gridbag weightx="0.0" weighty="0.0"/>
-                </constraints>
-              </vspacer>
-              <component id="c2d18" class="javax.swing.JLabel">
-                <constraints>
-                  <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                  <gridbag weightx="0.0" weighty="0.0"/>
-                </constraints>
-                <properties>
-                  <labelFor value="6a692"/>
-                  <text value="Evaluation time:"/>
-                  <toolTipText value="Time each evaluation may take."/>
-                </properties>
-              </component>
-              <component id="6a692" class="javax.swing.JComboBox" binding="evaluationTimeComboBox">
-                <constraints>
-                  <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-                  <gridbag weightx="0.0" weighty="0.0"/>
-                </constraints>
-                <properties>
-                  <model>
-                    <item value="0"/>
-                    <item value="[0, 100]"/>
-                    <item value="[0, 250]"/>
-                    <item value="[0, 500]"/>
-                    <item value="[0, 1000]"/>
-                  </model>
-                  <selectedIndex value="1"/>
-                  <toolTipText value="Time each evaluation may take."/>
-                </properties>
-              </component>
-              <component id="2cbc" class="javax.swing.JLabel">
-                <constraints>
-                  <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                  <gridbag weightx="0.0" weighty="0.0"/>
-                </constraints>
-                <properties>
-                  <labelFor value="fe7a"/>
-                  <text value="Appointment time:"/>
-                  <toolTipText value="Time each medical appointment may take."/>
-                </properties>
-              </component>
-              <component id="fe7a" class="javax.swing.JComboBox" binding="appointmentTimeSpinner">
-                <constraints>
-                  <grid row="7" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-                  <gridbag weightx="0.0" weighty="0.0"/>
-                </constraints>
-                <properties>
-                  <model>
-                    <item value="0"/>
-                    <item value="[0, 100]"/>
-                    <item value="[0, 250]"/>
-                    <item value="[0, 500]"/>
-                    <item value="[0, 1000]"/>
-                  </model>
-                  <selectedIndex value="1"/>
-                  <toolTipText value="Time each medical appointment may take."/>
-                </properties>
-              </component>
-              <vspacer id="57d68">
-                <constraints>
-                  <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                  <gridbag weightx="0.0" weighty="0.0"/>
-                </constraints>
-              </vspacer>
-              <component id="50a91" class="javax.swing.JLabel">
-                <constraints>
-                  <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                  <gridbag weightx="0.0" weighty="0.0"/>
-                </constraints>
-                <properties>
-                  <labelFor value="ca500"/>
-                  <text value="Payment time:"/>
-                  <toolTipText value="Time each payment may take."/>
-                </properties>
-              </component>
-              <component id="ca500" class="javax.swing.JComboBox" binding="paymentTimeComboBox">
-                <constraints>
-                  <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-                  <gridbag weightx="0.0" weighty="0.0"/>
-                </constraints>
-                <properties>
-                  <model>
-                    <item value="0"/>
-                    <item value="[0, 100]"/>
-                    <item value="[0, 250]"/>
-                    <item value="[0, 500]"/>
-                    <item value="[0, 1000]"/>
-                  </model>
-                  <selectedIndex value="1"/>
-                  <toolTipText value="Time each payment may take."/>
-                </properties>
-              </component>
-              <component id="a5fb9" class="javax.swing.JLabel">
-                <constraints>
-                  <grid row="9" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
-                  <gridbag weightx="0.0" weighty="0.0"/>
-                </constraints>
-                <properties>
-                  <labelFor value="a16ab"/>
-                  <text value="Time to move:"/>
-                  <toolTipText value="Time it may take to move (after waking-up) between halls or rooms for any patient."/>
-                </properties>
-              </component>
-              <component id="a16ab" class="javax.swing.JComboBox" binding="moveTimeComboBox">
-                <constraints>
-                  <grid row="10" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-                  <gridbag weightx="0.0" weighty="0.0"/>
-                </constraints>
-                <properties>
-                  <model>
-                    <item value="0"/>
-                    <item value="[0, 100]"/>
-                    <item value="[0, 250]"/>
-                    <item value="[0, 500]"/>
-                    <item value="[0, 1000]"/>
-                  </model>
-                  <selectedIndex value="1"/>
-                  <toolTipText value="Time it may take to move (after waking-up) between halls or rooms for any patient."/>
-                </properties>
-              </component>
-              <vspacer id="36d7">
-                <constraints>
-                  <grid row="11" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
-                  <gridbag weightx="0.0" weighty="0.0"/>
-                </constraints>
-              </vspacer>
-              <grid id="5b83f" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                <margin top="0" left="0" bottom="0" right="0"/>
-                <constraints>
-                  <grid row="12" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
-                  <gridbag weightx="0.0" weighty="0.0"/>
                 </constraints>
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="c22cd" class="javax.swing.JButton" binding="startFormButton">
+                  <grid id="46745" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <tabbedpane title="Controller"/>
                     </constraints>
                     <properties>
-                      <text value="Start"/>
+                      <maximumSize width="360" height="180"/>
+                      <minimumSize width="-1" height="-1"/>
+                      <preferredSize width="360" height="180"/>
                     </properties>
-                  </component>
-                  <component id="4a0a9" class="javax.swing.JButton" binding="cancelFormButton">
+                    <border type="none"/>
+                    <children>
+                      <grid id="36bec" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                            <preferred-size width="106" height="52"/>
+                          </grid>
+                          <gridbag weightx="1.0" weighty="1.0"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="40c20" class="javax.swing.JLabel" binding="statusLabel">
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text value="Status: Unknown"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                      <grid id="e467e" layout-manager="GridLayoutManager" row-count="1" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
+                        <constraints>
+                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
+                            <preferred-size width="445" height="190"/>
+                          </grid>
+                          <gridbag weightx="1.0" weighty="1.0"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="b3c92" class="javax.swing.JButton" binding="startButton" default-binding="true">
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text value="Start"/>
+                            </properties>
+                          </component>
+                          <component id="ed097" class="javax.swing.JButton" binding="suspendButton" default-binding="true">
+                            <constraints>
+                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text value="Suspend"/>
+                            </properties>
+                          </component>
+                          <component id="4ebb" class="javax.swing.JButton" binding="resumeButton" default-binding="true">
+                            <constraints>
+                              <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text value="Resume"/>
+                            </properties>
+                          </component>
+                          <component id="e8a7" class="javax.swing.JButton" binding="stopButton" default-binding="true">
+                            <constraints>
+                              <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text value="Stop"/>
+                            </properties>
+                          </component>
+                          <component id="ed3f7" class="javax.swing.JButton" binding="endButton" default-binding="true">
+                            <constraints>
+                              <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text value="End"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                      <grid id="65cf1" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
+                        <constraints>
+                          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="1.0" weighty="1.0"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none" title="Operating mode"/>
+                        <children>
+                          <component id="83e8a" class="javax.swing.JComboBox" binding="operatingModeComboBox">
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <model>
+                                <item value="Automatic"/>
+                                <item value="Manual"/>
+                              </model>
+                            </properties>
+                          </component>
+                          <component id="b60e6" class="javax.swing.JButton" binding="allowPatientButton" default-binding="true">
+                            <constraints>
+                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text value="Allow patient"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                    </children>
+                  </grid>
+                  <grid id="2c1e6" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <tabbedpane title="Configuration"/>
                     </constraints>
-                    <properties>
-                      <text value="Cancel"/>
-                    </properties>
-                  </component>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <component id="d9c77" class="javax.swing.JLabel">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <labelFor value="d6847"/>
+                          <text value="Number of adult patients:"/>
+                        </properties>
+                      </component>
+                      <component id="d6847" class="javax.swing.JSpinner" binding="adultPatientsSpinner">
+                        <constraints>
+                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <toolTipText value="Number of adult patients."/>
+                        </properties>
+                      </component>
+                      <hspacer id="47b6b">
+                        <constraints>
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                      </hspacer>
+                      <component id="d1307" class="javax.swing.JLabel">
+                        <constraints>
+                          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <labelFor value="e22f"/>
+                          <text value="Number of children patients:"/>
+                        </properties>
+                      </component>
+                      <component id="e22f" class="javax.swing.JSpinner" binding="childrenPatientsSpinner">
+                        <constraints>
+                          <grid row="1" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <toolTipText value="Number of children patients."/>
+                        </properties>
+                      </component>
+                      <vspacer id="ea335">
+                        <constraints>
+                          <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                      </vspacer>
+                      <component id="5184f" class="javax.swing.JLabel">
+                        <constraints>
+                          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <labelFor value="3ca4"/>
+                          <text value="Number of seats:"/>
+                          <toolTipText value="Number of seats in each Hall."/>
+                        </properties>
+                      </component>
+                      <component id="3ca4" class="javax.swing.JSpinner" binding="seatsSpinner">
+                        <constraints>
+                          <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <toolTipText value="Number of seats in each Hall."/>
+                        </properties>
+                      </component>
+                      <vspacer id="9a206">
+                        <constraints>
+                          <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                      </vspacer>
+                      <component id="c2d18" class="javax.swing.JLabel">
+                        <constraints>
+                          <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <labelFor value="6a692"/>
+                          <text value="Evaluation time:"/>
+                          <toolTipText value="Time each evaluation may take."/>
+                        </properties>
+                      </component>
+                      <component id="6a692" class="javax.swing.JComboBox" binding="evaluationTimeComboBox">
+                        <constraints>
+                          <grid row="7" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <model>
+                            <item value="0"/>
+                            <item value="[0, 100]"/>
+                            <item value="[0, 250]"/>
+                            <item value="[0, 500]"/>
+                            <item value="[0, 1000]"/>
+                          </model>
+                          <selectedIndex value="1"/>
+                          <toolTipText value="Time each evaluation may take."/>
+                        </properties>
+                      </component>
+                      <component id="2cbc" class="javax.swing.JLabel">
+                        <constraints>
+                          <grid row="6" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <labelFor value="fe7a"/>
+                          <text value="Appointment time:"/>
+                          <toolTipText value="Time each medical appointment may take."/>
+                        </properties>
+                      </component>
+                      <component id="fe7a" class="javax.swing.JComboBox" binding="appointmentTimeSpinner">
+                        <constraints>
+                          <grid row="7" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <model>
+                            <item value="0"/>
+                            <item value="[0, 100]"/>
+                            <item value="[0, 250]"/>
+                            <item value="[0, 500]"/>
+                            <item value="[0, 1000]"/>
+                          </model>
+                          <selectedIndex value="1"/>
+                          <toolTipText value="Time each medical appointment may take."/>
+                        </properties>
+                      </component>
+                      <vspacer id="57d68">
+                        <constraints>
+                          <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                      </vspacer>
+                      <component id="50a91" class="javax.swing.JLabel">
+                        <constraints>
+                          <grid row="9" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <labelFor value="ca500"/>
+                          <text value="Payment time:"/>
+                          <toolTipText value="Time each payment may take."/>
+                        </properties>
+                      </component>
+                      <component id="ca500" class="javax.swing.JComboBox" binding="paymentTimeComboBox">
+                        <constraints>
+                          <grid row="10" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <model>
+                            <item value="0"/>
+                            <item value="[0, 100]"/>
+                            <item value="[0, 250]"/>
+                            <item value="[0, 500]"/>
+                            <item value="[0, 1000]"/>
+                          </model>
+                          <selectedIndex value="1"/>
+                          <toolTipText value="Time each payment may take."/>
+                        </properties>
+                      </component>
+                      <component id="a5fb9" class="javax.swing.JLabel">
+                        <constraints>
+                          <grid row="9" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <labelFor value="a16ab"/>
+                          <text value="Time to move:"/>
+                          <toolTipText value="Time it may take to move (after waking-up) between halls or rooms for any patient."/>
+                        </properties>
+                      </component>
+                      <component id="a16ab" class="javax.swing.JComboBox" binding="moveTimeComboBox">
+                        <constraints>
+                          <grid row="10" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <model>
+                            <item value="0"/>
+                            <item value="[0, 100]"/>
+                            <item value="[0, 250]"/>
+                            <item value="[0, 500]"/>
+                            <item value="[0, 1000]"/>
+                          </model>
+                          <selectedIndex value="1"/>
+                          <toolTipText value="Time it may take to move (after waking-up) between halls or rooms for any patient."/>
+                        </properties>
+                      </component>
+                      <vspacer id="36d7">
+                        <constraints>
+                          <grid row="11" column="1" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                      </vspacer>
+                      <grid id="5b83f" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
+                        <constraints>
+                          <grid row="12" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="4a0a9" class="javax.swing.JButton" binding="resetFormButton">
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text value="Reset"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                    </children>
+                  </grid>
                 </children>
-              </grid>
+              </tabbedpane>
             </children>
           </grid>
         </children>
