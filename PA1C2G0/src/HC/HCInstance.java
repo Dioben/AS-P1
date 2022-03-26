@@ -1,6 +1,6 @@
 package HC;
 
-public class HCInstance extends Thread{
+public class HCInstance extends Thread {
     public HCInstance(int adults, int children, int seats, String evalTime, String medicTime, String payTime, String getUpTime) {
     }
 
