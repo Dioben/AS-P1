@@ -10,6 +10,7 @@ import java.util.UUID;
 
 public class TCommsHandler extends Thread{
 
+    private HCPLogger logger;
     private Socket comms;
     private String instanceName;
     private PrintWriter out;
@@ -29,6 +30,7 @@ public class TCommsHandler extends Thread{
             out = new PrintWriter(comms.getOutputStream(), true);
             in = new BufferedReader(
                     new InputStreamReader(comms.getInputStream()));
+            logger = new HCPLogger(instanceName);
 
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
