@@ -3,8 +3,9 @@ package hc.active;
 import hc.Severity;
 import hc.Timer;
 import hc.interfaces.IContainer;
+import hc.interfaces.IPatient;
 
-public class TPatient extends Thread{
+public class TPatient extends Thread implements IPatient {
     private IContainer surroundings;
     private Severity severity;
     private Timer timer;
@@ -56,4 +57,7 @@ public class TPatient extends Thread{
         this.severity=severity;
     }
 
+    public boolean isChild() {
+        return child;
+    }
 }
