@@ -6,7 +6,7 @@ import hc.interfaces.IContainer;
 import hc.interfaces.IPatient;
 
 public abstract class TServiceWorker extends Thread implements hc.interfaces.IServiceWorker {
-    protected Timer timer; //TODO: ASK WHETHER THIS IS OK
+    protected Timer timer;
     private HCInstance hc; //gotta be able to check if we're paused
     private IContainer surroundings;
     private IPatient costumer;
