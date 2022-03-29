@@ -1,5 +1,6 @@
 package hc.interfaces;
 
 public interface IServiceWorker {
-    void handleNextCostumer();
+    boolean isBusy();
+    boolean providePatient(IPatient patient);
 }

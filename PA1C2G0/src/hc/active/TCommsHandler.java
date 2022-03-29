@@ -89,10 +89,10 @@ public class TCommsHandler extends Thread {
         int adults = Integer.parseInt(command[1]);
         int children = Integer.parseInt(command[2]);
         int seats = Integer.parseInt(command[3]);
-        String evalTime = command[4]; //parse these in the randomGenerator class
-        String medicTime = command[5];
-        String payTime = command[6];
-        String getUpTime = command[7];
+        int evalTime = Integer.parseInt(command[4]);
+        int medicTime = Integer.parseInt(command[5]);
+        int payTime = Integer.parseInt(command[6]);
+        int getUpTime = Integer.parseInt(command[7]);
         //consider using a Builder here?
         instance = new HCInstance(adults, children, seats, evalTime, medicTime, payTime, getUpTime);
     }

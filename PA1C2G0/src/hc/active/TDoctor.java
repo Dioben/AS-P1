@@ -2,15 +2,18 @@ package hc.active;
 
 import hc.HCInstance;
 import hc.Timer;
+import hc.interfaces.IContainer;
+import hc.interfaces.IPatient;
 
 public class TDoctor extends TServiceWorker{
 
-    TDoctor(Timer timer, HCInstance instance) {
-        super(timer, instance);
+
+    public TDoctor(Timer timer, HCInstance instance, IContainer surroundings) {
+        super(timer, instance, surroundings);
     }
 
     @Override
-    void serveCostumer() {
+    void serveCostumer(IPatient patient) {
         try {
             sleep(timer.getAppointmentTime());
         } catch (InterruptedException e) {

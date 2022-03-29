@@ -1,6 +1,6 @@
 package hc.interfaces;
 
-import hc.Severity;
+import hc.enums.Severity;
 
 public interface IPatient {
     boolean isChild();

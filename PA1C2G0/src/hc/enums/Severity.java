@@ -1,4 +1,4 @@
-package hc;
+package hc.enums;
 
 public enum Severity {
     UNASSIGNED,

@@ -2,15 +2,18 @@ package hc.active;
 
 import hc.HCInstance;
 import hc.Timer;
+import hc.interfaces.IContainer;
+import hc.interfaces.IPatient;
 
 public class TCashier extends TServiceWorker{
 
-    TCashier(Timer timer, HCInstance instance) {
-        super(timer, instance);
+
+    public TCashier(Timer timer, HCInstance instance, IContainer surroundings) {
+        super(timer, instance, surroundings);
     }
 
     @Override
-    void serveCostumer() {
+    void serveCostumer(IPatient patient) {
         try {
             sleep(timer.getPaymentTime());
         } catch (InterruptedException e) {

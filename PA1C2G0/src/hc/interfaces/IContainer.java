@@ -1,5 +1,6 @@
 package hc.interfaces;
 
+import hc.HCInstance;
 import hc.active.TPatient;
 
 public interface IContainer {
@@ -10,4 +11,7 @@ public interface IContainer {
     void notifyDone(); // tells container that room processing is done
     IContainer getFollowingContainer(); //provides next space entity must move into AFTER room processing is done
     void tryEnter(TPatient tPatient); //blocking call that waits for notif to allow patient to enter
+
+    public String getDisplayName();
+    public HCInstance getInstance();
 }
