@@ -2,11 +2,12 @@ package hc.active;
 
 import hc.HCInstance;
 import hc.Timer;
+import hc.interfaces.IContainer;
 
 public abstract class TServiceWorker extends Thread{
     protected Timer timer; //TODO: ASK WHETHER THIS IS OK
     private HCInstance hc; //gotta be able to check if we're paused
-    //private Container surroundings;
+    private IContainer surroundings;
     private TPatient costumer;
     TServiceWorker(Timer timer, HCInstance instance){
         this.timer = timer;
@@ -28,7 +29,7 @@ public abstract class TServiceWorker extends Thread{
             }
         }
         serveCostumer();
-        //surroundings.notifyServed();//allow patient to getNextRoom
+        surroundings.notifyDone();//allow patient to getNextRoom
     }
 
     abstract void serveCostumer();

@@ -2,9 +2,10 @@ package hc.active;
 
 import hc.Severity;
 import hc.Timer;
+import hc.interfaces.IContainer;
 
 public class TPatient extends Thread{
-    //private Container surroundings;
+    private IContainer surroundings;
     private Severity severity;
     private Timer timer;
     private final boolean child;
@@ -20,22 +21,22 @@ public class TPatient extends Thread{
         displayValue = "";
     }
     public void run(){
-        //while(surroundings != null){
-        //    tryMove();
-        //}
+        while(surroundings != null){
+            tryMove();
+        }
     }
 
     private void tryMove(){
         //TODO: WAIT UNTIL CONTAINER ALLOWS YOU TO GET THE FOLLOWING ROOM
-        //Container next = surroundings.getFollowingContainer();// this blocks until the current container is done with you
+        IContainer next = surroundings.getFollowingContainer();// this blocks until the current container is done with you
         try {
             sleep(timer.getMovementTime());
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        //this.surroundings.notifyGone();
-        //this.surroundings = next;
-        //next.notifyArrival();
+        next.tryEnter(this);
+        this.surroundings.leave();
+        this.surroundings = next;
 
     }
 

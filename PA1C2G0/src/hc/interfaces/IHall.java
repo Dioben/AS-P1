@@ -1,4 +1,4 @@
 package hc.interfaces;
 
-public interface IHall {
+public interface IHall extends IContainer{
 }

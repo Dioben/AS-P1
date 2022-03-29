@@ -1,4 +1,4 @@
 package hc.interfaces;
 
-public interface IRoom {
+public interface IRoom extends IContainer {
 }
