@@ -1,4 +1,4 @@
-package HC;
+package hc;
 
 import javax.swing.*;
 import javax.swing.border.*;

@@ -1,4 +1,4 @@
-package HC;
+package hc;
 
 import java.util.Random;
 

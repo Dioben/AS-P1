@@ -1,4 +1,4 @@
-package HC;
+package hc;
 
 import java.io.File;
 import java.io.FileNotFoundException;

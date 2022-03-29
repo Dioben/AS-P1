@@ -1,4 +1,4 @@
-package HC;
+package hc;
 
 public class HCInstance extends Thread {
     public HCInstance(int adults, int children, int seats, String evalTime, String medicTime, String payTime, String getUpTime) {
@@ -17,5 +17,9 @@ public class HCInstance extends Thread {
     }
 
     public void cleanUp() {
+    }
+
+    public boolean isPaused() {//TODO: IMPLEMENT PAUSE FUNCTIONALITY
+        return false;
     }
 }

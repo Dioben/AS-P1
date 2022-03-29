@@ -1,4 +1,7 @@
-package HC;
+package hc.active;
+
+import hc.HCInstance;
+import hc.HCPLogger;
 
 import java.io.BufferedReader;
 import java.io.IOException;

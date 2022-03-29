@@ -1,4 +1,4 @@
-package CC;
+package cc;
 
 import javax.swing.*;
 import javax.swing.UIManager.LookAndFeelInfo;

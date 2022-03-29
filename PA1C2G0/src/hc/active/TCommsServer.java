@@ -1,4 +1,4 @@
-package HC;
+package hc.active;
 
 import java.io.IOException;
 import java.net.ServerSocket;

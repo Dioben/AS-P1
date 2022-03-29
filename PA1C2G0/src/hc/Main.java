@@ -1,4 +1,6 @@
-package HC;
+package hc;
+
+import hc.active.TCommsServer;
 
 import java.io.IOException;
 

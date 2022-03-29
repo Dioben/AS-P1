@@ -1,4 +1,4 @@
-package CC;
+package cc;
 
 public class Main {
 
