@@ -34,7 +34,7 @@ public class TCommsClient extends Thread {
                     //TODO: handle incoming messages
                     case "REQ":
                         //TODO: Push notification to UI
-                        int id = Integer.parseInt(notification[1]);
+                        String id = notification[1];
                         String destination = notification[2];
                         break;
                     case "DONE":
@@ -91,7 +91,7 @@ public class TCommsClient extends Thread {
         out.println("SWAP MANUAL");
     }
 
-    public void authorize(int id, String to) {
-        out.println("AUTH " + id + " " + to);
+    public void authorize(String id) {
+        out.println("AUTH " + id);
     }
 }

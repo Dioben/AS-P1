@@ -67,9 +67,8 @@ public class TCommsHandler extends Thread {
                             instance.setControls(mode);
                         break;
                     case "AUTH":
-                        int patientID = Integer.parseInt(command[1]);
-                        String destination = command[2];
-                        instance.permitMovement(patientID, destination);
+                        String patientID = command[1];
+                        instance.permitMovement(patientID);
                         break;
                     default:
                         break;
@@ -96,8 +95,8 @@ public class TCommsHandler extends Thread {
         instance = new HCInstance(adults, children, seats, evalTime, medicTime, payTime, getUpTime,this);
     }
 
-    public void requestPermission(int patientID, String from, String to) {
-        out.println("REQ " + patientID + " " + from + " " + to);
+    public void requestPermission(String patientID, String to) {
+        out.println("REQ " + patientID + " " + to);
     }
     public void notifyDone(){
         out.println("DONE");

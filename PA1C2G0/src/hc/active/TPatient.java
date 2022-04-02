@@ -60,4 +60,15 @@ public class TPatient extends Thread implements IPatient {
     public boolean isChild() {
         return child;
     }
+
+    public String getDisplayValue() {
+        String prefix = "";
+        if (severity == Severity.BLUE)
+                prefix = "B";
+        if (severity == Severity.YELLOW)
+            prefix = "y";
+        if (severity == Severity.RED)
+            prefix = "R";
+        return prefix+displayValue;
+    }
 }

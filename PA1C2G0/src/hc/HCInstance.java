@@ -20,7 +20,7 @@ public class HCInstance {
                 .withAppointmentTimeRange(medicTime)
                 .withPaymentTimeRange(payTime)
                 .withMovementTimeRange(getUpTime).build();
-        callCenter = new MCallCenter(false, tCommsHandler);
+        callCenter = new MCallCenter(false, tCommsHandler,adults+children);
         callCenter.start();
 
         entranceHall = null;
@@ -32,7 +32,8 @@ public class HCInstance {
 
     }
 
-    public void permitMovement(int patientID, String destination) {
+    public void permitMovement(String patientID) {
+        callCenter.releaseRequest(patientID);
 
     }
 

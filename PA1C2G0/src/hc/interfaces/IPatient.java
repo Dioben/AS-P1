@@ -4,8 +4,11 @@ import hc.enums.Severity;
 
 public interface IPatient {
     boolean isChild();
-    public void setEntranceNumber(int entranceNumber);
-    public void setWaitingNumber(int waitingNumber);
-    public void setPaymentNumber(int paymentNumber);
-    public void setSeverity(Severity severity);
+    void setEntranceNumber(int entranceNumber);
+    void setWaitingNumber(int waitingNumber);
+    void setPaymentNumber(int paymentNumber);
+    void setSeverity(Severity severity);
+    String getDisplayValue();
+
+
 }

@@ -67,6 +67,13 @@ public class WorkerRoom implements IRoom { //rooms for nurse,doctor,cashier: onl
         return container.getInstance();
     }
 
+    @Override
+    public String getState() {
+        if (user == null)
+            return "";
+        return user.getDisplayValue();
+    }
+
     public static WorkerRoom getRoom(Worker worker, IHall container, IContainer next, String name){
         if (worker==null)
             return null;
