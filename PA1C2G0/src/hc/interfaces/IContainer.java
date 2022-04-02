@@ -14,4 +14,6 @@ public interface IContainer {
 
     public String getDisplayName();
     public HCInstance getInstance();
+
+    public String getState();
 }

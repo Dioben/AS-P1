@@ -93,16 +93,13 @@ public class TCommsHandler extends Thread {
         int medicTime = Integer.parseInt(command[5]);
         int payTime = Integer.parseInt(command[6]);
         int getUpTime = Integer.parseInt(command[7]);
-        //consider using a Builder here?
-        instance = new HCInstance(adults, children, seats, evalTime, medicTime, payTime, getUpTime);
+        instance = new HCInstance(adults, children, seats, evalTime, medicTime, payTime, getUpTime,this);
     }
 
     public void requestPermission(int patientID, String from, String to) {
-        //TODO: MAYBE ADD MORE PATIENT INFO, NAMELY ARMBAND COLOR? -> should probably be in notifyMovement?
         out.println("REQ " + patientID + " " + from + " " + to);
     }
-
-    public void notifyMovement(int patientID, String from, String to) {
-        //TODO: DETERMINE WHETHER THIS WILL BE NECESSARY
+    public void notifyDone(){
+        out.println("DONE");
     }
 }

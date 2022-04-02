@@ -8,7 +8,8 @@ import java.util.Map;
 public class HCPLogger {
     private PrintWriter fileWriter;
     public HCPLogger(String simId) throws FileNotFoundException {
-        File file = new File("/logs/LOG"+simId+".txt");
+        //File file = new File("/logs/log"+simId+".txt"); //suited for multiple client system, doesn't match our specs
+        File file = new File("/logs/log.txt");
         file.getParentFile().mkdirs(); //write folders up to this point
             fileWriter = new PrintWriter(file);
 

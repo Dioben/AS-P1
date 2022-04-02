@@ -1,4 +1,4 @@
-package hc.active;
+package hc.active;                    //TODO: handle incoming messages - missing NOTIFY END
 
 import hc.HCInstance;
 import hc.Timer;

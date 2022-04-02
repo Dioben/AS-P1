@@ -37,6 +37,8 @@ public class TCommsClient extends Thread {
                         int id = Integer.parseInt(notification[1]);
                         String destination = notification[2];
                         break;
+                    case "DONE":
+                        //TODO: Push notification to UI
                     default:
                         break;
                 }
