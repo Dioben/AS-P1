@@ -30,7 +30,7 @@ public class MCallCenter extends Thread {
         this.manual = manual;
         comms = tCommsHandler;
         requests = new MFIFO(CallCenterRequest[].class,people);
-        onHold = new CallCenterRequest[people]; //only ever accessed by this thread, FIFO in theory but can't be sure
+        onHold = new CallCenterRequest[people]; //not necessarily FIFO, lock-protected
 
     }
 
@@ -55,8 +55,10 @@ public class MCallCenter extends Thread {
     }
 
     private void holdRequest(CallCenterRequest request) {
+        rl.lock();
         onHold[held] = request;
         held++;
+        rl.unlock();
     }
 
     /**Releases ONE patient request based on patient ID
@@ -65,28 +67,29 @@ public class MCallCenter extends Thread {
      * @param ID: The allowed patient's ID
      */
     public void releaseRequest(String ID){
+        rl.lock();
         CallCenterRequest request;
         for (int i=0;i<held;i++){
             request = onHold[i];
 
             if (request == null){
-                break;
+                break; //nothing found
             }
-            if (request.getID().equals(ID)){
+            if (request.getID().equals(ID)){ //found
                 requests.put(request);
                 onHold[i]=null;//empty spot, move array backwards
                 i++;
                 for (;i<held;i++){
-                    request = onHold[i];
-                    if (request==null)
+                    if (onHold[i]==null)
                         break; //no more to fast forward
                     onHold[i-1] = onHold[i];
                 }
                 held--;
-
+                rl.unlock();
                 return;
             }
         }
+        rl.unlock();//nothing found
     }
 
     private Condition getMatchingCondition(IContainer container) {
