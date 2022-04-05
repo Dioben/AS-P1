@@ -2,10 +2,11 @@ package hc.places;
 
 import hc.HCInstance;
 import hc.MFIFO;
-import hc.active.*;
-import hc.enums.Worker;
 import hc.interfaces.*;
 
+/**
+ * Class for rooms that hold several users
+ */
 public class WaitingRoom implements IRoom {
     private final IHall container;
     private final IContainer next;

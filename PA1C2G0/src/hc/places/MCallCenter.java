@@ -8,11 +8,16 @@ import hc.interfaces.IPatient;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * STINKY CLASS
+ * REQUIRES A FULL REWRITE
+ */
 public class MCallCenter extends Thread {
-    //TODO: THIS DOES NOT SUPPORT PAUSING AT ALL RN
     //TODO: THIS SUCKS AND DOES NOT CONSIDER TELLING CC THAT YOU'RE AVAILABLE AT ALL
     //TODO: REPLACE THE ONE FIFO WITH ONE FIFO PER CONDITION PROBABLY
     //TODO: ADD A CONDITION THAT AWAKENS THIS MAIN THREAD MAYBE
+    //TODO ALTERNATIVE: MOVE FROM 1 THREAD TOTAL TO 4 THREADS-> every thread has an entrance queue with built in "slack" and matches one of our current conditions
+
     private final TCommsHandler comms;
     private final ReentrantLock rl;
     private final Condition evrAvailable;
@@ -117,6 +122,10 @@ public class MCallCenter extends Thread {
         return null;
     }
 
+    /**
+     * gets the latest request, allow it
+     * big problem: this does not match spec at all
+     */
     public void run(){
         CallCenterRequest handling;
         while (true){
@@ -127,7 +136,10 @@ public class MCallCenter extends Thread {
         }
     }
 
-
+    /**
+     * Class for holding information that is fed back to a customer:
+     * Contains a condition they must wait on and a boolean to confirm that they're meant to wake up
+     */
     public class CallCenterRequest {
         private final IPatient patient;
         private boolean allowed = false;

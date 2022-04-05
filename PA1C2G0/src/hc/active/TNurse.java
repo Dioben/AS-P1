@@ -5,17 +5,17 @@ import hc.enums.Severity;
 import hc.Timer;
 import hc.interfaces.IContainer;
 import hc.interfaces.IPatient;
+import hc.interfaces.IWorkerRoom;
 
 public class TNurse extends TServiceWorker{
 
     /**
      * Instance Nurse Worker, this subclass of ServiceWorker waits <i>evaluation</i> time
      * @param timer The wait interval provider class
-     * @param instance the HC instance this worker is a part of
      * @param surroundings the room this worker is a part of
      */
-    public TNurse(Timer timer, HCInstance instance, IContainer surroundings) {
-        super(timer, instance, surroundings);
+    public TNurse(Timer timer, IWorkerRoom surroundings) {
+        super(timer, surroundings);
     }
 
     @Override

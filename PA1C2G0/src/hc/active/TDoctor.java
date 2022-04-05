@@ -4,17 +4,17 @@ import hc.HCInstance;
 import hc.Timer;
 import hc.interfaces.IContainer;
 import hc.interfaces.IPatient;
+import hc.interfaces.IWorkerRoom;
 
 public class TDoctor extends TServiceWorker{
 
     /**
      * Instance Doctor Worker, this subclass of ServiceWorker waits <i>appointment</i> time
      * @param timer The wait interval provider class
-     * @param instance the HC instance this worker is a part of
      * @param surroundings the room this worker is a part of
      */
-    public TDoctor(Timer timer, HCInstance instance, IContainer surroundings) {
-        super(timer, instance, surroundings);
+    public TDoctor(Timer timer, IWorkerRoom surroundings) {
+        super(timer, surroundings);
     }
 
     @Override

@@ -104,19 +104,19 @@ public class WorkerRoom implements IWorkerRoom,ISeat { //rooms for nurse,doctor,
         HCInstance instance = container.getInstance();
         if (worker==Worker.DOCTOR){
             workerRoom = new AdultWorkerRoom(container,next,name);
-            workerThread = new TDoctor(instance.getTimer(),instance,workerRoom);
+            workerThread = new TDoctor(instance.getTimer(),workerRoom);
         }
         else if (worker==Worker.CHILD_DOCTOR){
             workerRoom = new ChildWorkerRoom(container,next,name);
-            workerThread = new TDoctor(instance.getTimer(),instance,workerRoom);
+            workerThread = new TDoctor(instance.getTimer(),workerRoom);
         }
         else if (worker==Worker.NURSE){
             workerRoom = new WorkerRoom(container,next,name);
-            workerThread = new TNurse(instance.getTimer(),instance,workerRoom);
+            workerThread = new TNurse(instance.getTimer(),workerRoom);
         }
         else if (worker==Worker.CASHIER){
             workerRoom = new WorkerRoom(container,next,name);
-            workerThread = new TCashier(instance.getTimer(),instance,workerRoom);
+            workerThread = new TCashier(instance.getTimer(),workerRoom);
         }
         workerRoom.setWorker(workerThread);
         workerThread.start();
