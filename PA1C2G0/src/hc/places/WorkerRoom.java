@@ -81,7 +81,7 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
      * @param patient the patient attempting to enter the space
      */
     @Override
-    public void tryEnter(IPatient patient) {
+    public void enter(IPatient patient) {
         user = patient;
     }
 
@@ -91,11 +91,11 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
         return name;
     }
 
-    @Override
-    public HCInstance getInstance() {
-        return container.getInstance();
-    }
 
+    /**
+     *
+     * @return string detailing room's contained patient
+     */
     @Override
     public String getState() {
         if (user == null)
@@ -103,6 +103,9 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
         return user.getDisplayValue();
     }
 
+    /**
+     * pause all activity
+     */
     @Override
     public void suspend() {
         worker.suspend();
@@ -111,6 +114,9 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
 
     }
 
+    /**
+     * Resume paused activity
+     */
     @Override
     public void resume() {
         worker.resume();

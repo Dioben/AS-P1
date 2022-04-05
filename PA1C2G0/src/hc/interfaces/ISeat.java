@@ -5,6 +5,15 @@ package hc.interfaces;
  */
 public interface ISeat {
 
-    void tryEnter(IPatient patient);
+    /**
+     * Blocking call that a patient must use to try to enter a given space
+     * @param patient the patient attempting to enter the space
+     */
+    void enter(IPatient patient);
+
+    /**
+     * Notify given container that a patient has left it
+     * @param patient individual leaving space
+     */
     void leave(IPatient patient);
 }

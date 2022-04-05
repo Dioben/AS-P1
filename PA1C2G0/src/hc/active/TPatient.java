@@ -47,7 +47,7 @@ public class TPatient extends Thread implements IPatient {
         IContainer next = surroundings.getFollowingContainer(this);// this blocks until the current container is done with you
         try {
             sleep(timer.getMovementTime());
-            next.tryEnter(this);
+            next.enter(this);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

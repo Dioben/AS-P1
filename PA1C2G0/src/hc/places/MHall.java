@@ -30,7 +30,7 @@ public abstract class MHall implements IHall {
     }
 
     @Override
-    public void tryEnter(IPatient patient) {
+    public void enter(IPatient patient) {
 
     }
 

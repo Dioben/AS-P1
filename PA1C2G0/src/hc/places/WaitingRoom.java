@@ -39,7 +39,7 @@ public class WaitingRoom implements IRoom {
     }
 
     @Override
-    public void tryEnter(IPatient tPatient) {
+    public void enter(IPatient tPatient) {
         //TODO: FIGURE THIS OUT, PROBABLY HAS SOMETHING TO DO WITH CALL CENTER
     }
 
@@ -48,10 +48,6 @@ public class WaitingRoom implements IRoom {
         return name;
     }
 
-    @Override
-    public HCInstance getInstance() {
-        return container.getInstance();
-    }
 
     @Override
     public String getState() {

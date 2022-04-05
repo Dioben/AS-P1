@@ -8,11 +8,7 @@ import hc.HCInstance;
  */
 public interface IContainer extends ISeat{
 
-    /**
-     * Notify given container that a patient has left it
-     * @param patient individual leaving space
-     */
-    void leave(IPatient patient);
+
 
     /**
      * Blocking call made by Patient
@@ -23,12 +19,6 @@ public interface IContainer extends ISeat{
      */
     IContainer getFollowingContainer(IPatient patient);
 
-    /**
-     * Blocking call that a patient must use to try to enter a given space
-     * TODO: relies on canEnter/enter but those shouldnt be interface methods
-     * @param patient the patient attempting to enter the space
-     */
-    void tryEnter(IPatient patient);
 
     /**
      * Get this container's name for logging and UI representation purposes
@@ -36,11 +26,6 @@ public interface IContainer extends ISeat{
      */
     public String getDisplayName();
 
-    /**
-     * Get the instance this container is a part of
-     * @return instance container belongs to
-     */
-    public HCInstance getInstance();
 
     /**
      * Current occupation status of container, used for Logger
