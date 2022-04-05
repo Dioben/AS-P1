@@ -16,7 +16,7 @@ public class HCInstance {
     private final MHall paymentHall;
     private boolean paused = false;
 
-    public HCInstance(int adults, int children, int seats, int evalTime, int medicTime, int payTime, int getUpTime, TCommsHandler tCommsHandler) {
+    public HCInstance(int adults, int children, int seats, int evalTime, int medicTime, int payTime, int getUpTime, TCommsHandler tCommsHandler, boolean mode) {
         timer = new Timer.Builder()
                 .withEvaluationTimeRange(evalTime)
                 .withAppointmentTimeRange(medicTime)

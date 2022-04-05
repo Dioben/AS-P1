@@ -7,17 +7,12 @@ import hc.interfaces.IPatient;
 import hc.interfaces.IRoom;
 
 public abstract class MHall implements IHall {
-    @Override
-    public boolean canEnter(IPatient patient) {
+    private boolean canEnter(IPatient patient) {
         //TODO: IMPLEMENT LOGIC FOR GENDERED ROOMS
         //TODO: IMPLEMENT
         return false;
     }
 
-    @Override
-    public boolean enter(IPatient patient) {
-        return false;
-    }
 
     @Override
     public void leave(IPatient patient) {

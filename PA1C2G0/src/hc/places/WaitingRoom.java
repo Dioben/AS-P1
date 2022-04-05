@@ -19,16 +19,10 @@ public class WaitingRoom implements IRoom {
         this.name = name;
     }
 
-    @Override
-    public boolean canEnter(IPatient patient) {
+    private boolean canEnter(IPatient patient) {
         return ! patients.isFull();
     }
 
-    @Override
-    public boolean enter(IPatient patient) {
-        patients.put(patient);
-        return true;
-    }
 
     /**
      * Remove oldest user -> problem: user is who calls this and he's delayed

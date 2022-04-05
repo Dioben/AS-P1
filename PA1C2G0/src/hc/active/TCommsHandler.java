@@ -1,14 +1,12 @@
 package hc.active;
 
 import hc.HCInstance;
-import hc.HCPLogger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.UUID;
 
 /**
  * Client handler branched off of main simulation
@@ -16,12 +14,8 @@ import java.util.UUID;
  */
 public class TCommsHandler extends Thread {
 
-    //TODO: check whether this logger should even be here
-    private HCPLogger logger;
-    private Socket comms;
-    private String instanceName;
+    private final Socket comms;
     private PrintWriter out;
-    private BufferedReader in;
     private String mode = "AUTO";
 
     //TODO: this object class is nowhere near done
@@ -29,7 +23,6 @@ public class TCommsHandler extends Thread {
 
     public TCommsHandler(Socket accept) {
         comms = accept;
-        instanceName = UUID.randomUUID().toString();
 
     }
 
@@ -47,9 +40,8 @@ public class TCommsHandler extends Thread {
     public void run() {
         try {
             out = new PrintWriter(comms.getOutputStream(), true);
-            in = new BufferedReader(
+            BufferedReader in = new BufferedReader(
                     new InputStreamReader(comms.getInputStream()));
-            logger = new HCPLogger(instanceName);
 
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
@@ -111,11 +103,11 @@ public class TCommsHandler extends Thread {
         int medicTime = Integer.parseInt(command[5]);
         int payTime = Integer.parseInt(command[6]);
         int getUpTime = Integer.parseInt(command[7]);
-        instance = new HCInstance(adults, children, seats, evalTime, medicTime, payTime, getUpTime,this);
+        instance = new HCInstance(adults, children, seats, evalTime, medicTime, payTime, getUpTime,this, mode.equals("MANUAL"));
     }
 
     /**
-     * Request permission for a pacient to move in manual mode
+     * Request permission for a patient to move in manual mode
      * @param patientID Patient's display info
      * @param to Name of the target room
      */

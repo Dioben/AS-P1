@@ -1,7 +1,6 @@
 package hc.active;
 
 import hc.Timer;
-import hc.interfaces.IContainer;
 import hc.interfaces.IPatient;
 import hc.interfaces.IWorkerRoom;
 
@@ -12,7 +11,7 @@ import hc.interfaces.IWorkerRoom;
 public abstract class TServiceWorker extends Thread implements hc.interfaces.IServiceWorker {
     protected Timer timer;
     private IWorkerRoom surroundings;
-    private IPatient costumer;
+    private IPatient customer;
 
     /**
      * Waits for a customer to be assigned to itself
@@ -22,15 +21,15 @@ public abstract class TServiceWorker extends Thread implements hc.interfaces.ISe
      */
     private void handleNextCostumer() {
 
-        while (costumer == null) {
+        while (customer == null) {
             try {
                 this.wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-        serveCustomer(costumer);
-        costumer = null;
+        serveCustomer(customer);
+        customer = null;
         surroundings.notifyDone();//allow patient to getNextRoom
     }
 
@@ -55,7 +54,7 @@ public abstract class TServiceWorker extends Thread implements hc.interfaces.ISe
      */
     public boolean providePatient(IPatient patient){
         if (!isBusy()){
-            this.costumer = patient;
+            this.customer = patient;
             this.notify();
             return true;
         }
@@ -64,7 +63,7 @@ public abstract class TServiceWorker extends Thread implements hc.interfaces.ISe
 
 
     public boolean isBusy(){
-        return costumer==null;
+        return customer !=null;
     }
     abstract void serveCustomer(IPatient patient);
 }

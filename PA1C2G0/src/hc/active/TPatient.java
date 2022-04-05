@@ -18,7 +18,6 @@ public class TPatient extends Thread implements IPatient {
     private Severity severity=Severity.UNASSIGNED;
     private Timer timer;
     private final boolean child;
-    private int displayNumber;
     private int entranceNumber;
     private int paymentNumber;
     private int waitingNumber;
@@ -48,10 +47,11 @@ public class TPatient extends Thread implements IPatient {
         IContainer next = surroundings.getFollowingContainer(this);// this blocks until the current container is done with you
         try {
             sleep(timer.getMovementTime());
+            next.tryEnter(this);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        next.tryEnter(this);
+
         this.surroundings.leave(this);
         this.surroundings = next;
 

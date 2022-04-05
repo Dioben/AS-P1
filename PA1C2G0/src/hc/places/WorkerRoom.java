@@ -5,49 +5,61 @@ import hc.active.*;
 import hc.enums.Worker;
 import hc.interfaces.*;
 
-public class WorkerRoom implements IWorkerRoom,ISeat { //rooms for nurse,doctor,cashier: only supports one person at a time
-    //subclasses implement age lock policy
-
+/**
+ * Room meant to hold Doctor/Nurse/Cashier and a single patient at a time
+ * The worker is a thread but the room itself is not
+ */
+public class WorkerRoom implements IWorkerRoom,ISeat {
     private final IHall container;
     private final IContainer next;
     private IPatient user;
     private IServiceWorker worker;
     private final String name;
 
+
     protected WorkerRoom(IHall container, IContainer next, String name){
         this.container = container;
         this.next = next;
         this.name = name;
     }
+
+    /**
+     * Used to inject a worker inside factory method
+     * @param worker The worker that will reside in room
+     */
     private void setWorker(IServiceWorker worker){
         this.worker = worker;
     }
-    @Override
-    public boolean canEnter(IPatient patient) {
+
+
+    private boolean canEnter(IPatient patient) {
         return user==null;
     }
 
-    @Override
-    public boolean enter(IPatient patient) {//not supposed to ever actually return false
-        if (canEnter(patient)){
-            user = patient;
-            return  true;
-        }
-        return false;
-    }
 
+
+    /**
+     * notifies container that this room is empty
+     * if parent room has anyone waiting they tell that one thread to enter and keep every other one waiting
+     * @param patient individual leaving space
+     *
+     */
     @Override
     public void leave(IPatient patient)
     {
-        if (patient==user)
+        if (patient==user){
             user = null;
+            container.notifyDone(this);
+        }
     }
 
+    /**
+     * notifies current patient that it should start trying to leave
+     * at this stage user is expected to be waiting at getFollowingContainer
+     */
     @Override
     public void notifyDone() {
-        //TODO: FIGURE THIS OUT, PROBABLY HAS SOMETHING TO DO WITH CALL CENTER
-        //get notif from worker, propagate it to container
-        container.notifyDone(this);
+        user.notify();
     }
 
     @Override
@@ -55,13 +67,24 @@ public class WorkerRoom implements IWorkerRoom,ISeat { //rooms for nurse,doctor,
         if (! user.equals(patient))
             throw new RuntimeException("Patient getting worker follower does not match contained");
         worker.providePatient(user);
+        while(worker.isBusy()){
+            try {
+                user.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         return next;
     }
-
+    /**
+     * This method is locked by the parent container
+     * @param patient the patient attempting to enter the space
+     */
     @Override
     public void tryEnter(IPatient patient) {
-    //TODO: FIGURE THIS OUT, PROBABLY HAS SOMETHING TO DO WITH CALL CENTER
+        user = patient;
     }
+
 
     @Override
     public String getDisplayName() {
@@ -99,23 +122,16 @@ public class WorkerRoom implements IWorkerRoom,ISeat { //rooms for nurse,doctor,
     public static WorkerRoom getRoom(Worker worker, IHall container, IContainer next, String name){
         if (worker==null)
             return null;
-        WorkerRoom workerRoom = null;
+        WorkerRoom workerRoom = new WorkerRoom(container,next,name);
         TServiceWorker workerThread = null;
         HCInstance instance = container.getInstance();
         if (worker==Worker.DOCTOR){
-            workerRoom = new AdultWorkerRoom(container,next,name);
-            workerThread = new TDoctor(instance.getTimer(),workerRoom);
-        }
-        else if (worker==Worker.CHILD_DOCTOR){
-            workerRoom = new ChildWorkerRoom(container,next,name);
             workerThread = new TDoctor(instance.getTimer(),workerRoom);
         }
         else if (worker==Worker.NURSE){
-            workerRoom = new WorkerRoom(container,next,name);
             workerThread = new TNurse(instance.getTimer(),workerRoom);
         }
         else if (worker==Worker.CASHIER){
-            workerRoom = new WorkerRoom(container,next,name);
             workerThread = new TCashier(instance.getTimer(),workerRoom);
         }
         workerRoom.setWorker(workerThread);

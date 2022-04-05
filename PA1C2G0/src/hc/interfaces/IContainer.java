@@ -6,21 +6,7 @@ import hc.HCInstance;
  * Generic Interfaces for spaces that a Patient can be inside
  * Fits both rooms and halls
  */
-public interface IContainer {
-    /**
-     * Check whether a room is empty and a patient qualifies to enter it
-     * @param patient the subject entering a room
-     * @return whether patient is allowed to enter
-     */
-    //TODO: WITH SEGREGATED QUEUES CHILD-SPECIFIC ROOMS/ THIS CONDITION MAY NOT EVEN BE REQUIRED -> this and enter shouldnt be here if tryEnter exists probably
-    boolean canEnter(IPatient patient);
-
-    /**
-     * Makes patient enter a given container object
-     * @param patient
-     * @return whether enter was successful, expected to be true
-     */
-    boolean enter(IPatient patient);
+public interface IContainer extends ISeat{
 
     /**
      * Notify given container that a patient has left it
