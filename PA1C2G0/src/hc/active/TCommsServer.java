@@ -3,6 +3,9 @@ package hc.active;
 import java.io.IOException;
 import java.net.ServerSocket;
 
+/**
+ * Endlessly accepts connection requests and deploys handler threads
+ */
 public class TCommsServer extends Thread {
     private ServerSocket serverSocket;
 

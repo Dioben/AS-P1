@@ -5,7 +5,7 @@ import hc.active.*;
 import hc.enums.Worker;
 import hc.interfaces.*;
 
-public class WorkerRoom implements IRoom { //rooms for nurse,doctor,cashier: only supports one person at a time
+public class WorkerRoom implements IWorkerRoom,ISeat { //rooms for nurse,doctor,cashier: only supports one person at a time
     //subclasses implement age lock policy
 
     private final IHall container;
@@ -23,12 +23,12 @@ public class WorkerRoom implements IRoom { //rooms for nurse,doctor,cashier: onl
         this.worker = worker;
     }
     @Override
-    public boolean canEnter(TPatient patient) {
+    public boolean canEnter(IPatient patient) {
         return user==null;
     }
 
     @Override
-    public boolean enter(TPatient patient) {//not supposed to ever actually return false
+    public boolean enter(IPatient patient) {//not supposed to ever actually return false
         if (canEnter(patient)){
             user = patient;
             return  true;
@@ -37,23 +37,29 @@ public class WorkerRoom implements IRoom { //rooms for nurse,doctor,cashier: onl
     }
 
     @Override
-    public void leave() {
-        user = null;
+    public void leave(IPatient patient)
+    {
+        if (patient==user)
+            user = null;
     }
 
     @Override
     public void notifyDone() {
         //TODO: FIGURE THIS OUT, PROBABLY HAS SOMETHING TO DO WITH CALL CENTER
+        //get notif from worker, propagate it to container
+        container.notifyDone(this);
     }
 
     @Override
-    public IContainer getFollowingContainer() {
+    public IContainer getFollowingContainer(IPatient patient) {
+        if (! user.equals(patient))
+            throw new RuntimeException("Patient getting worker follower does not match contained");
         worker.providePatient(user);
         return next;
     }
 
     @Override
-    public void tryEnter(TPatient tPatient) {
+    public void tryEnter(IPatient patient) {
     //TODO: FIGURE THIS OUT, PROBABLY HAS SOMETHING TO DO WITH CALL CENTER
     }
 
@@ -72,6 +78,22 @@ public class WorkerRoom implements IRoom { //rooms for nurse,doctor,cashier: onl
         if (user == null)
             return "";
         return user.getDisplayValue();
+    }
+
+    @Override
+    public void suspend() {
+        worker.suspend();
+        if (user!=null)
+            user.suspend();
+
+    }
+
+    @Override
+    public void resume() {
+        worker.resume();
+        if (user!=null)
+            user.resume();
+
     }
 
     public static WorkerRoom getRoom(Worker worker, IHall container, IContainer next, String name){

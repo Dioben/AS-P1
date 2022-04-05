@@ -1,8 +1,8 @@
 package hc.places;
 
-import hc.active.TPatient;
 import hc.interfaces.IContainer;
 import hc.interfaces.IHall;
+import hc.interfaces.IPatient;
 
 public class AdultWorkerRoom extends WorkerRoom{
     protected AdultWorkerRoom(IHall container, IContainer next, String name) {
@@ -10,7 +10,7 @@ public class AdultWorkerRoom extends WorkerRoom{
     }
 
     @Override
-    public boolean canEnter(TPatient patient) {
+    public boolean canEnter(IPatient patient) {
         return getUser()==null && !patient.isChild();
     }
 }

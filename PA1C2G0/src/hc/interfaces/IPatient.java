@@ -10,5 +10,7 @@ public interface IPatient {
     void setSeverity(Severity severity);
     String getDisplayValue();
 
+    void suspend();
+    void resume();
 
 }

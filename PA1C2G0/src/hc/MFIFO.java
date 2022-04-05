@@ -57,11 +57,11 @@ public class MFIFO<T> {
         return val;
     }
 
-    private boolean isFull() {
+    public boolean isFull() {
         return count == size;
     }
 
-    private boolean isEmpty() {
+    public boolean isEmpty() {
         return count == 0;
     }
 

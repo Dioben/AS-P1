@@ -10,6 +10,9 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class MCallCenter extends Thread {
     //TODO: THIS DOES NOT SUPPORT PAUSING AT ALL RN
+    //TODO: THIS SUCKS AND DOES NOT CONSIDER TELLING CC THAT YOU'RE AVAILABLE AT ALL
+    //TODO: REPLACE THE ONE FIFO WITH ONE FIFO PER CONDITION PROBABLY
+    //TODO: ADD A CONDITION THAT AWAKENS THIS MAIN THREAD MAYBE
     private final TCommsHandler comms;
     private final ReentrantLock rl;
     private final Condition evrAvailable;
@@ -34,7 +37,10 @@ public class MCallCenter extends Thread {
 
     }
 
-
+    /**
+     * Sets this class's operation mode
+     * @param b True for manual operation, False for automatic mode
+     */
     public void setManual(boolean b) {
     manual = b;
     }
@@ -54,6 +60,10 @@ public class MCallCenter extends Thread {
         return request;
     }
 
+    /**
+     * Sets a request to be temporarily held until controller approves it
+     * @param request: the request to be held
+     */
     private void holdRequest(CallCenterRequest request) {
         rl.lock();
         onHold[held] = request;
@@ -61,8 +71,10 @@ public class MCallCenter extends Thread {
         rl.unlock();
     }
 
-    /**Releases ONE patient request based on patient ID
+    /**Called by communication socket after movement is approved
+     * Releases ONE patient request based on patient ID
      * Adjusts the held request list so that there's never gaps
+     * If patient isn't on the backlog nothing will happen
      *
      * @param ID: The allowed patient's ID
      */
@@ -76,7 +88,7 @@ public class MCallCenter extends Thread {
                 break; //nothing found
             }
             if (request.getID().equals(ID)){ //found
-                requests.put(request);
+                requests.put(request); //actually move it into the queue
                 onHold[i]=null;//empty spot, move array backwards
                 i++;
                 for (;i<held;i++){

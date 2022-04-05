@@ -1,6 +1,7 @@
 package hc;
 
 import hc.active.TCommsHandler;
+import hc.interfaces.IPatient;
 import hc.places.MCallCenter;
 import hc.places.MHall;
 
@@ -14,6 +15,7 @@ public class HCInstance {
     private final MHall medicalHall;
     private final MHall paymentHall;
     private boolean paused = false;
+
     public HCInstance(int adults, int children, int seats, int evalTime, int medicTime, int payTime, int getUpTime, TCommsHandler tCommsHandler) {
         timer = new Timer.Builder()
                 .withEvaluationTimeRange(evalTime)

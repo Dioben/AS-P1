@@ -10,9 +10,13 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.UUID;
 
-
+/**
+ * Client handler branched off of main simulation
+ * Contains a Health Center instance and handles message flow with client
+ */
 public class TCommsHandler extends Thread {
 
+    //TODO: check whether this logger should even be here
     private HCPLogger logger;
     private Socket comms;
     private String instanceName;
@@ -20,7 +24,7 @@ public class TCommsHandler extends Thread {
     private BufferedReader in;
     private String mode = "AUTO";
 
-    //TODO: this object class is functionally empty
+    //TODO: this object class is nowhere near done
     private HCInstance instance;
 
     public TCommsHandler(Socket accept) {
@@ -29,6 +33,17 @@ public class TCommsHandler extends Thread {
 
     }
 
+    /**
+     * repeatedly gets next socket instruction and parses it
+     * valid commands:
+     * START <parameters>
+     * RESUME
+     * SUSPEND
+     * STOP
+     * END
+     * SWAP <mode>
+     * AUTH <patientID>
+     */
     public void run() {
         try {
             out = new PrintWriter(comms.getOutputStream(), true);
@@ -84,6 +99,10 @@ public class TCommsHandler extends Thread {
         }
     }
 
+    /**
+     * starts an HC instance based on command
+     * @param command full command string passed to socket, parsing is done internally
+     */
     private void startInstance(String[] command) {
         int adults = Integer.parseInt(command[1]);
         int children = Integer.parseInt(command[2]);
@@ -95,9 +114,18 @@ public class TCommsHandler extends Thread {
         instance = new HCInstance(adults, children, seats, evalTime, medicTime, payTime, getUpTime,this);
     }
 
+    /**
+     * Request permission for a pacient to move in manual mode
+     * @param patientID Patient's display info
+     * @param to Name of the target room
+     */
     public void requestPermission(String patientID, String to) {
         out.println("REQ " + patientID + " " + to);
     }
+
+    /**
+     * Tell client that simulation has finished running naturally
+     */
     public void notifyDone(){
         out.println("DONE");
     }
