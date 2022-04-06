@@ -4,7 +4,13 @@ import java.lang.reflect.Array;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class MFIFO<T> {
+/**
+ * Similar to normal MFIFO
+ * does not signal after get
+ * Instead a call to remove() with the given object must be used to release objects
+ * @param <T>
+ */
+public class MDelayFIFO<T> {
 
     private final int size;
     private final T[] queue;
@@ -14,8 +20,9 @@ public class MFIFO<T> {
     private int idxGet=0;
     private int idxPut=0;
     private int count = 0;
+    private int awaitingRemoval = 0;
 
-    public MFIFO(Class<T> clazz,int arraySize){
+    public MDelayFIFO(Class<T> clazz, int arraySize){
         this.size = arraySize;
         queue = (T[]) Array.newInstance(clazz, size);
         rl = new ReentrantLock();
@@ -38,6 +45,10 @@ public class MFIFO<T> {
         }
     }
 
+    /**
+     * Difference from normal implementation: does not signal available space
+     * @return object at idxGet
+     */
     public T get() {
 
         T val = null;
@@ -47,8 +58,8 @@ public class MFIFO<T> {
                 cNotEmpty.await();
             val = queue[idxGet];
             idxGet = (idxGet+1) % size;
+            awaitingRemoval++;
             count--;
-            cNotFull.signal();
 
         } catch( InterruptedException ignored ) {}
         finally {
@@ -57,8 +68,25 @@ public class MFIFO<T> {
         return val;
     }
 
+    /**
+     * Signals that one of the objects that has been gotten before has now actually left
+     * it does not matter which one left
+     */
+    public void remove(){
+        try{
+            rl.lock();
+            awaitingRemoval--;
+            cNotFull.signal();
+
+            } finally {
+            rl.unlock();
+        }
+    }
+
+
+
     public boolean isFull() {
-        return count == size;
+        return count+awaitingRemoval == size;
     }
 
     public boolean isEmpty() {

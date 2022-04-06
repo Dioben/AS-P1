@@ -2,7 +2,7 @@ package hc.interfaces;
 
 import hc.enums.Severity;
 
-public interface IPatient {
+public interface IPatient extends Runnable{
     boolean isChild();
     void setEntranceNumber(int entranceNumber);
     void setWaitingNumber(int waitingNumber);
