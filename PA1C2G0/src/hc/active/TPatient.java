@@ -21,6 +21,7 @@ public class TPatient extends Thread implements IPatient {
     private int entranceNumber;
     private int paymentNumber;
     private int waitingNumber;
+    private int roomNumber;
     private String displayValue="";
     TPatient(boolean isChild,Timer timer,IContainer surroundings){
         this.child = isChild;
@@ -108,5 +109,16 @@ public class TPatient extends Thread implements IPatient {
         if (severity == Severity.RED)
             prefix = "R";
         return prefix+displayValue;
+    }
+
+    @Override
+    public int getRoomNumber() {
+        return roomNumber;
+    }
+
+    @Override
+    public void setRoomNumber(int entered) {
+        roomNumber = entered;
+
     }
 }
