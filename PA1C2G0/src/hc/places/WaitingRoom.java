@@ -45,7 +45,7 @@ public class WaitingRoom implements IWaitingRoom {
      */
     @Override
     public IContainer getFollowingContainer(IPatient patient) {
-        while (released < patient.getRoomNumber()) {
+        while (released <= patient.getRoomNumber()) {
             try {
                 patient.wait();
             } catch (InterruptedException e) {
