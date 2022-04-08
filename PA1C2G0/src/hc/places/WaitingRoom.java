@@ -9,14 +9,14 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Class for rooms that hold several users
  */
 public class WaitingRoom implements IWaitingRoom {
-    private final IHall container;
+    private final IWaitingHall container;
     private final IContainer next;
     private final String name;
     private final MDelayFIFO<IPatient> patients;
     private int released = 0; //way to let a patient know if they've been released -> only ever changed by 1 thread
     private AtomicInteger entered =  new AtomicInteger(0);
 
-    public WaitingRoom(IHall container, IContainer next, String name, int seats){
+    public WaitingRoom(IWaitingHall container, IContainer next, String name, int seats){
         this.container = container;
         this.next = next;
         this.name = name;
@@ -35,6 +35,7 @@ public class WaitingRoom implements IWaitingRoom {
     @Override
     public void leave(IPatient patient) {
         patients.remove();
+        container.notifyDone(this);
     }
 
     /**
@@ -45,6 +46,7 @@ public class WaitingRoom implements IWaitingRoom {
      */
     @Override
     public IContainer getFollowingContainer(IPatient patient) {
+        container.notifyWaiting(this);
         while (released <= patient.getRoomNumber()) {
             try {
                 patient.wait();
@@ -90,7 +92,7 @@ public class WaitingRoom implements IWaitingRoom {
     }
 
     /**
-     * Called by monitor only
+     * Called from monitor only
      * Causes this room to tell the oldest user to get out
      *
      */

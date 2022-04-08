@@ -121,4 +121,5 @@ public class TPatient extends Thread implements IPatient {
         roomNumber = entered;
 
     }
+
 }

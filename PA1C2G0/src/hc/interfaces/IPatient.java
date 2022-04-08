@@ -16,4 +16,5 @@ public interface IPatient extends Runnable{
     int getRoomNumber();
 
     void setRoomNumber(int entered);
+
 }

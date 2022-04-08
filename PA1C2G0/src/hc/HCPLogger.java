@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Map;
 
+//TODO: UNSYNCHRONIZE THIS
 public class HCPLogger {
     private PrintWriter fileWriter;
     public HCPLogger(String simId) throws FileNotFoundException {

@@ -1,19 +1,19 @@
 package hc;
 
 import hc.active.TCommsHandler;
-import hc.interfaces.IPatient;
+import hc.interfaces.IHall;
 import hc.places.MCallCenter;
-import hc.places.MHall;
+import hc.places.MEntranceHall;
 
 public class HCInstance {
 
     private final Timer timer;
     private final MCallCenter callCenter;
-    private final MHall entranceHall;
-    private final MHall evaluationHall;
-    private final MHall waitingHall;
-    private final MHall medicalHall;
-    private final MHall paymentHall;
+    private final IHall entranceHall;
+    private final IHall evaluationHall;
+    private final IHall waitingHall;
+    private final IHall medicalHall;
+    private final IHall paymentHall;
     private boolean paused = false;
 
     public HCInstance(int adults, int children, int seats, int evalTime, int medicTime, int payTime, int getUpTime, TCommsHandler tCommsHandler, boolean mode) {
@@ -25,8 +25,9 @@ public class HCInstance {
         callCenter = new MCallCenter(false, tCommsHandler,adults+children);
         callCenter.start();
 
-        entranceHall = null;
         evaluationHall = null;
+        entranceHall = new MEntranceHall(this,evaluationHall,seats,"ETH",adults,children);
+
         waitingHall = null;
         medicalHall = null;
         paymentHall = null;
