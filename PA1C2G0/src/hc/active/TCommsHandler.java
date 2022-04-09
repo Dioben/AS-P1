@@ -108,11 +108,11 @@ public class TCommsHandler extends Thread {
 
     /**
      * Request permission for a patient to move in manual mode
-     * @param patientID Patient's display info
-     * @param to Name of the target room
+     * @param roomName name of room requesting movement
+     *
      */
-    public void requestPermission(String patientID, String to) {
-        out.println("REQ " + patientID + " " + to);
+    public void requestPermission(String roomName) {
+        out.println("REQ " + roomName);
     }
 
     /**

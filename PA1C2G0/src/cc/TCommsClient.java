@@ -46,8 +46,7 @@ public class TCommsClient extends Thread {
                     //TODO: handle incoming messages
                     case "REQ":
                         //TODO: Push notification to UI
-                        String id = notification[1];
-                        String destination = notification[2];
+                        String destination = notification[1];
                         break;
                     case "DONE":
                         //TODO: Push notification to UI

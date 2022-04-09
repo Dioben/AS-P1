@@ -26,7 +26,7 @@ public class HCInstance {
         callCenter.start();
 
         evaluationHall = null;
-        entranceHall = new MEntranceHall(this,evaluationHall,seats,"ETH",adults,children);
+        entranceHall = new MEntranceHall(this,evaluationHall,seats, adults,children,4);
 
         waitingHall = null;
         medicalHall = null;

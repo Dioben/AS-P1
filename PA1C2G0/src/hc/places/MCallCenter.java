@@ -2,164 +2,108 @@ package hc.places;
 
 import hc.MFIFO;
 import hc.active.TCommsHandler;
-import hc.interfaces.IContainer;
-import hc.interfaces.IPatient;
-
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.ReentrantLock;
+import hc.enums.ReleasedRoom;
+import hc.interfaces.ICallCenterWaiter;
 
 /**
- * STINKY CLASS
- * REQUIRES A FULL REWRITE
+ * Class responsible for propagating availability notifications
+ * Stores a queue of tasks
+ * Supports manual/auto mode
+ * In manual mode requests are propagated to controller process and echoed after user approval
  */
 public class MCallCenter extends Thread {
-    //TODO: THIS SUCKS AND DOES NOT CONSIDER TELLING CC THAT YOU'RE AVAILABLE AT ALL
-    //TODO: REPLACE THE ONE FIFO WITH ONE FIFO PER CONDITION PROBABLY
-    //TODO: ADD A CONDITION THAT AWAKENS THIS MAIN THREAD MAYBE
-    //TODO ALTERNATIVE: MOVE FROM 1 THREAD TOTAL TO 4 THREADS-> every thread has an entrance queue with built in "slack" and matches one of our current conditions
 
     private final TCommsHandler comms;
-    private final ReentrantLock rl;
-    private final Condition evrAvailable;
-    private final Condition wtrAvailable;
-    private final Condition mdwAvailable;
-    private final Condition mdrAvailable;
-    private final MFIFO<CallCenterRequest> requests;
+    private final MFIFO<ReleasedRoom> requests; //this fifo provides all the synchronicity we need
     private boolean manual;
-    private  CallCenterRequest[] onHold;
-    private int held = 0;
+    ICallCenterWaiter entranceHall;
+    ICallCenterWaiter waitingHall;
+    ICallCenterWaiter medicalHall;
+
 
     public MCallCenter(boolean manual, TCommsHandler tCommsHandler,int people){
-        rl = new ReentrantLock();
-        evrAvailable = rl.newCondition();
-        wtrAvailable = rl.newCondition();
-        mdwAvailable = rl.newCondition();
-        mdrAvailable = rl.newCondition();
+
         this.manual = manual;
         comms = tCommsHandler;
-        requests = new MFIFO(CallCenterRequest[].class,people);
-        onHold = new CallCenterRequest[people]; //not necessarily FIFO, lock-protected
-
+        requests = new MFIFO(ReleasedRoom[].class,people);
     }
 
     /**
-     * Sets this class's operation mode
+     * Sets this class's operation mode, only ever called by comms so safe by default
      * @param b True for manual operation, False for automatic mode
      */
     public void setManual(boolean b) {
     manual = b;
     }
 
-    public CallCenterRequest registerRequest(IContainer container, IPatient patient){
-        Condition cond = getMatchingCondition(container);
-        if (cond==null){
-            throw new RuntimeException("This should not be possible, name was"+ container.getDisplayName());
+    /**
+     * Registers a new movement request from a room that got was freed up
+     * @param room The room type that got freed up
+     */
+    public void requestMovement(ReleasedRoom room){
+        if (!manual)
+            requests.put(room);
+        else{
+            comms.requestPermission(room.name());
         }
-        CallCenterRequest request = new CallCenterRequest(patient,cond);
-        if (! manual)
-            requests.put(request);
-        else {
-            holdRequest(request);
-            comms.requestPermission(patient.getDisplayValue(), container.getDisplayName());
-        }
-        return request;
     }
 
-    /**
-     * Sets a request to be temporarily held until controller approves it
-     * @param request: the request to be held
-     */
-    private void holdRequest(CallCenterRequest request) {
-        rl.lock();
-        onHold[held] = request;
-        held++;
-        rl.unlock();
-    }
 
     /**Called by communication socket after movement is approved
-     * Releases ONE patient request based on patient ID
-     * Adjusts the held request list so that there's never gaps
-     * If patient isn't on the backlog nothing will happen
+     * Releases ONE patient request for the given room
      *
-     * @param ID: The allowed patient's ID
+     * @param ID: The allowed room's name
      */
     public void releaseRequest(String ID){
-        rl.lock();
-        CallCenterRequest request;
-        for (int i=0;i<held;i++){
-            request = onHold[i];
-
-            if (request == null){
-                break; //nothing found
-            }
-            if (request.getID().equals(ID)){ //found
-                requests.put(request); //actually move it into the queue
-                onHold[i]=null;//empty spot, move array backwards
-                i++;
-                for (;i<held;i++){
-                    if (onHold[i]==null)
-                        break; //no more to fast forward
-                    onHold[i-1] = onHold[i];
-                }
-                held--;
-                rl.unlock();
-                return;
-            }
+        switch (ID){
+            case "EVH":
+                requests.put(ReleasedRoom.EVH);
+                break;
+            case "WTR":
+                requests.put(ReleasedRoom.WTR);
+                break;
+            case "MDW":
+                requests.put(ReleasedRoom.MDW);
+                break;
+            case "MDR_ADULT":
+                requests.put(ReleasedRoom.MDR_ADULT);
+                break;
+            case "MDR_CHILD":
+                requests.put(ReleasedRoom.MDR_CHILD);
+                break;
+            default:
+                throw new RuntimeException("Unknown room was released");
         }
-        rl.unlock();//nothing found
     }
 
-    private Condition getMatchingCondition(IContainer container) {
-        String name = container.getDisplayName();
-        if (name.startsWith("ETR"))
-            return evrAvailable;
-        if (name.equals("WTH"))
-            return wtrAvailable;
-        if (name.startsWith("WTR"))
-            return mdwAvailable;
-        if (name.startsWith("MDW"))
-            return mdrAvailable;
-        return null;
-    }
 
     /**
-     * gets the latest request, allow it
-     * big problem: this does not match spec at all
+     * gets the latest request
+     * lock into appropriate hall
+     * notify oldest patient in hall if any
+     *
      */
     public void run(){
-        CallCenterRequest handling;
+        ReleasedRoom handling;
         while (true){
             handling = requests.get();
-            handling.allowed = true;
-            handling.condition.signalAll();
+            switch (handling){
+                case EVH:
+                    entranceHall.notifyAvailable(handling);
+                    break;
+                case WTR:
+                case MDW:
+                    waitingHall.notifyAvailable(handling);
+                    break;
+                case MDR_ADULT:
+                case MDR_CHILD:
+                    medicalHall.notifyAvailable(handling);
+                    break;
+
+            }
 
         }
     }
 
-    /**
-     * Class for holding information that is fed back to a customer:
-     * Contains a condition they must wait on and a boolean to confirm that they're meant to wake up
-     */
-    public class CallCenterRequest {
-        private final IPatient patient;
-        private boolean allowed = false;
-        private final Condition condition;
-
-
-        private CallCenterRequest(IPatient p, Condition cond){
-            patient = p;
-            condition = cond;
-        }
-
-        public boolean isAllowed() {
-            return allowed;
-        }
-        public Condition getCondition(){
-        return  condition;
-        }
-        public String getID(){
-            return patient.getDisplayValue();
-        }
-    }
 
     }

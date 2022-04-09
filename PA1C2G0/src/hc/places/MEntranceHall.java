@@ -2,17 +2,18 @@ package hc.places;
 
 import hc.HCInstance;
 import hc.MFIFO;
+import hc.enums.ReleasedRoom;
 import hc.interfaces.*;
 
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class MEntranceHall implements IWaitingHall {
+public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
 
     private final  HCInstance instance;
     private final WaitingRoom childRoom;
     private final WaitingRoom adultRoom;
-    private final String name;
+    private final String name = "ETH";
     private int inChild = 0;
     private int inAdult = 0;
     private final int roomMax;
@@ -23,21 +24,21 @@ public class MEntranceHall implements IWaitingHall {
     private int released = 0; //helps patients know if they can leave
     private final MFIFO<IPatient> childBacklog;
     private final MFIFO<IPatient> adultBacklog;
-    private int nextSlack = 4; //we start out with 4 slots available in EVH
+    private int nextSlack; //we start out with 4 slots available in EVH
     private final MFIFO<Boolean> entrances; //stores entrance history, True if Child and False otherwise
 
-    public MEntranceHall(HCInstance instance, IContainer after, int seatsPerRoom, String name, int adults, int children){
+    public MEntranceHall(HCInstance instance, IContainer after, int seatsPerRoom, int adults, int children, int nextRoomSlack){
         this.instance = instance;
-        childRoom = new WaitingRoom(this,after,"ET1",seatsPerRoom);
-        adultRoom = new WaitingRoom(this,after,"ET2",seatsPerRoom);
+        childRoom = new WaitingRoom(this,after,"ETR1",seatsPerRoom);
+        adultRoom = new WaitingRoom(this,after,"ETR2",seatsPerRoom);
         roomMax = seatsPerRoom;
-        this.name = name;
         rl = new ReentrantLock();
         childRoomAvailable = rl.newCondition();
         adultRoomAvailable = rl.newCondition();
         childBacklog = new MFIFO(IPatient[].class,children);
         adultBacklog = new MFIFO(IPatient[].class,adults);
         entrances = new MFIFO(Boolean[].class,seatsPerRoom*2);
+        nextSlack = nextRoomSlack;
     }
 
     /**
@@ -177,10 +178,15 @@ public class MEntranceHall implements IWaitingHall {
 
     }
 
-    /** TODO: ADD THIS TO SOME SORT OF "CALL CENTER LISTENER" INTERFACE
+    /**
      * Called by CCH to notify that some forward movement is expected
+     * @param releasedRoom
      */
-    public void notifyAvailable() {
+    @Override
+    public void notifyAvailable(ReleasedRoom releasedRoom) {
+        if (!releasedRoom.equals(ReleasedRoom.EVH)){
+            throw new RuntimeException("Entrance Hall was notified of the wrong movement: "+releasedRoom.name());
+        }
         rl.lock();
         if (inChild==0 && inAdult==0)
             nextSlack++;
