@@ -2,6 +2,7 @@ package hc.places;
 
 import hc.HCInstance;
 import hc.MFIFO;
+import hc.enums.ReleasedRoom;
 import hc.enums.Worker;
 import hc.interfaces.*;
 
@@ -15,9 +16,9 @@ public class MEvaluationHall implements IHall {
     private final boolean[] available;
     private final ReentrantLock rl;
     private final String name = "EVH";
+    private final ICallCenterWaiter callCenter; //must be set later due to object creation flow
 
-    //TODO: ADD CALL CENTER SOMEHOW
-    public MEvaluationHall(HCInstance instance, IContainer after){
+    public MEvaluationHall(HCInstance instance, IContainer after, ICallCenterWaiter callCenter){
         this.instance = instance;
         available = new boolean[]{false, false, false, false};
         IWorkerRoom evr1 = WorkerRoom.getRoom(Worker.NURSE,this,after,"EVR1");
@@ -26,6 +27,7 @@ public class MEvaluationHall implements IHall {
         IWorkerRoom evr4 = WorkerRoom.getRoom(Worker.NURSE,this,after,"EVR4");
         rooms = new IWorkerRoom[]{evr1,evr2,evr3,evr4};
         rl = new ReentrantLock();
+        this.callCenter = callCenter;
     }
 
     /**
@@ -100,7 +102,7 @@ public class MEvaluationHall implements IHall {
                 break;
             }
         }
-        //TODO: NOTIFY CALL CENTER HERE
+        callCenter.notifyAvailable(ReleasedRoom.EVH);
         rl.unlock();
 
     }
@@ -130,5 +132,6 @@ public class MEvaluationHall implements IHall {
     @Override
     public void leave(IPatient patient) {
     }
+
 
 }

@@ -11,14 +11,14 @@ import hc.interfaces.ICallCenterWaiter;
  * Supports manual/auto mode
  * In manual mode requests are propagated to controller process and echoed after user approval
  */
-public class MCallCenter extends Thread {
+public class MCallCenter extends Thread implements ICallCenterWaiter{
 
     private final TCommsHandler comms;
     private final MFIFO<ReleasedRoom> requests; //this fifo provides all the synchronicity we need
     private boolean manual;
-    ICallCenterWaiter entranceHall;
-    ICallCenterWaiter waitingHall;
-    ICallCenterWaiter medicalHall;
+    private ICallCenterWaiter entranceHall;
+    private ICallCenterWaiter waitingHall;
+    private ICallCenterWaiter medicalHall;
 
 
     public MCallCenter(boolean manual, TCommsHandler tCommsHandler,int people){
@@ -40,7 +40,7 @@ public class MCallCenter extends Thread {
      * Registers a new movement request from a room that got was freed up
      * @param room The room type that got freed up
      */
-    public void requestMovement(ReleasedRoom room){
+    public void notifyAvailable(ReleasedRoom room){
         if (!manual)
             requests.put(room);
         else{
@@ -106,4 +106,15 @@ public class MCallCenter extends Thread {
     }
 
 
+    public void setEntranceHall(ICallCenterWaiter entranceHall) {
+        this.entranceHall = entranceHall;
     }
+
+    public void setWaitingHall(ICallCenterWaiter waitingHall) {
+        this.waitingHall = waitingHall;
+    }
+
+    public void setMedicalHall(ICallCenterWaiter medicalHall) {
+        this.medicalHall = medicalHall;
+    }
+}

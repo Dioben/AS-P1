@@ -4,6 +4,7 @@ import hc.active.TCommsHandler;
 import hc.interfaces.IHall;
 import hc.places.MCallCenter;
 import hc.places.MEntranceHall;
+import hc.places.MEvaluationHall;
 
 public class HCInstance {
 
@@ -25,12 +26,18 @@ public class HCInstance {
         callCenter = new MCallCenter(false, tCommsHandler,adults+children);
         callCenter.start();
 
-        evaluationHall = null;
-        entranceHall = new MEntranceHall(this,evaluationHall,seats, adults,children,4);
-
         waitingHall = null;
         medicalHall = null;
         paymentHall = null;
+
+        evaluationHall = new MEvaluationHall(this,waitingHall,callCenter);
+        MEntranceHall eh = new MEntranceHall(this,evaluationHall,seats, adults,children,4);
+        entranceHall = eh;
+        callCenter.setEntranceHall(eh);
+        //callCenter.setMedicalHall(medicalHall);
+        //callCenter.setWaitingHall(waitingHall);
+
+
 
 
     }
