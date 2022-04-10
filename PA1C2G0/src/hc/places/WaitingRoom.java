@@ -13,7 +13,7 @@ public class WaitingRoom implements IWaitingRoom {
     private final IContainer next;
     private final String name;
     private final MDelayFIFO<IPatient> patients;
-    private int released = 0; //way to let a patient know if they've been released -> only ever changed by 1 thread
+    private int released = -1; //way to let a patient know if they've been released -> only ever changed by 1 thread
     private AtomicInteger entered =  new AtomicInteger(0);
 
     public WaitingRoom(IWaitingHall container, IContainer next, String name, int seats){
@@ -99,7 +99,7 @@ public class WaitingRoom implements IWaitingRoom {
     @Override
     public void notifyDone() {
         IPatient patient = patients.get(); //this notifies the oldest patient, causing them to leave getFollowingContainer
-        released++;
+        released = patient.getRoomNumber();
         patient.notify();
     }
 

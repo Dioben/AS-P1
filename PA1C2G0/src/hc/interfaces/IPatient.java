@@ -8,6 +8,7 @@ public interface IPatient extends Runnable{
     void setWaitingNumber(int waitingNumber);
     void setPaymentNumber(int paymentNumber);
     void setSeverity(Severity severity);
+    Severity getSeverity();
     String getDisplayValue();
 
     void suspend();

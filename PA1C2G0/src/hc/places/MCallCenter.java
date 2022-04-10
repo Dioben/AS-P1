@@ -59,11 +59,17 @@ public class MCallCenter extends Thread implements ICallCenterWaiter{
             case "EVH":
                 requests.put(ReleasedRoom.EVH);
                 break;
-            case "WTR":
-                requests.put(ReleasedRoom.WTR);
+            case "WTR_ADULT":
+                requests.put(ReleasedRoom.WTR_ADULT);
                 break;
-            case "MDW":
-                requests.put(ReleasedRoom.MDW);
+            case "WTR_CHILD":
+                requests.put(ReleasedRoom.WTR_CHILD);
+                break;
+            case "MDW_ADULT":
+                requests.put(ReleasedRoom.MDW_ADULT);
+                break;
+            case "MDW_CHILD":
+                requests.put(ReleasedRoom.MDW_CHILD);
                 break;
             case "MDR_ADULT":
                 requests.put(ReleasedRoom.MDR_ADULT);
@@ -91,8 +97,10 @@ public class MCallCenter extends Thread implements ICallCenterWaiter{
                 case EVH:
                     entranceHall.notifyAvailable(handling);
                     break;
-                case WTR:
-                case MDW:
+                case WTR_ADULT:
+                case WTR_CHILD:
+                case MDW_ADULT:
+                case MDW_CHILD:
                     waitingHall.notifyAvailable(handling);
                     break;
                 case MDR_ADULT:

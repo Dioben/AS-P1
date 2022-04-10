@@ -11,8 +11,8 @@ import java.util.concurrent.locks.ReentrantLock;
 public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
 
     private final  HCInstance instance;
-    private final WaitingRoom childRoom;
-    private final WaitingRoom adultRoom;
+    private final IWaitingRoom childRoom;
+    private final IWaitingRoom adultRoom;
     private final String name = "ETH";
     private int inChild = 0;
     private int inAdult = 0;
@@ -21,7 +21,8 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
     private final Condition childRoomAvailable;
     private final Condition adultRoomAvailable;
     private int entered = 0; //ID tracker
-    private int released = 0; //helps patients know if they can leave
+    private int releasedChild = -1; //helps patients know if they can leave
+    private int releasedAdult = -1;
     private final MFIFO<IPatient> childBacklog;
     private final MFIFO<IPatient> adultBacklog;
     private int nextSlack; //we start out with 4 slots available in EVH
@@ -29,8 +30,8 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
 
     public MEntranceHall(HCInstance instance, IContainer after, int seatsPerRoom, int adults, int children, int nextRoomSlack){
         this.instance = instance;
-        childRoom = new WaitingRoom(this,after,"ETR1",seatsPerRoom);
-        adultRoom = new WaitingRoom(this,after,"ETR2",seatsPerRoom);
+        childRoom = new WaitingRoom(this,after,"ETR2",seatsPerRoom);
+        adultRoom = new WaitingRoom(this,after,"ETR1",seatsPerRoom);
         roomMax = seatsPerRoom;
         rl = new ReentrantLock();
         childRoomAvailable = rl.newCondition();
@@ -63,7 +64,7 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
         rl.lock();
         if (inAdult==roomMax){
             adultBacklog.put(patient);
-            while (released<patient.getRoomNumber()) {
+            while (releasedAdult<patient.getRoomNumber()) {
                 try {
                     adultRoomAvailable.await();
                 } catch (InterruptedException e) {}
@@ -87,7 +88,7 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
         rl.lock();
         if (inChild==roomMax){
             childBacklog.put(patient);
-            while(released<patient.getRoomNumber()){
+            while(releasedChild<patient.getRoomNumber()){
                 try {
                     childRoomAvailable.await();
                 } catch (InterruptedException e) {}
@@ -159,7 +160,7 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
         inChild--;
         if(!childBacklog.isEmpty()) {
             IPatient patient = childBacklog.get();
-            released = patient.getRoomNumber();
+            releasedChild = patient.getRoomNumber();
         }
         childRoomAvailable.signal();
     }
@@ -171,7 +172,7 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
         inAdult--;
         if(!adultBacklog.isEmpty()) {
             IPatient patient = adultBacklog.get();
-            released = patient.getRoomNumber();
+            releasedAdult = patient.getRoomNumber();
         }
         adultRoomAvailable.signal();
 

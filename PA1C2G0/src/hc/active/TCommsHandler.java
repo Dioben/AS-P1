@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Client handler branched off of main simulation
@@ -17,6 +18,7 @@ public class TCommsHandler extends Thread {
     private final Socket comms;
     private PrintWriter out;
     private String mode = "AUTO";
+    private ReentrantLock writeLock; //supposed to be thread safe but I want to make sure
 
     //TODO: this object class is nowhere near done
     private HCInstance instance;
@@ -112,13 +114,18 @@ public class TCommsHandler extends Thread {
      *
      */
     public void requestPermission(String roomName) {
+        writeLock.lock();
         out.println("REQ " + roomName);
+        writeLock.unlock();
     }
 
     /**
      * Tell client that simulation has finished running naturally
      */
     public void notifyDone(){
+
+        writeLock.lock();
         out.println("DONE");
+        writeLock.unlock();
     }
 }

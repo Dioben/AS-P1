@@ -16,7 +16,7 @@ public class MEvaluationHall implements IHall {
     private final boolean[] available;
     private final ReentrantLock rl;
     private final String name = "EVH";
-    private final ICallCenterWaiter callCenter; //must be set later due to object creation flow
+    private final ICallCenterWaiter callCenter;
 
     public MEvaluationHall(HCInstance instance, IContainer after, ICallCenterWaiter callCenter){
         this.instance = instance;

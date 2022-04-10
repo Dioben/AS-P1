@@ -5,8 +5,10 @@ package hc.enums;
  */
 public enum ReleasedRoom {
     EVH,
-    WTR,
-    MDW,
+    WTR_ADULT,
+    WTR_CHILD,
+    MDW_ADULT,
+    MDW_CHILD,
     MDR_ADULT,
     MDR_CHILD;
 
