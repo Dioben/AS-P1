@@ -11,7 +11,7 @@ import hc.interfaces.*;
  */
 public class WorkerRoom implements IWorkerRoom,ISeat {
     private final IHall container;
-    private final IContainer next;
+    private IContainer next;
     private IPatient user;
     private IServiceWorker worker;
     private final String name;
@@ -32,7 +32,7 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
     }
 
 
-    private boolean canEnter(IPatient patient) {
+    public boolean canEnter() {
         return user==null;
     }
 
@@ -144,5 +144,11 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
         workerThread.start();
         return workerRoom;
     }
+    @Override
     public IPatient getUser(){return user;}
+
+    @Override
+    public void setNext(IContainer next) {
+        this.next = next;
+    }
 }

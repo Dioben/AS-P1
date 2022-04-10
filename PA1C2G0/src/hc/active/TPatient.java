@@ -96,6 +96,11 @@ public class TPatient extends Thread implements IPatient {
         this.severity=severity;
     }
 
+    @Override
+    public Severity getSeverity() {
+        return severity;
+    }
+
     public boolean isChild() {
         return child;
     }

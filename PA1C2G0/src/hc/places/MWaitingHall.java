@@ -269,7 +269,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
     public void notifyAvailable(ReleasedRoom releasedRoom) {
         if (! (releasedRoom.equals(ReleasedRoom.WTR_ADULT)  || releasedRoom.equals(releasedRoom.WTR_CHILD) ||
                 releasedRoom.equals(releasedRoom.MDW_ADULT) || releasedRoom.equals(releasedRoom.MDW_CHILD)) ){
-            throw new RuntimeException("Entrance Hall was notified of the wrong movement: "+releasedRoom.name());
+            throw new RuntimeException("Waiting Hall was notified of the wrong movement: "+releasedRoom.name());
         }
         rl.lock();
         if (releasedRoom.equals(ReleasedRoom.MDW_ADULT)){

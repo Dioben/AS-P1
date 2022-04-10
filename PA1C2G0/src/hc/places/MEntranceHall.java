@@ -231,7 +231,7 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
     }
 
     /**
-     * Allow a waiting room patient to stop waiting without CCH call if we know there's space in EVH
+     * Allow a waiting room patient to stop waiting without CCH call if we know there's space in WTR
      * @param room
      */
     @Override

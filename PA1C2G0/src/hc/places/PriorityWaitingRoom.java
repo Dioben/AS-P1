@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class PriorityWaitingRoom implements IWaitingRoom {
     private final IWaitingHall container;
-    private final IContainer next;
+    private IContainer next;
     private final String name;
     private final MDelayFIFO<IPatient> patientsRed;
     private final MDelayFIFO<IPatient> patientsYellow;
@@ -155,4 +155,13 @@ public class PriorityWaitingRoom implements IWaitingRoom {
     public IPatient[] getUsers(){
         //TODO: UI purpose code, probably develop a way to peek into FIFO
         return null;}
+
+    /**
+     * Overrides the next field in cases where it might be ambiguous
+     * @param next The container to set as following after this one
+     */
+    @Override
+    public void setNext(IContainer next) {
+        this.next = next;
+    }
 }

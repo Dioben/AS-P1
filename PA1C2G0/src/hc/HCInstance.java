@@ -7,6 +7,10 @@ import hc.places.MEntranceHall;
 import hc.places.MEvaluationHall;
 import hc.places.MWaitingHall;
 
+/**
+ * Class representing an instance of health center
+ * Includes all halls and patients
+ */
 public class HCInstance {
 
     private final Timer timer;
