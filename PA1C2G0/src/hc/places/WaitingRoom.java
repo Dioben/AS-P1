@@ -3,6 +3,7 @@ package hc.places;
 import hc.MDelayFIFO;
 import hc.interfaces.*;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -22,10 +23,6 @@ public class WaitingRoom implements IWaitingRoom {
         this.next = next;
         this.name = name;
         patients = new MDelayFIFO(IPatient[].class, seats);
-    }
-
-    private boolean canEnter(IPatient patient) {
-        return ! patients.isFull();
     }
 
 
@@ -76,10 +73,11 @@ public class WaitingRoom implements IWaitingRoom {
     }
 
 
+    //TODO: USE FIFO PEEK HERE
     @Override
     public Map<String, String[]> getState() {
-        //TODO: SOMETHING, SHOULD PROBABLY REPORT THE MOST RECENT USER TO GET IN?
-       return "";
+        HashMap<String,String[]> map = new HashMap();
+       return map;
     }
 
     @Override
@@ -104,10 +102,6 @@ public class WaitingRoom implements IWaitingRoom {
         patient.notify();
     }
 
-    @Override
-    public IPatient[] getUsers(){
-        //TODO: UI purpose code, probably develop a way to peek into FIFO
-        return null;}
 
     /**
      * Overrides the next field in cases where it might be ambiguous

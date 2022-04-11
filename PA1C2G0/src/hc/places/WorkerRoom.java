@@ -142,8 +142,6 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
         workerThread.start();
         return workerRoom;
     }
-    @Override
-    public IPatient getUser(){return user;}
 
     @Override
     public void setNext(IContainer next) {

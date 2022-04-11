@@ -93,7 +93,7 @@ public class MPaymentHall implements IHall {
     public void notifyDone(IRoom room) {
         rl.lock();
         cashierAvailable = true;
-        //TODO: logging here
+        instance.notifyGone();
         IPatient patient = backlog.get();
         released = patient.getRoomNumber();
         cashierAvailableSignal.signal();

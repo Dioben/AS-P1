@@ -8,7 +8,6 @@ public interface IWorkerRoom extends IRoom{
      * Tell this container that task within has been conducted
      */
     void notifyDone();
-    IPatient getUser();
     boolean canEnter();
 
 }

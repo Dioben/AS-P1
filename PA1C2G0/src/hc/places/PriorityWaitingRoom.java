@@ -7,6 +7,7 @@ import hc.interfaces.IPatient;
 import hc.interfaces.IWaitingHall;
 import hc.interfaces.IWaitingRoom;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -115,7 +116,8 @@ public class PriorityWaitingRoom implements IWaitingRoom {
     @Override
     public Map<String, String[]> getState() {
         //TODO: SOMETHING, SHOULD PROBABLY REPORT THE MOST RECENT USER TO GET IN?
-       return "";
+        HashMap<String,String[]> map = new HashMap();
+        return map;
     }
 
     @Override
@@ -150,11 +152,6 @@ public class PriorityWaitingRoom implements IWaitingRoom {
         if (patient!=null)
             patient.notify();
     }
-
-    @Override
-    public IPatient[] getUsers(){
-        //TODO: UI purpose code, probably develop a way to peek into FIFO
-        return null;}
 
     /**
      * Overrides the next field in cases where it might be ambiguous

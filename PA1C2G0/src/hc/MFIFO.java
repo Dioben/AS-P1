@@ -14,9 +14,11 @@ public class MFIFO<T> {
     private int idxGet=0;
     private int idxPut=0;
     private int count = 0;
+    private final Class<T> clazz; //for snapshot purposes
 
     public MFIFO(Class<T> clazz,int arraySize){
         this.size = arraySize;
+        this.clazz = clazz;
         queue = (T[]) Array.newInstance(clazz, size);
         rl = new ReentrantLock();
         cNotFull = rl.newCondition();
@@ -63,6 +65,24 @@ public class MFIFO<T> {
 
     public boolean isEmpty() {
         return count == 0;
+    }
+
+    /**
+     * Generates a list snapshot of this array's current state, null-padded
+     * @param size size of returned array
+     * @return clone of this FIFO's content, oldest items first
+     */
+    public T[] getSnapshot(int size){
+        rl.lock();
+        T[] values = (T[]) Array.newInstance(clazz, size);
+        for (int i = 0;i<count;i++){
+            if (i==size)
+                break;
+            values[i] = queue[(idxGet+i)%size];
+        }
+
+        rl.unlock();
+        return values;
     }
 
 
