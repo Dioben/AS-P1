@@ -5,6 +5,9 @@ import hc.active.*;
 import hc.enums.Worker;
 import hc.interfaces.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Room meant to hold Doctor/Nurse/Cashier and a single patient at a time
  * The worker is a thread but the room itself is not
@@ -97,10 +100,11 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
      * @return string detailing room's contained patient
      */
     @Override
-    public String getState() {
-        if (user == null)
-            return "";
-        return user.getDisplayValue();
+    public Map<String, String[]> getState() {
+        String[] info = {user==null?"": user.getDisplayValue()};
+        HashMap<String, String[]> val = new HashMap<>();
+        val.put(this.name,info);
+        return val;
     }
 
     /**
@@ -109,9 +113,6 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
     @Override
     public void suspend() {
         worker.suspend();
-        if (user!=null)
-            user.suspend();
-
     }
 
     /**
@@ -120,9 +121,6 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
     @Override
     public void resume() {
         worker.resume();
-        if (user!=null)
-            user.resume();
-
     }
 
     public static WorkerRoom getRoom(Worker worker, IHall container, IContainer next, String name){

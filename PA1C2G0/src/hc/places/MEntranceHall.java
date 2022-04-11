@@ -5,6 +5,8 @@ import hc.MFIFO;
 import hc.enums.ReleasedRoom;
 import hc.interfaces.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -26,7 +28,6 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
     private final MFIFO<IPatient> childBacklog;
     private final MFIFO<IPatient> adultBacklog;
     private int nextSlack; //we start out with 4 slots available in EVH
-    private IPatient latest; //just for logging purposes
     private final MFIFO<Boolean> entrances; //stores entrance history, True if Child and False otherwise
 
     public MEntranceHall(HCInstance instance, IContainer after, int seatsPerRoom, int adults, int children, int nextRoomSlack){
@@ -107,12 +108,35 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
         return name;
     }
 
-    /**
+    /** TODO: IMPLEMENT THE QUEUE PEEK METHOD, USE IT HERE
      * @return Empty String if no patient exists in this room, otherwise the display value of latest patient to enter
      */
     @Override
-    public String getState() {
-        return (latest==null)?"":latest.getDisplayValue();
+    public Map<String, String[]> getState() {
+        HashMap<String,String[]> vals = new HashMap<>();
+
+        IPatient[] oldestAdults = null;
+        IPatient[] oldestChildren = null;
+        Boolean[]  oldestEntries = null;
+
+        String[] selfInfo = new String[3];
+        for(int i=0;i<0;i++){
+            if (oldestEntries[i]==null){
+                selfInfo[i]="";
+            }
+            else if (oldestEntries[i]){ //wasChild
+                selfInfo[i] = oldestChildren[i].getDisplayValue();
+            }else{
+                selfInfo[i] = oldestAdults[i].getDisplayValue();
+            }
+        }
+
+        vals.put(this.name,selfInfo);
+        HashMap<String,String[]> inside = childRoom.getState();
+        vals.putAll(inside);
+        HashMap<String,String[]> inside = adultRoom.getState();
+        vals.putAll(inside);
+        return vals;
     }
 
     /**
@@ -216,20 +240,18 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
         patient.setEntranceNumber(entered);
         patient.setRoomNumber(entered);
         entered++;
-        latest = patient;
         instance.notifyMovement();
         rl.unlock();
     }
 
     /**
      * Notifies that a patient has left this hall and entered the waiting rooms
-     * As the counters were preemptively increased earlier and this class does not signal Call Center this function only needs to update display
+     * As the counters were preemptively increased earlier and this class does not signal Call Center this function only notifies instance to log changes
      * @param patient individual leaving space
      */
     @Override
     public void leave(IPatient patient) {
-        if (patient==latest)
-            latest=null;
+        instance.notifyMovement();
     }
 
     /**

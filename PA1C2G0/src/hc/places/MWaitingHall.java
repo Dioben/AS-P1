@@ -6,6 +6,7 @@ import hc.enums.ReleasedRoom;
 import hc.enums.Severity;
 import hc.interfaces.*;
 
+import java.util.Map;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -182,22 +183,22 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
      * @return
      */
     @Override
-    public String getState() {
+    public Map<String, String[]> getState() {
         return null;
     }
 
-    /** TODO
+    /**
      * Pause all contained threads
-     * With patient thread pooling this can be empty, otherwise we must propagate into room
+     * Due to patient pooling this method does not actually do anything
      */
     @Override
     public void suspend() {
 
     }
 
-    /** TODO
+    /**
      * Resume all contained threads
-     * With patient thread pooling this can be empty, otherwise we must propagate into room
+     * Due to patient pooling this method does not actually do anything
      */
     @Override
     public void resume() {

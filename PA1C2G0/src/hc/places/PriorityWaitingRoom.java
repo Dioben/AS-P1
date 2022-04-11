@@ -1,13 +1,13 @@
 package hc.places;
 
 import hc.MDelayFIFO;
-import hc.MFIFO;
 import hc.enums.Severity;
 import hc.interfaces.IContainer;
 import hc.interfaces.IPatient;
 import hc.interfaces.IWaitingHall;
 import hc.interfaces.IWaitingRoom;
 
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -113,7 +113,7 @@ public class PriorityWaitingRoom implements IWaitingRoom {
 
 
     @Override
-    public String getState() {
+    public Map<String, String[]> getState() {
         //TODO: SOMETHING, SHOULD PROBABLY REPORT THE MOST RECENT USER TO GET IN?
        return "";
     }

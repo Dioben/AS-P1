@@ -3,6 +3,7 @@ package hc.places;
 import hc.MDelayFIFO;
 import hc.interfaces.*;
 
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -76,7 +77,7 @@ public class WaitingRoom implements IWaitingRoom {
 
 
     @Override
-    public String getState() {
+    public Map<String, String[]> getState() {
         //TODO: SOMETHING, SHOULD PROBABLY REPORT THE MOST RECENT USER TO GET IN?
        return "";
     }

@@ -1,6 +1,6 @@
 package hc.interfaces;
 
-import hc.HCInstance;
+import java.util.Map;
 
 /**
  * Generic Interfaces for spaces that a Patient can be inside
@@ -28,10 +28,10 @@ public interface IContainer extends ISeat{
 
 
     /**
-     * Current occupation status of container, used for Logger
-     * @return "" if empty, otherwise user displayNumber + Band color
+     * Current occupation status of container, used for Logger and UI
+     * @return per room in container: "" if empty, otherwise user displayNumber + Band color
      */
-    public String getState();
+    public Map<String,String[]> getState();
 
     /**
      * pause any threads involved with this container

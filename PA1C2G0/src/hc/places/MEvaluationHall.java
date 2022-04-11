@@ -1,12 +1,11 @@
 package hc.places;
 
 import hc.HCInstance;
-import hc.MFIFO;
 import hc.enums.ReleasedRoom;
 import hc.enums.Worker;
 import hc.interfaces.*;
 
-import java.util.concurrent.locks.Condition;
+import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class MEvaluationHall implements IHall {
@@ -67,26 +66,29 @@ public class MEvaluationHall implements IHall {
      * @return
      */
     @Override
-    public String getState() {
+    public Map<String, String[]> getState() {
         return null;
     }
 
-    /** TODO
+    /**
      * Pause all contained threads
-     * With patient thread pooling this can be empty, otherwise we must propagate into room
+     * Due to patient pooling this only affects the contained nurses
      */
     @Override
     public void suspend() {
+        for (IRoom room:rooms)
+            room.suspend();
 
     }
 
-    /** TODO
+    /**
      * Resume all contained threads
-     * With patient thread pooling this can be empty, otherwise we must propagate into room
+     * Due to patient pooling this only affects the contained nurses
      */
     @Override
     public void resume() {
-
+        for (IRoom room:rooms)
+            room.resume();
     }
 
     /**
