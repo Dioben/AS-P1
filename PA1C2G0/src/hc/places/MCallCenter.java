@@ -113,6 +113,13 @@ public class MCallCenter extends Thread implements ICallCenterWaiter{
         }
     }
 
+    /**
+     * Called by instance to claim that simulation has finished running
+     */
+    public void notifyOver(){
+        comms.notifyDone();
+    }
+
 
     public void setEntranceHall(ICallCenterWaiter entranceHall) {
         this.entranceHall = entranceHall;

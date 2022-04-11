@@ -7,6 +7,7 @@ import hc.interfaces.IPatient;
 import hc.places.*;
 
 import java.util.Random;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Class representing an instance of health center
@@ -21,14 +22,22 @@ public class HCInstance {
     private final IHall waitingHall;
     private final IHall medicalHall;
     private final IHall paymentHall;
+    private final ReentrantLock loggerAccess;
+    private final HCPLogger logger;
     private final int adults;
     private final int children;
-    private boolean paused = false;
     private boolean started= false;
+    private int gone = 0;
+    private final int seats;
 
     public HCInstance(int adults, int children, int seats, int evalTime, int medicTime, int payTime, int getUpTime, TCommsHandler tCommsHandler, boolean mode) {
         this.adults = adults;
         this.children = children;
+        this.seats = seats;
+
+        logger = new HCPLogger();
+        loggerAccess = new ReentrantLock();
+
 
         timer = new Timer.Builder()
                 .withEvaluationTimeRange(evalTime)
@@ -63,11 +72,12 @@ public class HCInstance {
         if (started)
             throw new RuntimeException("HC Instance was already started");
         started = true;
+        logger.printHeader(adults,children,seats);
         Random r = new Random();
         IPatient patient;
         int assignedChildren = 0;
         int assignedAdults = 0;
-        boolean isChild = false;
+        boolean isChild;
         for (int i=0;i<adults+children;i++){
             if (assignedAdults==adults)
                 isChild=true;
@@ -102,27 +112,52 @@ public class HCInstance {
         }else if (s.equals("AUTO")){
             callCenter.setManual(false);
         }
+        logger.printState(s);
     }
 
     public void progress() {
-        paused = false;
-        //TODO: PROPAGATE CONTINUE SOMEHOW
+        paymentHall.resume();
+        medicalHall.resume();
+        waitingHall.resume();
+        evaluationHall.resume();
+        entranceHall.resume();
+        logger.printState("RESUME");
     }
 
     public void pause() {
-        paused = true;
-        //TODO: PROPAGATE PAUSE SOMEHOW
+        paymentHall.suspend();
+        medicalHall.suspend();
+        waitingHall.suspend();
+        evaluationHall.suspend();
+        entranceHall.suspend();
+
+        logger.printState("PAUSE");
     }
 
     public void cleanUp() {
         //TODO: MANUALLY KILL EVERY THREAD or just STOP EXISTING, who cares really
     }
 
-    public boolean isPaused() {//TODO: IMPLEMENT PAUSE FUNCTIONALITY
-        return paused;
-    }
-
     public Timer getTimer() {
         return  timer;
+    }
+
+    public void notifyMovement(){
+        loggerAccess.lock();
+        //TODO: log stuff somehow
+        logger.printPositions(null);
+        loggerAccess.unlock();
+    }
+    public void notifyGone(){
+        loggerAccess.lock();
+        gone++;
+        //TODO: log stuff somehow
+        logger.printPositions(null);
+        loggerAccess.unlock();
+        if (gone==adults+children) {
+
+            callCenter.notifyOver();
+        }
+
     }
 }

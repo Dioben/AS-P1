@@ -5,25 +5,27 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Map;
 
-//TODO: UNSYNCHRONIZE THIS
 public class HCPLogger {
     private PrintWriter fileWriter;
-    public HCPLogger(String simId) throws FileNotFoundException {
-        //File file = new File("/logs/log"+simId+".txt"); //suited for multiple client system, doesn't match our specs
+    public HCPLogger(){
         File file = new File("/logs/log.txt");
         file.getParentFile().mkdirs(); //write folders up to this point
+        try {
             fileWriter = new PrintWriter(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
     };
 
-    public synchronized void  printHeader(int adults, int children, int seats){
+    public void  printHeader(int adults, int children, int seats){
         String output = "NoA:"+adults+", NoC:"+children+", NoS: "+seats+"\n"+
                 "STT | ETH ET1 ET2 | EVR1 EVR2 EVR3 EVR4 | WTH WTR1 WTR2 | MDH MDR1 MDR2 MDR3 MDR4 | PYH | OUT";
         fileWriter.println(output);
         System.out.println(output);
 
     }
-    public synchronized void printPositions(Map<String,String> places){
+    public void printPositions(Map<String,String> places){
         StringBuilder outputString = new StringBuilder();
         outputString.append("    | "); //STT is always empty in these
         outputString.append(formatPosition(places, "ETH"));
@@ -62,8 +64,8 @@ public class HCPLogger {
         return spot;
     }
 
-    public synchronized void printState(String state){
-        String output = state.toUpperCase()+" |             |                     |               |                         |     |    ";
+    public void printState(String state){
+        String output = state.toUpperCase().substring(0,4)+" |             |                     |               |                         |     |    ";
         fileWriter.println(output);
         System.out.println(output);
     }
