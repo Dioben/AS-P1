@@ -23,7 +23,7 @@ public class TPatient extends Thread implements IPatient {
     private int waitingNumber;
     private int roomNumber;
     private String displayValue="";
-    TPatient(boolean isChild,Timer timer,IContainer surroundings){
+    public TPatient(boolean isChild, Timer timer, IContainer surroundings){
         this.child = isChild;
         this.timer = timer;
         this.surroundings = surroundings;

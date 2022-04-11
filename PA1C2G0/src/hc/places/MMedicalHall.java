@@ -30,7 +30,7 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
     private boolean inChild = false;
     private final ICallCenterWaiter callCenter;
 
-    public MMedicalHall(HCInstance instance, IContainer after, int adults, int children, ICallCenterWaiter callCenter){
+    public MMedicalHall(HCInstance instance, IContainer after, ICallCenterWaiter callCenter){
         this.instance = instance;
         childWorkerRoom1 = WorkerRoom.getRoom(Worker.DOCTOR,this,after,"MDR1");
         childWorkerRoom2 = WorkerRoom.getRoom(Worker.DOCTOR,this,after,"MDR2");
@@ -183,7 +183,7 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
 
     /**
      * Notifies that a patient has left this hall and entered the waiting rooms
-     * As the counters were preemptively increased earlier and this class does not signal Call Center this function does nothing
+     * As this hall itself is just a transition point there is no need to do anything here, see notifyDone() for call center signals
      * @param patient individual leaving space
      */
     @Override

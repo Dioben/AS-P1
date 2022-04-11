@@ -1,11 +1,12 @@
 package hc;
 
 import hc.active.TCommsHandler;
+import hc.active.TPatient;
 import hc.interfaces.IHall;
-import hc.places.MCallCenter;
-import hc.places.MEntranceHall;
-import hc.places.MEvaluationHall;
-import hc.places.MWaitingHall;
+import hc.interfaces.IPatient;
+import hc.places.*;
+
+import java.util.Random;
 
 /**
  * Class representing an instance of health center
@@ -20,37 +21,78 @@ public class HCInstance {
     private final IHall waitingHall;
     private final IHall medicalHall;
     private final IHall paymentHall;
+    private final int adults;
+    private final int children;
     private boolean paused = false;
+    private boolean started= false;
 
     public HCInstance(int adults, int children, int seats, int evalTime, int medicTime, int payTime, int getUpTime, TCommsHandler tCommsHandler, boolean mode) {
+        this.adults = adults;
+        this.children = children;
+
         timer = new Timer.Builder()
                 .withEvaluationTimeRange(evalTime)
                 .withAppointmentTimeRange(medicTime)
                 .withPaymentTimeRange(payTime)
                 .withMovementTimeRange(getUpTime).build();
-        callCenter = new MCallCenter(false, tCommsHandler,adults+children);
+
+
+        callCenter = new MCallCenter(mode, tCommsHandler,adults+children);
         callCenter.start();
 
-
-        medicalHall = null;
-        paymentHall = null;
-
+        paymentHall = new MPaymentHall(this,adults+children);
+        MMedicalHall mh = new MMedicalHall(this,paymentHall,callCenter);
+        medicalHall = mh;
         MWaitingHall wh = new MWaitingHall(this, medicalHall, seats, adults, children, 1, 1, callCenter);
         waitingHall = wh;
         evaluationHall = new MEvaluationHall(this,waitingHall,callCenter);
         MEntranceHall eh = new MEntranceHall(this,evaluationHall,seats, adults,children,4);
         entranceHall = eh;
+
         callCenter.setEntranceHall(eh);
-        //callCenter.setMedicalHall(medicalHall);
+        callCenter.setMedicalHall(mh);
         callCenter.setWaitingHall(wh);
-
-
-
 
     }
 
-    public void permitMovement(String patientID) {
-        callCenter.releaseRequest(patientID);
+    /**
+     * Instances and starts all patients
+     * Attempts to randomize whether a patient is a child while possible
+     */
+    public void start(){
+        if (started)
+            throw new RuntimeException("HC Instance was already started");
+        started = true;
+        Random r = new Random();
+        IPatient patient;
+        int assignedChildren = 0;
+        int assignedAdults = 0;
+        boolean isChild = false;
+        for (int i=0;i<adults+children;i++){
+            if (assignedAdults==adults)
+                isChild=true;
+            else if (assignedChildren==children)
+                isChild=false;
+            else{
+                isChild = r.nextBoolean();
+            }
+            assignedChildren+= isChild?1:0;
+            assignedAdults+= isChild?0:1;
+            patient = new TPatient(isChild,timer,entranceHall);
+            patient.run();
+
+        }
+
+
+        if (assignedAdults>adults)
+            throw new RuntimeException("Somehow too many adults were instanced");
+        if (assignedChildren>children)
+            throw new RuntimeException("Somehow too many children were instanced");
+    }
+
+
+    public void permitMovement(String roomID) {
+        callCenter.releaseRequest(roomID);
 
     }
 
@@ -73,7 +115,7 @@ public class HCInstance {
     }
 
     public void cleanUp() {
-        //TODO: MANUALLY KILL EVERY THREAD
+        //TODO: MANUALLY KILL EVERY THREAD or just STOP EXISTING, who cares really
     }
 
     public boolean isPaused() {//TODO: IMPLEMENT PAUSE FUNCTIONALITY
