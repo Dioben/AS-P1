@@ -26,6 +26,7 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
     private final MFIFO<IPatient> childBacklog;
     private final MFIFO<IPatient> adultBacklog;
     private int nextSlack; //we start out with 4 slots available in EVH
+    private IPatient latest; //just for logging purposes
     private final MFIFO<Boolean> entrances; //stores entrance history, True if Child and False otherwise
 
     public MEntranceHall(HCInstance instance, IContainer after, int seatsPerRoom, int adults, int children, int nextRoomSlack){
@@ -107,26 +108,23 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
     }
 
     /**
-     * TODO: report the current state of this container for logging purposes
-     * @return
+     * @return Empty String if no patient exists in this room, otherwise the display value of latest patient to enter
      */
     @Override
     public String getState() {
-        return null;
+        return (latest==null)?"":latest.getDisplayValue();
     }
 
-    /** TODO
-     * Pause all contained threads
-     * With patient thread pooling this can be empty, otherwise we must propagate into room
+    /**
+     * Due to patient thread pooling this function can be empty, if we had any workers we'd have to pause them
      */
     @Override
     public void suspend() {
 
     }
 
-    /** TODO
-     * Resume all contained threads
-     * With patient thread pooling this can be empty, otherwise we must propagate into room
+    /**
+     * Due to patient thread pooling this function can be empty, if we had any workers we'd have to pause them
      */
     @Override
     public void resume() {
@@ -218,16 +216,20 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
         patient.setEntranceNumber(entered);
         patient.setRoomNumber(entered);
         entered++;
+        latest = patient;
+        instance.notifyMovement();
         rl.unlock();
     }
 
     /**
      * Notifies that a patient has left this hall and entered the waiting rooms
-     * As the counters were preemptively increased earlier and this class does not signal Call Center this function does nothing
+     * As the counters were preemptively increased earlier and this class does not signal Call Center this function only needs to update display
      * @param patient individual leaving space
      */
     @Override
     public void leave(IPatient patient) {
+        if (patient==latest)
+            latest=null;
     }
 
     /**

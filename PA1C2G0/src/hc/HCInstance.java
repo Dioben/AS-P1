@@ -29,11 +29,14 @@ public class HCInstance {
     private boolean started= false;
     private int gone = 0;
     private final int seats;
+    private final IPatient[] patients;
 
     public HCInstance(int adults, int children, int seats, int evalTime, int medicTime, int payTime, int getUpTime, TCommsHandler tCommsHandler, boolean mode) {
         this.adults = adults;
         this.children = children;
         this.seats = seats;
+
+        patients = new IPatient[adults+children];
 
         logger = new HCPLogger();
         loggerAccess = new ReentrantLock();
@@ -89,6 +92,7 @@ public class HCInstance {
             assignedChildren+= isChild?1:0;
             assignedAdults+= isChild?0:1;
             patient = new TPatient(isChild,timer,entranceHall);
+            patients[i]=patient;
             patient.run();
 
         }
@@ -121,6 +125,10 @@ public class HCInstance {
         waitingHall.resume();
         evaluationHall.resume();
         entranceHall.resume();
+        for(IPatient p : patients){
+            if (p.isAlive())
+                p.resume();
+        }
         logger.printState("RESUME");
     }
 
@@ -131,6 +139,10 @@ public class HCInstance {
         evaluationHall.suspend();
         entranceHall.suspend();
 
+        for(IPatient p : patients){
+            if (p.isAlive())
+                p.suspend();
+        }
         logger.printState("PAUSE");
     }
 
@@ -142,12 +154,21 @@ public class HCInstance {
         return  timer;
     }
 
+    /**
+     * Gets all room statuses and passes them to logger/UI
+     * //TODO: INJECT UI HERE SOMEHOW
+     */
     public void notifyMovement(){
         loggerAccess.lock();
         //TODO: log stuff somehow
         logger.printPositions(null);
         loggerAccess.unlock();
     }
+
+    /**
+     * Gets all room statuses and passes them to logger/UI
+     * Updates how many patients and have left, actually puts a patient in OUT slot
+     */
     public void notifyGone(){
         loggerAccess.lock();
         gone++;
@@ -155,7 +176,6 @@ public class HCInstance {
         logger.printPositions(null);
         loggerAccess.unlock();
         if (gone==adults+children) {
-
             callCenter.notifyOver();
         }
 

@@ -11,11 +11,15 @@ public interface IPatient extends Runnable{
     Severity getSeverity();
     String getDisplayValue();
 
+    /**
+     * Thread class methods
+     */
     void suspend();
     void resume();
+    boolean isAlive();
+
 
     int getRoomNumber();
-
     void setRoomNumber(int entered);
 
 }
