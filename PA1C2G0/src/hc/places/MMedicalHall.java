@@ -233,7 +233,7 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
      * @param patient individual leaving space
      */
     @Override
-    public void leave(IPatient patient,IRoom room) {
+    public void leave(IPatient patient,IContainer next) {
         instance.notifyMovement(patient.getDisplayValue(), this.name); //patient has officially entered the actual waiting room
     }
 

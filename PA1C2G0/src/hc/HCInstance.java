@@ -159,15 +159,16 @@ public class HCInstance {
 
     /**
      * Gets all room statuses and passes them to logger/UI
-     * //TODO: CREATE A WAY TO GET LOGGER INFO
+     *
      */
     public void notifyMovement(String patient, String room){
         loggerAccess.lock();
-        if (room.equals("OUT")){
-            gone++;
-        }
-        //TODO: log stuff somehow
-        logger.printPosition(room,patient);
+        if (room!=null) //movements that don't warrant logging can happen
+            {
+                if (room.equals("OUT"))
+                    gone++;
+                logger.printPosition(room,patient);
+            }
         updateUI();
         loggerAccess.unlock();
 

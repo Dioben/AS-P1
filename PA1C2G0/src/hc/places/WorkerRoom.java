@@ -48,7 +48,7 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
      *
      */
     @Override
-    public void leave(IPatient patient)
+    public void leave(IPatient patient, IContainer next)
     {
         if (patient==user){
             user = null;

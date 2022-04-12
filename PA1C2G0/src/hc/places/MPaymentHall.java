@@ -22,6 +22,7 @@ public class MPaymentHall implements IHall {
     private int released = -1;
     private boolean cashierAvailable = false;
     private final MFIFO<IPatient> backlog;
+    private final String nextRoomName = "OUT";
 
     public MPaymentHall(HCInstance instance,int people){
         this.instance = instance;
@@ -104,10 +105,10 @@ public class MPaymentHall implements IHall {
      * @param room identifies room that has finished processing
      */
     @Override
-    public void notifyDone(IRoom room) {
+    public void notifyDone(IRoom room,IPatient left) {
         rl.lock();
         cashierAvailable = true;
-        instance.notifyGone();
+        instance.notifyMovement(left.getDisplayValue(),nextRoomName); //notify patient removal
         IPatient patient = backlog.get();
         released = patient.getRoomNumber();
         cashierAvailableSignal.signal();
@@ -142,8 +143,8 @@ public class MPaymentHall implements IHall {
      * @param patient individual leaving space
      */
     @Override
-    public void leave(IPatient patient) {
-        instance.notifyGone();
+    public void leave(IPatient patient, IContainer next) {
+        instance.notifyMovement(patient.getDisplayValue(),this.name); //has entered cashier
     }
 
 }

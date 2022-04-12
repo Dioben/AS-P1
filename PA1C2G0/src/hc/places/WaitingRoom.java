@@ -33,7 +33,7 @@ public class WaitingRoom implements IWaitingRoom {
      * This is called by the patient thread itself
      */
     @Override
-    public void leave(IPatient patient) {
+    public void leave(IPatient patient, IContainer next) {
         patients.remove();
         container.notifyDone(this,patient);
     }
