@@ -80,7 +80,6 @@ public class HCInstance {
         started = true;
         logger.printHeader(adults,children,seats);
         Random r = new Random();
-        TPatient patient;
         int assignedChildren = 0;
         int assignedAdults = 0;
         boolean isChild;
@@ -94,9 +93,8 @@ public class HCInstance {
             }
             assignedChildren+= isChild?1:0;
             assignedAdults+= isChild?0:1;
-            patient = new TPatient(isChild,timer,entranceHall);
-            patients[i]=patient;
-            patient.start();
+            patients[i]=new TPatient(isChild,timer,entranceHall);
+            ((TPatient) patients[i]).start();
         }
 
 

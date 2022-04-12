@@ -1,18 +1,16 @@
 package hc;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.Map;
 
 public class HCPLogger {
     private PrintWriter fileWriter;
     public HCPLogger(){
-        File file = new File("logs/log.txt");
-        file.getParentFile().mkdirs(); //write folders up to this point
+        String fileName = "logs/log.txt";
+        (new File(fileName)).getParentFile().mkdirs(); //write folders up to this point
         try {
-            fileWriter = new PrintWriter(file);
-        } catch (FileNotFoundException e) {
+            fileWriter = new PrintWriter(new FileWriter(fileName), true);
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
