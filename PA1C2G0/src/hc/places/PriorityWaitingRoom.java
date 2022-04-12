@@ -10,6 +10,8 @@ import hc.interfaces.IWaitingRoom;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Class for rooms that hold several users
@@ -27,6 +29,8 @@ public class PriorityWaitingRoom implements IWaitingRoom {
     private int releasedRed = -1; //way to let a patient know if they've been released
     private final AtomicInteger entered =  new AtomicInteger(0);
     private final int seats;
+    private final ReentrantLock rl;
+    private final Condition c;
 
     public PriorityWaitingRoom(IWaitingHall container, IContainer next, String name, int seats){
         this.container = container;
@@ -36,6 +40,8 @@ public class PriorityWaitingRoom implements IWaitingRoom {
         patientsYellow = new MDelayFIFO(IPatient.class, seats);
         patientsBlue = new MDelayFIFO(IPatient.class, seats);
         this.seats = seats;
+        rl = new ReentrantLock();
+        c = rl.newCondition();
     }
 
 
@@ -59,13 +65,18 @@ public class PriorityWaitingRoom implements IWaitingRoom {
      */
     @Override
     public IContainer getFollowingContainer(IPatient patient) {
-        container.notifyWaiting(this);
-        while (getControlNumber(patient) < patient.getRoomNumber()) {
-            try {
-                patient.wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        try {
+            rl.lock();
+            container.notifyWaiting(this);
+            while (getControlNumber(patient) < patient.getRoomNumber()) {
+                try {
+                    c.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
+        } finally {
+            rl.unlock();
         }
         return next;
     }
@@ -153,20 +164,25 @@ public class PriorityWaitingRoom implements IWaitingRoom {
      */
     @Override
     public void notifyDone() {
-        IPatient patient=null;
-        if(!patientsRed.isEmpty()) {
-            patient = patientsRed.get();
-            releasedRed = patient.getRoomNumber();
+        try {
+            rl.lock();
+            IPatient patient=null;
+            if(!patientsRed.isEmpty()) {
+                patient = patientsRed.get();
+                releasedRed = patient.getRoomNumber();
+            }
+            else if(!patientsYellow.isEmpty()){
+                patient = patientsYellow.get();
+                releasedYellow = patient.getRoomNumber();
+            }else if(!patientsBlue.isEmpty()){
+                patient = patientsBlue.get();
+                releasedBlue = patient.getRoomNumber();
+            }
+            if (patient!=null)
+                c.signalAll();
+        } finally {
+            rl.unlock();
         }
-        else if(!patientsYellow.isEmpty()){
-            patient = patientsYellow.get();
-            releasedYellow = patient.getRoomNumber();
-        }else if(!patientsBlue.isEmpty()){
-            patient = patientsBlue.get();
-            releasedBlue = patient.getRoomNumber();
-        }
-        if (patient!=null)
-            patient.notify();
     }
 
     /**

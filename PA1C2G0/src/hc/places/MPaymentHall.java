@@ -20,7 +20,7 @@ public class MPaymentHall implements IHall {
     private final Condition cashierAvailableSignal;
     private int entered = 0; //ID tracker
     private int released = -1;
-    private boolean cashierAvailable = false;
+    private boolean cashierAvailable = true;
     private final MFIFO<IPatient> backlog;
     private final String nextRoomName = "OUT";
 

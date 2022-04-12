@@ -33,9 +33,10 @@ public class TPatient extends Thread implements IPatient {
      * Try to advance as long as the current room is not null
      */
     public void run(){
-        while(surroundings != null){
+        if (surroundings != null)
+            surroundings.enter(this);
+        while(surroundings != null)
             tryMove();
-        }
     }
 
     /**
@@ -48,7 +49,8 @@ public class TPatient extends Thread implements IPatient {
         IContainer next = surroundings.getFollowingContainer(this);// this blocks until the current container is done with you
         try {
             sleep(timer.getMovementTime());
-            next.enter(this);
+            if (next != null)
+                next.enter(this);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

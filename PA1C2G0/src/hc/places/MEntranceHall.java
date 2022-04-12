@@ -33,8 +33,8 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
 
     public MEntranceHall(HCInstance instance, IContainer after, int seatsPerRoom, int adults, int children, int nextRoomSlack){
         this.instance = instance;
-        childRoom = new WaitingRoom(this,after,"ETR2",seatsPerRoom);
-        adultRoom = new WaitingRoom(this,after,"ETR1",seatsPerRoom);
+        childRoom = new WaitingRoom(this,after,"ET2",seatsPerRoom);
+        adultRoom = new WaitingRoom(this,after,"ET1",seatsPerRoom);
         roomMax = seatsPerRoom;
         rl = new ReentrantLock();
         childRoomAvailable = rl.newCondition();

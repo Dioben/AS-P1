@@ -21,7 +21,7 @@ public class MEvaluationHall implements IHall {
 
     public MEvaluationHall(HCInstance instance, IContainer after, ICallCenterWaiter callCenter){
         this.instance = instance;
-        available = new boolean[]{false, false, false, false};
+        available = new boolean[]{true, true, true, true};
         IWorkerRoom evr1 = WorkerRoom.getRoom(Worker.NURSE,this,after,"EVR1");
         IWorkerRoom evr2 = WorkerRoom.getRoom(Worker.NURSE,this,after,"EVR2");
         IWorkerRoom evr3 = WorkerRoom.getRoom(Worker.NURSE,this,after,"EVR3");

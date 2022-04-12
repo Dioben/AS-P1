@@ -7,6 +7,8 @@ import hc.interfaces.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Room meant to hold Doctor/Nurse/Cashier and a single patient at a time
@@ -18,12 +20,16 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
     private IPatient user;
     private IServiceWorker worker;
     private final String name;
+    private final ReentrantLock rl;
+    private final Condition c;
 
 
     protected WorkerRoom(IHall container, IContainer next, String name){
         this.container = container;
         this.next = next;
         this.name = name;
+        rl = new ReentrantLock();
+        c = rl.newCondition();
     }
 
     /**
@@ -62,20 +68,30 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
      */
     @Override
     public void notifyDone() {
-        user.notify();
+        try {
+            rl.lock();
+            c.signal();
+        } finally {
+            rl.unlock();
+        }
     }
 
     @Override
     public IContainer getFollowingContainer(IPatient patient) {
-        if (! user.equals(patient))
-            throw new RuntimeException("Patient getting worker follower does not match contained");
-        worker.providePatient(user);
-        while(worker.isBusy()){
-            try {
-                user.wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        try {
+            rl.lock();
+            if (! user.equals(patient))
+                throw new RuntimeException("Patient getting worker follower does not match contained");
+            worker.providePatient(user);
+            while(worker.isBusy()){
+                try {
+                    c.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
+        } finally {
+            rl.unlock();
         }
         return next;
     }

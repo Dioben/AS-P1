@@ -56,10 +56,10 @@ public class HCPLogger {
                 outputString.append(formatPosition(header,null));
         }
         outputString.append("| "); //Transition to PYN
-        if (place.equals("PYN"))
+        if (place.equals("PYH"))
             outputString.append(formatPosition(place,patient));
         else
-            outputString.append(formatPosition("PYN",null));
+            outputString.append(formatPosition("PYH",null));
         outputString.append("| "); //Transition to OUT
         if (place.equals("OUT"))
             outputString.append(formatPosition(place,patient));

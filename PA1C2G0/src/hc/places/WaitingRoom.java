@@ -56,7 +56,7 @@ public class WaitingRoom implements IWaitingRoom {
         try {
             rl.lock();
             container.notifyWaiting(this);
-            while (released <= patient.getRoomNumber()) {
+            while (released < patient.getRoomNumber()) {
                 try {
                     cCanMove.await();
                 } catch (InterruptedException e) {
