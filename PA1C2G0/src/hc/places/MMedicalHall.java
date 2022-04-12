@@ -117,21 +117,44 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
     /**
      * Called by contained room to notify that patient is out
      * Can be called by waiting rooms to notify that patient is no longer waiting or by doctor to notify that patient is done
+     * Calls logger, call center, updates UI thread
      * @param room identifies room that has finished processing
      */
     @Override
-    public void notifyDone(IRoom room) {
+    public void notifyDone(IRoom room, IPatient patient) {
         rl.lock();
         if (room==childWaitingRoom){
+            //figure out which room this patient actually moved on to, then notify movement
+            String patientName = patient.getDisplayValue();
+            String childPatient1name = childWorkerRoom1.getState().values().toArray(new String[1])[0];
+            if (childPatient1name.equals(patientName))
+                instance.notifyMovement(patientName,childWorkerRoom1.getDisplayName());
+            else{
+                instance.notifyMovement(patientName,childWorkerRoom2.getDisplayName());
+            }
             callCenter.notifyAvailable(ReleasedRoom.MDW_CHILD);
+
         }
-        if (room==adultWaitingRoom){
+        else if (room==adultWaitingRoom){
+            //figure out which room this patient actually moved on to, then notify movement
+            String patientName = patient.getDisplayValue();
+            String adultPatient1name = adultWorkerRoom1.getState().values().toArray(new String[1])[0];
+            if (adultPatient1name.equals(patientName))
+                instance.notifyMovement(patientName,adultWorkerRoom1.getDisplayName());
+            else{
+                instance.notifyMovement(patientName,adultWorkerRoom2.getDisplayName());
+            }
+
             callCenter.notifyAvailable(ReleasedRoom.MDW_ADULT);
         }
-        if (room==adultWorkerRoom1 || room==adultWorkerRoom2)
+        else if (room==adultWorkerRoom1 || room==adultWorkerRoom2){
+            instance.notifyMovement(patient.getDisplayValue(),null); //goes to PYN, we only notify on entering CASHIER
             callCenter.notifyAvailable(ReleasedRoom.MDR_ADULT);
-        if (room==childWorkerRoom1 || room==childWorkerRoom2)
+        }
+        else if (room==childWorkerRoom1 || room==childWorkerRoom2){
+            instance.notifyMovement(patient.getDisplayValue(),null);
             callCenter.notifyAvailable(ReleasedRoom.MDR_CHILD);
+        }
         rl.unlock();
 
     }
@@ -139,7 +162,7 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
     /**
      * Called by CCH to notify that some forward movement is expected
      * Will notify a patient in the correct room to start moving again
-     * @param releasedRoom
+     * @param releasedRoom type of room that is now available
      */
     @Override
     public void notifyAvailable(ReleasedRoom releasedRoom) {
@@ -210,7 +233,8 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
      * @param patient individual leaving space
      */
     @Override
-    public void leave(IPatient patient) {
+    public void leave(IPatient patient,IRoom room) {
+        instance.notifyMovement(patient.getDisplayValue(), this.name); //patient has officially entered the actual waiting room
     }
 
     /**
