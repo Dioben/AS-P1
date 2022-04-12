@@ -247,7 +247,6 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
      */
     @Override
     public void notifyDone(IRoom room, IPatient patient) {
-        instance.notifyMovement(patient.getDisplayValue(),nextRoomName);
         if (room==childRoom){
             callCenter.notifyAvailable(ReleasedRoom.WTR_CHILD);
         }

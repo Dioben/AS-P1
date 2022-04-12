@@ -109,8 +109,10 @@ public class MPaymentHall implements IHall {
         rl.lock();
         cashierAvailable = true;
         instance.notifyMovement(left.getDisplayValue(),nextRoomName); //notify patient removal
-        IPatient patient = backlog.get();
-        released = patient.getRoomNumber();
+        if (!backlog.isEmpty()) {
+            IPatient patient = backlog.get();
+            released = patient.getRoomNumber();
+        }
         cashierAvailableSignal.signal();
         rl.unlock();
 
