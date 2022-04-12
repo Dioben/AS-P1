@@ -2,6 +2,7 @@ package hc.places;
 
 import hc.HCInstance;
 import hc.MFIFO;
+import hc.enums.Severity;
 import hc.enums.Worker;
 import hc.interfaces.*;
 
@@ -130,6 +131,7 @@ public class MPaymentHall implements IHall {
         rl.lock();
         patient.setPaymentNumber(entered);
         patient.setRoomNumber(entered);
+        patient.setSeverity(Severity.UNASSIGNED);
         entered++;
         rl.unlock();
     }

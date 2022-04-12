@@ -18,13 +18,12 @@ public class TCommsHandler extends Thread {
     private final Socket comms;
     private PrintWriter out;
     private String mode = "AUTO";
-    private ReentrantLock writeLock; //supposed to be thread safe but I want to make sure
-
-    //TODO: this object class is nowhere near done
+    private final ReentrantLock writeLock; //writer is supposed to be thread safe but I want to make sure
     private HCInstance instance;
 
     public TCommsHandler(Socket accept) {
         comms = accept;
+        writeLock = new ReentrantLock();
 
     }
 

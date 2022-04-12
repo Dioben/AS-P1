@@ -48,7 +48,7 @@ public class PriorityWaitingRoom implements IWaitingRoom {
     public void leave(IPatient patient) {
         MDelayFIFO queue = getPatientQueue(patient);
         queue.remove();
-        container.notifyDone(this);
+        container.notifyDone(this,patient);
     }
 
     /**

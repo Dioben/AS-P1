@@ -52,7 +52,7 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
     {
         if (patient==user){
             user = null;
-            container.notifyDone(this);
+            container.notifyDone(this,patient);
         }
     }
 

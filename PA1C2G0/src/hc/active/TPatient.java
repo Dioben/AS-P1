@@ -53,7 +53,7 @@ public class TPatient extends Thread implements IPatient {
             e.printStackTrace();
         }
 
-        this.surroundings.leave(this);
+        this.surroundings.leave(this,next);
         this.surroundings = next;
 
     }

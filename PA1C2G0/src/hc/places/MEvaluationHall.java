@@ -17,6 +17,7 @@ public class MEvaluationHall implements IHall {
     private final ReentrantLock rl;
     private final String name = "EVH";
     private final ICallCenterWaiter callCenter;
+    private final String nextHallName;
 
     public MEvaluationHall(HCInstance instance, IContainer after, ICallCenterWaiter callCenter){
         this.instance = instance;
@@ -28,6 +29,7 @@ public class MEvaluationHall implements IHall {
         rooms = new IWorkerRoom[]{evr1,evr2,evr3,evr4};
         rl = new ReentrantLock();
         this.callCenter = callCenter;
+        nextHallName = after.getDisplayName();
     }
 
     /**
@@ -100,7 +102,7 @@ public class MEvaluationHall implements IHall {
      * @param room identifies room that has finished processing
      */
     @Override
-    public void notifyDone(IRoom room) {
+    public void notifyDone(IRoom room,IPatient patient) {
         rl.lock();
         for (int i=0;i<rooms.length;i++){
             if (rooms[i]==room){
@@ -108,6 +110,7 @@ public class MEvaluationHall implements IHall {
                 break;
             }
         }
+        instance.notifyMovement(patient.getDisplayValue(),nextHallName);
         callCenter.notifyAvailable(ReleasedRoom.EVH);
         rl.unlock();
 
@@ -136,7 +139,8 @@ public class MEvaluationHall implements IHall {
      * @param patient individual leaving space
      */
     @Override
-    public void leave(IPatient patient) {
+    public void leave(IPatient patient, IContainer next) {
+        instance.notifyMovement(patient.getDisplayValue(),next.getDisplayName());
     }
 
 

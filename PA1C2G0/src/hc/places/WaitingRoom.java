@@ -35,7 +35,7 @@ public class WaitingRoom implements IWaitingRoom {
     @Override
     public void leave(IPatient patient) {
         patients.remove();
-        container.notifyDone(this);
+        container.notifyDone(this,patient);
     }
 
     /**

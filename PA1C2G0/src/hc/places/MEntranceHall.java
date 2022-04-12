@@ -29,6 +29,7 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
     private final IFIFO<IPatient> adultBacklog;
     private int nextSlack; //we start out with 4 slots available in EVH
     private final MFIFO<Boolean> entrances; //stores entrance history, True if Child and False otherwise
+    private final String nextRoomName;
 
     public MEntranceHall(HCInstance instance, IContainer after, int seatsPerRoom, int adults, int children, int nextRoomSlack){
         this.instance = instance;
@@ -42,6 +43,7 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
         adultBacklog = new MFIFO(IPatient[].class,adults);
         entrances = new MFIFO(Boolean[].class,seatsPerRoom*2);
         nextSlack = nextRoomSlack;
+        nextRoomName = after.getDisplayName();
     }
 
     /**
@@ -158,7 +160,7 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
      * @param room identifies room that has finished processing
      */
     @Override
-    public void notifyDone(IRoom room) {
+    public void notifyDone(IRoom room, IPatient patient) {
         rl.lock();
         if (inAdult==0 && inChild==0) {
             rl.unlock();
@@ -169,6 +171,8 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
 
         if (room==childRoom)
             handleChildRoomLeave();
+
+        instance.notifyMovement(patient.getDisplayValue(),nextRoomName); //notifies that someone has ENTERED EVH
         rl.unlock();
 
     }
@@ -238,7 +242,7 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
         patient.setEntranceNumber(entered);
         patient.setRoomNumber(entered);
         entered++;
-        instance.notifyMovement();
+        instance.notifyMovement(patient.getDisplayValue(),this.name);
         rl.unlock();
     }
 
@@ -248,8 +252,8 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
      * @param patient individual leaving space
      */
     @Override
-    public void leave(IPatient patient) {
-        instance.notifyMovement();
+    public void leave(IPatient patient,IContainer next) {
+        instance.notifyMovement(patient.getDisplayValue(),next.getDisplayName());
     }
 
     /**

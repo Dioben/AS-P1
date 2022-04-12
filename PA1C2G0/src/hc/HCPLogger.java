@@ -25,43 +25,58 @@ public class HCPLogger {
         System.out.println(output);
 
     }
-    public void printPositions(Map<String,String> places){
+    public void printPosition(String place, String patient){
         StringBuilder outputString = new StringBuilder();
         outputString.append("    | "); //STT is always empty in these
-        outputString.append(formatPosition(places, "ETH"));
-        outputString.append(formatPosition(places, "ET1"));
-        outputString.append(formatPosition(places, "ET2"));
+        for (String header: new String[]{"ETH","ET1","ET2"}){
+            if (place.equals(header))
+                outputString.append(formatPosition(place,patient));
+            else
+                outputString.append(formatPosition(header,null));
+        }
         outputString.append("| "); //Transition to EVR
-        outputString.append(formatPosition(places, "EVR1"));
-        outputString.append(formatPosition(places, "EVR2"));
-        outputString.append(formatPosition(places, "EVR3"));
-        outputString.append(formatPosition(places, "EVR4"));
+        for (String header: new String[]{"EVR1","EVR2","EVR3","EVR4"}){
+            if (place.equals(header))
+                outputString.append(formatPosition(place,patient));
+            else
+                outputString.append(formatPosition(header,null));
+        }
         outputString.append("| "); //Transition to WTH
-        outputString.append(formatPosition(places, "WTH"));
-        outputString.append(formatPosition(places, "WTR1"));
-        outputString.append(formatPosition(places, "WTR2"));
+        for (String header: new String[]{"WTH","WTR1","WTR2"}){
+            if (place.equals(header))
+                outputString.append(formatPosition(place,patient));
+            else
+                outputString.append(formatPosition(header,null));
+        }
         outputString.append("| "); //Transition to MDH
-        outputString.append(formatPosition(places, "MDH"));
-        outputString.append(formatPosition(places, "MDR1"));
-        outputString.append(formatPosition(places, "MDR2"));
-        outputString.append(formatPosition(places, "MDR3"));
-        outputString.append(formatPosition(places, "MDR4"));
+        for (String header: new String[]{"MDH","MDR1","MDR2","MDR3","MDR4"}){
+            if (place.equals(header))
+                outputString.append(formatPosition(place,patient));
+            else
+                outputString.append(formatPosition(header,null));
+        }
         outputString.append("| "); //Transition to PYN
-        outputString.append(formatPosition(places, "PYN"));
+        if (place.equals("PYN"))
+            outputString.append(formatPosition(place,patient));
+        else
+            outputString.append(formatPosition("PYN",null));
         outputString.append("| "); //Transition to OUT
-        outputString.append(formatPosition(places, "OUT"));
+        if (place.equals("OUT"))
+            outputString.append(formatPosition(place,patient));
+        else
+            outputString.append(formatPosition("OUT",null));
         String content = outputString.toString();
         fileWriter.println(content);
         System.out.println(content);
     }
 
-    private String formatPosition(Map<String, String> places, String header) {
-        String spot = places.get(header);
-        spot = (spot==null)?"    ":spot.toUpperCase(); //if null auto pads to 4, smallest header is 3 + 1 trailing space
-        for (int i = header.length()+1-spot.length();i>0;i--){
-            spot+= " ";
+    private String formatPosition(String header, String patient) {
+        patient = (patient==null)?"    ":patient.toUpperCase(); //if null auto pads to 4, smallest header is 3 + 1 trailing space
+        int len = patient.length();
+        for (int i = header.length()+1-len;i>0;i--){
+            patient+= " ";
         }
-        return spot;
+        return patient;
     }
 
     public void printState(String state){

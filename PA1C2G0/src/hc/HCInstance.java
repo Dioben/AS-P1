@@ -2,10 +2,13 @@ package hc;
 
 import hc.active.TCommsHandler;
 import hc.active.TPatient;
+import hc.interfaces.IContainer;
 import hc.interfaces.IHall;
 import hc.interfaces.IPatient;
 import hc.places.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -156,28 +159,36 @@ public class HCInstance {
 
     /**
      * Gets all room statuses and passes them to logger/UI
-     * //TODO: INJECT UI HERE SOMEHOW
+     * //TODO: CREATE A WAY TO GET LOGGER INFO
      */
-    public void notifyMovement(){
+    public void notifyMovement(String patient, String room){
         loggerAccess.lock();
+        if (room.equals("OUT")){
+            gone++;
+        }
         //TODO: log stuff somehow
-        logger.printPositions(null);
+        logger.printPosition(room,patient);
+        updateUI();
         loggerAccess.unlock();
-    }
 
-    /**
-     * Gets all room statuses and passes them to logger/UI
-     * Updates how many patients and have left, actually puts a patient in OUT slot
-     */
-    public void notifyGone(){
-        loggerAccess.lock();
-        gone++;
-        //TODO: log stuff somehow
-        logger.printPositions(null);
-        loggerAccess.unlock();
         if (gone==adults+children) {
             callCenter.notifyOver();
         }
 
+    }
+
+    private void updateUI() {
+        Map<String,String[]> UIInfo = new HashMap<>();
+        UIInfo.putAll(entranceHall.getState());
+        UIInfo.putAll(evaluationHall.getState());
+        UIInfo.putAll(waitingHall.getState());
+        UIInfo.putAll(medicalHall.getState());
+        UIInfo.putAll(paymentHall.getState());
+
+        /* TODO: INJECT A UI CLASS INTO THIS AND GIVE IT AN UPDATE METHOD
+        if (display!=null)
+            display.update(UIInfo);
+
+         */
     }
 }
