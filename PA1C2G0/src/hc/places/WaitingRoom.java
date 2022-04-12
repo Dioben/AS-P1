@@ -6,6 +6,8 @@ import hc.interfaces.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Class for rooms that hold several users
@@ -18,6 +20,9 @@ public class WaitingRoom implements IWaitingRoom {
     private int released = -1; //way to let a patient know if they've been released -> only ever changed by 1 thread
     private AtomicInteger entered =  new AtomicInteger(0);
     private final int seats;
+    private final ReentrantLock rl;
+    private final Condition cCanMove;
+
 
     public WaitingRoom(IWaitingHall container, IContainer next, String name, int seats){
         this.container = container;
@@ -25,6 +30,8 @@ public class WaitingRoom implements IWaitingRoom {
         this.name = name;
         patients = new MDelayFIFO(IPatient.class, seats);
         this.seats = seats;
+        rl = new ReentrantLock();
+        cCanMove = rl.newCondition();
     }
 
 
@@ -46,13 +53,18 @@ public class WaitingRoom implements IWaitingRoom {
      */
     @Override
     public IContainer getFollowingContainer(IPatient patient) {
-        container.notifyWaiting(this);
-        while (released <= patient.getRoomNumber()) {
-            try {
-                patient.wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        try {
+            rl.lock();
+            container.notifyWaiting(this);
+            while (released <= patient.getRoomNumber()) {
+                try {
+                    cCanMove.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
+        } finally {
+            rl.unlock();
         }
         return next;
     }
@@ -109,9 +121,14 @@ public class WaitingRoom implements IWaitingRoom {
      */
     @Override
     public void notifyDone() {
-        IPatient patient = patients.get(); //this notifies the oldest patient, causing them to leave getFollowingContainer
-        released = patient.getRoomNumber();
-        patient.notify();
+        try {
+            rl.lock();
+            IPatient patient = patients.get(); //this notifies the oldest patient, causing them to leave getFollowingContainer
+            released = patient.getRoomNumber();
+            cCanMove.signalAll();
+        } finally {
+            rl.unlock();
+        }
     }
 
 
