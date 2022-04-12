@@ -41,6 +41,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
     private final IFIFO<IPatient> adultBacklogBlue;
     private int nextSlackAdult; //we start out with 1 adult slots available in MDW
     private int nextSlackChild; //we start out with 1 child slots available in MDW
+    private final String nextRoomName;
 
     public MWaitingHall(HCInstance instance, IContainer after, int seatsPerRoom, int adults, int children, int nextRoomSlackAdult, int nextRoomSlackChild, ICallCenterWaiter callCenter){
         this.instance = instance;
@@ -59,6 +60,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
         nextSlackAdult = nextRoomSlackAdult;
         nextSlackChild = nextRoomSlackChild;
         this.callCenter = callCenter;
+        nextRoomName = after.getDisplayName();
     }
 
     /**
@@ -244,12 +246,14 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
      * @param room identifies room that has finished processing
      */
     @Override
-    public void notifyDone(IRoom room) {
-        if (room==childRoom)
+    public void notifyDone(IRoom room, IPatient patient) {
+        instance.notifyMovement(patient.getDisplayValue(),nextRoomName);
+        if (room==childRoom){
             callCenter.notifyAvailable(ReleasedRoom.WTR_CHILD);
-        else if (room==adultRoom)
+        }
+        else if (room==adultRoom) {
             callCenter.notifyAvailable(ReleasedRoom.WTR_ADULT);
-
+        }
     }
 
     /**
@@ -365,7 +369,8 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
      * @param patient individual leaving space
      */
     @Override
-    public void leave(IPatient patient) {
+    public void leave(IPatient patient,IContainer room) {
+        instance.notifyMovement(patient.getDisplayValue(),room.getDisplayName());
     }
 
     /**
