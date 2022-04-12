@@ -4,6 +4,9 @@ import hc.Timer;
 import hc.interfaces.IPatient;
 import hc.interfaces.IWorkerRoom;
 
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * Generic class for service workers (Nurse/Cashier/Doctor)
  * Implements every method except ServeCustomer()
@@ -12,6 +15,8 @@ public abstract class TServiceWorker extends Thread implements hc.interfaces.ISe
     protected Timer timer;
     private IWorkerRoom surroundings;
     private IPatient customer;
+    private final ReentrantLock rl;
+    private final Condition c;
 
     /**
      * Waits for a customer to be assigned to itself
@@ -20,22 +25,28 @@ public abstract class TServiceWorker extends Thread implements hc.interfaces.ISe
      * warns container that they're done
      */
     private void handleNextCostumer() {
-
-        while (customer == null) {
-            try {
-                this.wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        try {
+            rl.lock();
+            while (customer == null) {
+                try {
+                    c.await();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
+            serveCustomer(customer);
+            customer = null;
+            surroundings.notifyDone();//allow patient to getNextRoom
+        } finally {
+            rl.unlock();
         }
-        serveCustomer(customer);
-        customer = null;
-        surroundings.notifyDone();//allow patient to getNextRoom
     }
 
     public TServiceWorker(Timer timer,IWorkerRoom surroundings){
         this.timer = timer;
         this.surroundings = surroundings;
+        rl = new ReentrantLock();
+        c = rl.newCondition();
     }
 
     /**
@@ -53,12 +64,17 @@ public abstract class TServiceWorker extends Thread implements hc.interfaces.ISe
      * @return whether the patient was accepted, not expected to fail
      */
     public boolean providePatient(IPatient patient){
-        if (!isBusy()){
-            this.customer = patient;
-            this.notify();
-            return true;
+        try {
+            rl.lock();
+            if (!isBusy()){
+                this.customer = patient;
+                c.signal();
+                return true;
+            }
+            return false;
+        } finally {
+            rl.unlock();
         }
-        return false;
     }
 
 

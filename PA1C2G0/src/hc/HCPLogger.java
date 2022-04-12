@@ -8,7 +8,7 @@ import java.util.Map;
 public class HCPLogger {
     private PrintWriter fileWriter;
     public HCPLogger(){
-        File file = new File("/logs/log.txt");
+        File file = new File("logs/log.txt");
         file.getParentFile().mkdirs(); //write folders up to this point
         try {
             fileWriter = new PrintWriter(file);

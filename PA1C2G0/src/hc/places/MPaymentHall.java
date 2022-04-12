@@ -28,7 +28,7 @@ public class MPaymentHall implements IHall {
         this.instance = instance;
         cashierRoom = WorkerRoom.getRoom(Worker.CASHIER,this,null,"PYR");
         rl = new ReentrantLock();
-        backlog = new MFIFO(IPatient[].class,people);
+        backlog = new MFIFO(IPatient.class,people);
         cashierAvailableSignal = rl.newCondition();
 
     }
@@ -79,7 +79,7 @@ public class MPaymentHall implements IHall {
         states.put(this.name,relevant);
         states.putAll(cashierRoom.getState());
 
-        return null;
+        return states;
     }
 
     /**

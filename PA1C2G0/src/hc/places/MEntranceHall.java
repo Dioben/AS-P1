@@ -39,9 +39,9 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
         rl = new ReentrantLock();
         childRoomAvailable = rl.newCondition();
         adultRoomAvailable = rl.newCondition();
-        childBacklog = new MFIFO(IPatient[].class,children);
-        adultBacklog = new MFIFO(IPatient[].class,adults);
-        entrances = new MFIFO(Boolean[].class,seatsPerRoom*2);
+        childBacklog = new MFIFO(IPatient.class,children);
+        adultBacklog = new MFIFO(IPatient.class,adults);
+        entrances = new MFIFO(Boolean.class,seatsPerRoom*2);
         nextSlack = nextRoomSlack;
         nextRoomName = after.getDisplayName();
     }

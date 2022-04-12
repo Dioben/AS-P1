@@ -26,7 +26,7 @@ public class MCallCenter extends Thread implements ICallCenterWaiter{
 
         this.manual = manual;
         comms = tCommsHandler;
-        requests = new MFIFO(ReleasedRoom[].class,people);
+        requests = new MFIFO(ReleasedRoom.class,people);
     }
 
     /**

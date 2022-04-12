@@ -23,7 +23,7 @@ public class WaitingRoom implements IWaitingRoom {
         this.container = container;
         this.next = next;
         this.name = name;
-        patients = new MDelayFIFO(IPatient[].class, seats);
+        patients = new MDelayFIFO(IPatient.class, seats);
         this.seats = seats;
     }
 

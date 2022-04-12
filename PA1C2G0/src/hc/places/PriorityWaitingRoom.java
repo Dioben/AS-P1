@@ -32,9 +32,9 @@ public class PriorityWaitingRoom implements IWaitingRoom {
         this.container = container;
         this.next = next;
         this.name = name;
-        patientsRed = new MDelayFIFO(IPatient[].class, seats);
-        patientsYellow = new MDelayFIFO(IPatient[].class, seats);
-        patientsBlue = new MDelayFIFO(IPatient[].class, seats);
+        patientsRed = new MDelayFIFO(IPatient.class, seats);
+        patientsYellow = new MDelayFIFO(IPatient.class, seats);
+        patientsBlue = new MDelayFIFO(IPatient.class, seats);
         this.seats = seats;
     }
 

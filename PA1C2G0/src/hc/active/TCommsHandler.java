@@ -105,6 +105,7 @@ public class TCommsHandler extends Thread {
         int payTime = Integer.parseInt(command[6]);
         int getUpTime = Integer.parseInt(command[7]);
         instance = new HCInstance(adults, children, seats, evalTime, medicTime, payTime, getUpTime,this, mode.equals("MANUAL"));
+        instance.start();
     }
 
     /**

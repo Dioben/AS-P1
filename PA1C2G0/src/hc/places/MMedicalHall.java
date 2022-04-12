@@ -74,10 +74,10 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
         Map<String,String[]> states = new HashMap<>();
         String[] inWaiting = new String[2];
         int idx = 0;
-        inWaiting[idx] = childWaitingRoom.getState().values().toArray(new String[1])[0];
+        inWaiting[idx] = childWaitingRoom.getState().get(childWaitingRoom.getDisplayName())[0];
         if (inWaiting[idx]!=null)
             idx++;
-        inWaiting[idx] = adultWaitingRoom.getState().values().toArray(new String[1])[0];
+        inWaiting[idx] = adultWaitingRoom.getState().get(adultWaitingRoom.getDisplayName())[0];
         states.put(this.name,inWaiting);
         states.putAll(adultWaitingRoom.getState());
         states.putAll(childWorkerRoom1.getState());
@@ -126,7 +126,7 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
         if (room==childWaitingRoom){
             //figure out which room this patient actually moved on to, then notify movement
             String patientName = patient.getDisplayValue();
-            String childPatient1name = childWorkerRoom1.getState().values().toArray(new String[1])[0];
+            String childPatient1name = childWorkerRoom1.getState().get(childWorkerRoom1.getDisplayName())[0];
             if (childPatient1name.equals(patientName))
                 instance.notifyMovement(patientName,childWorkerRoom1.getDisplayName());
             else{
@@ -138,7 +138,7 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
         else if (room==adultWaitingRoom){
             //figure out which room this patient actually moved on to, then notify movement
             String patientName = patient.getDisplayValue();
-            String adultPatient1name = adultWorkerRoom1.getState().values().toArray(new String[1])[0];
+            String adultPatient1name = adultWorkerRoom1.getState().get(adultWorkerRoom1.getDisplayName())[0];
             if (adultPatient1name.equals(patientName))
                 instance.notifyMovement(patientName,adultWorkerRoom1.getDisplayName());
             else{

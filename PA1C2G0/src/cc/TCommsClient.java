@@ -75,7 +75,7 @@ public class TCommsClient extends Thread {
      * @param payTime time required for payment
      * @param getUpTime time required for getting up and moving between rooms
      */
-    public void startSim(int adults, int children, int seats, String evalTime, String medicTime, String payTime, String getUpTime) {
+    public void startSim(int adults, int children, int seats, int evalTime, int medicTime, int payTime, int getUpTime) {
         String msg = "START " +
                 adults + " " +
                 children + " " +

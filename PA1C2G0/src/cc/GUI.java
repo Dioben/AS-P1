@@ -49,7 +49,7 @@ public class GUI {
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                commsClient.startSim(10, 10, 4, "100", "100", "100", "100");
+                commsClient.startSim(10, 10, 4, 100, 100, 100, 100);
             }
         });
         confirmLoginButton.addActionListener(new ActionListener() {
