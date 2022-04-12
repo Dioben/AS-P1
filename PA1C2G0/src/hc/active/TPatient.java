@@ -106,14 +106,15 @@ public class TPatient extends Thread implements IPatient {
     }
 
     public String getDisplayValue() {
-        String prefix = "";
+        String prefix = this.child?"C":"A";
+        String suffix = "";
         if (severity == Severity.BLUE)
-                prefix = "B";
+            suffix = "B";
         if (severity == Severity.YELLOW)
-            prefix = "y";
+            suffix = "y";
         if (severity == Severity.RED)
-            prefix = "R";
-        return prefix+displayValue;
+            suffix = "R";
+        return prefix+displayValue+suffix;
     }
 
     @Override

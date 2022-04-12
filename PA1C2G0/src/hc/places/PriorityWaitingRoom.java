@@ -13,6 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Class for rooms that hold several users
+ * This room can overflow if used on their own, container object must implement limiting logic
  */
 public class PriorityWaitingRoom implements IWaitingRoom {
     private final IWaitingHall container;
@@ -24,7 +25,8 @@ public class PriorityWaitingRoom implements IWaitingRoom {
     private int releasedBlue = -1; //way to let a patient know if they've been released -> only affected while inside hall lock
     private int releasedYellow = -1; //way to let a patient know if they've been released
     private int releasedRed = -1; //way to let a patient know if they've been released
-    private AtomicInteger entered =  new AtomicInteger(0);
+    private final AtomicInteger entered =  new AtomicInteger(0);
+    private final int seats;
 
     public PriorityWaitingRoom(IWaitingHall container, IContainer next, String name, int seats){
         this.container = container;
@@ -33,13 +35,9 @@ public class PriorityWaitingRoom implements IWaitingRoom {
         patientsRed = new MDelayFIFO(IPatient[].class, seats);
         patientsYellow = new MDelayFIFO(IPatient[].class, seats);
         patientsBlue = new MDelayFIFO(IPatient[].class, seats);
+        this.seats = seats;
     }
 
-    private boolean canEnter(IPatient patient) {
-        Severity severity = patient.getSeverity();
-        MDelayFIFO queue = getPatientQueue(patient);
-        return  queue.isFull();
-    }
 
 
     /**
@@ -113,10 +111,28 @@ public class PriorityWaitingRoom implements IWaitingRoom {
     }
 
 
+    /**
+     * Maps all patients in this room by descending severity and ID
+     * @return Map<room name, patient string list>
+     */
     @Override
     public Map<String, String[]> getState() {
-        //TODO: SOMETHING, SHOULD PROBABLY REPORT THE MOST RECENT USER TO GET IN?
         HashMap<String,String[]> map = new HashMap();
+        String[] patientText = new String[seats];
+        int assigned = 0;
+        for (IPatient[] patientList: new IPatient[][]{patientsRed.getSnapshot(seats),patientsYellow.getSnapshot(seats),patientsBlue.getSnapshot(seats)}) {
+            for (int i = 0; i < seats - assigned; i++) {
+                IPatient patient = patientList[i];
+                if (patient == null)
+                    break;
+                patientText[assigned] = patient.getDisplayValue();
+                assigned++;
+            }
+            if (assigned==seats)
+                break;
+        }
+
+        map.put(this.name,patientText);
         return map;
     }
 

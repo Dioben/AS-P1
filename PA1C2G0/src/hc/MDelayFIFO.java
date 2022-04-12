@@ -10,7 +10,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * Instead a call to remove() with the given object must be used to release objects
  * @param <T>
  */
-public class MDelayFIFO<T> {
+public class MDelayFIFO<T> implements hc.interfaces.IDelayFIFO<T> {
 
     private final int size;
     private final T[] queue;
@@ -21,16 +21,19 @@ public class MDelayFIFO<T> {
     private int idxPut=0;
     private int count = 0;
     private int awaitingRemoval = 0;
+    private final Class<T> clazz; //for snapshot purposes
 
     public MDelayFIFO(Class<T> clazz, int arraySize){
         this.size = arraySize;
+        this.clazz = clazz;
         queue = (T[]) Array.newInstance(clazz, size);
         rl = new ReentrantLock();
         cNotFull = rl.newCondition();
         cNotEmpty = rl.newCondition();
     }
 
-    public void put( T value ) {
+    @Override
+    public void put(T value) {
         try {
             rl.lock();
             while ( isFull() )
@@ -49,6 +52,7 @@ public class MDelayFIFO<T> {
      * Difference from normal implementation: does not signal available space
      * @return object at idxGet
      */
+    @Override
     public T get() {
 
         T val = null;
@@ -72,6 +76,7 @@ public class MDelayFIFO<T> {
      * Signals that one of the objects that has been gotten before has now actually left
      * it does not matter which one left
      */
+    @Override
     public void remove(){
         try{
             rl.lock();
@@ -83,12 +88,39 @@ public class MDelayFIFO<T> {
         }
     }
 
+    /**
+     * Generates a list snapshot of this array's current state, null-padded
+     * Includes items awaiting remove
+     * @param size size of returned array
+     * @return clone of this FIFO's content, oldest items first
+     */
+    @Override
+    public T[] getSnapshot(int size){
+        rl.lock();
+        T[] values = (T[]) Array.newInstance(clazz, size);
+        int idx;
+        for (int i = 0;i<count+awaitingRemoval;i++){
+            if (i==size)
+                break;
+            idx = (idxGet-awaitingRemoval+i)%size;
+            if (idx<0)
+                idx= size+idx;
+            values[i] = queue[idx];
+        }
+
+        rl.unlock();
+        return values;
+    }
 
 
+
+
+    @Override
     public boolean isFull() {
         return count+awaitingRemoval == size;
     }
 
+    @Override
     public boolean isEmpty() {
         return count == 0;
     }

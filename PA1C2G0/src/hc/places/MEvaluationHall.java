@@ -5,6 +5,7 @@ import hc.enums.ReleasedRoom;
 import hc.enums.Worker;
 import hc.interfaces.*;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -62,12 +63,15 @@ public class MEvaluationHall implements IHall {
     }
 
     /**
-     * TODO: report the current state of this container for logging purposes
-     * @return
+     * Gets current state of all rooms inside
+     * @return A map linking room name to list of patients inside with length 1, may contain null
      */
     @Override
     public Map<String, String[]> getState() {
-        return null;
+        HashMap<String,String[]> states = new HashMap<>();
+        for (IWorkerRoom room : rooms)
+            states.putAll(room.getState());
+        return states;
     }
 
     /**

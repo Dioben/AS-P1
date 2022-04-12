@@ -6,6 +6,7 @@ import hc.enums.ReleasedRoom;
 import hc.enums.Severity;
 import hc.interfaces.*;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
@@ -32,12 +33,12 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
     private int releasedYellowChild = -1; //helps patients know if they can leave
     private int releasedRedChild = -1; //helps patients know if they can leave
 
-    private final MFIFO<IPatient> childBacklogRed;
-    private final MFIFO<IPatient> adultBacklogRed;
-    private final MFIFO<IPatient> childBacklogYellow;
-    private final MFIFO<IPatient> adultBacklogYellow;
-    private final MFIFO<IPatient> childBacklogBlue;
-    private final MFIFO<IPatient> adultBacklogBlue;
+    private final IFIFO<IPatient> childBacklogRed;
+    private final IFIFO<IPatient> adultBacklogRed;
+    private final IFIFO<IPatient> childBacklogYellow;
+    private final IFIFO<IPatient> adultBacklogYellow;
+    private final IFIFO<IPatient> childBacklogBlue;
+    private final IFIFO<IPatient> adultBacklogBlue;
     private int nextSlackAdult; //we start out with 1 adult slots available in MDW
     private int nextSlackChild; //we start out with 1 child slots available in MDW
 
@@ -80,7 +81,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
      */
     private IContainer enterAdultRoom(IPatient patient) {
         rl.lock();
-        MFIFO backlog = getBacklog(patient);
+        IFIFO backlog = getBacklog(patient);
         if (inAdult==roomMax){
             backlog.put(patient);
             while (getControlNumber(patient)<patient.getRoomNumber()) {
@@ -125,7 +126,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
      * @param patient
      * @return a backlog for user to wait in
      */
-    private MFIFO getBacklog(IPatient patient) {
+    private IFIFO getBacklog(IPatient patient) {
         Severity severity = patient.getSeverity();
         if (severity.equals(Severity.UNASSIGNED))
             throw new RuntimeException("Unassigned patient in WTH");
@@ -158,7 +159,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
      */
     private IContainer enterChildRoom(IPatient patient) {
         rl.lock();
-        MFIFO backlog = getBacklog(patient);
+        IFIFO backlog = getBacklog(patient);
         if (inChild==roomMax){
             backlog.put(patient);
             while(getControlNumber(patient)<patient.getRoomNumber()){
@@ -179,12 +180,45 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
     }
 
     /**
-     * TODO: report the current state of this container for logging purposes
+     * Reports this container's state for UI purposes, prioritizing older items
+     * Key WTH will return 6 items, 3 children first then 3 adults
      * @return
      */
     @Override
     public Map<String, String[]> getState() {
-        return null;
+        Map<String,String[]> states = new HashMap<>();
+        String[] here = new String[6];
+        int assignedAdults = 0;
+        int assignedChildren=0;
+        for (IPatient[] patients : new IPatient[][]{childBacklogRed.getSnapshot(3), childBacklogYellow.getSnapshot(3), childBacklogBlue.getSnapshot(3)})
+        {
+            for (int i=0;i<3-assignedChildren;i++){
+                IPatient patient = patients[i];
+                if (patient==null)
+                    break;
+                here[assignedChildren] = patient.getDisplayValue();
+                assignedChildren++;
+            }
+            if (assignedChildren==3)
+                break;
+        }
+        for (IPatient[] patients : new IPatient[][]{adultBacklogRed.getSnapshot(3), adultBacklogYellow.getSnapshot(3), adultBacklogBlue.getSnapshot(3)})
+        {
+            for (int i=0;i<3-assignedAdults;i++){
+                IPatient patient = patients[i];
+                if (patient==null)
+                    break;
+                here[assignedAdults+3] = patient.getDisplayValue();
+                assignedAdults++;
+            }
+            if (assignedAdults==3)
+                break;
+        }
+        states.put(this.name,here);
+        states.putAll(childRoom.getState());
+        states.putAll(adultRoom.getState());
+
+        return states;
     }
 
     /**

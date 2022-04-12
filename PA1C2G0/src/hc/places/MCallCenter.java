@@ -4,6 +4,7 @@ import hc.MFIFO;
 import hc.active.TCommsHandler;
 import hc.enums.ReleasedRoom;
 import hc.interfaces.ICallCenterWaiter;
+import hc.interfaces.IFIFO;
 
 /**
  * Class responsible for propagating availability notifications
@@ -14,7 +15,7 @@ import hc.interfaces.ICallCenterWaiter;
 public class MCallCenter extends Thread implements ICallCenterWaiter{
 
     private final TCommsHandler comms;
-    private final MFIFO<ReleasedRoom> requests; //this fifo provides all the synchronicity we need
+    private final IFIFO<ReleasedRoom> requests; //this fifo provides all the synchronicity we need
     private boolean manual;
     private ICallCenterWaiter entranceHall;
     private ICallCenterWaiter waitingHall;

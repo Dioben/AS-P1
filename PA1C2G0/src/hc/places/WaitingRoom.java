@@ -17,12 +17,14 @@ public class WaitingRoom implements IWaitingRoom {
     private final MDelayFIFO<IPatient> patients;
     private int released = -1; //way to let a patient know if they've been released -> only ever changed by 1 thread
     private AtomicInteger entered =  new AtomicInteger(0);
+    private final int seats;
 
     public WaitingRoom(IWaitingHall container, IContainer next, String name, int seats){
         this.container = container;
         this.next = next;
         this.name = name;
         patients = new MDelayFIFO(IPatient[].class, seats);
+        this.seats = seats;
     }
 
 
@@ -73,10 +75,20 @@ public class WaitingRoom implements IWaitingRoom {
     }
 
 
-    //TODO: USE FIFO PEEK HERE
     @Override
     public Map<String, String[]> getState() {
         HashMap<String,String[]> map = new HashMap();
+        IPatient[] patientList = patients.getSnapshot(seats);
+        String[] patientText = new String[seats];
+
+        for(int i=0;i<seats;i++){
+            IPatient patient = patientList[i];
+            if (patient==null)
+                break;
+            patientText[i] = patient.getDisplayValue();
+        }
+
+        map.put(this.name,patientText);
        return map;
     }
 

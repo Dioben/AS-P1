@@ -25,8 +25,8 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
     private int entered = 0; //ID tracker
     private int releasedChild = -1; //helps patients know if they can leave
     private int releasedAdult = -1;
-    private final MFIFO<IPatient> childBacklog;
-    private final MFIFO<IPatient> adultBacklog;
+    private final IFIFO<IPatient> childBacklog;
+    private final IFIFO<IPatient> adultBacklog;
     private int nextSlack; //we start out with 4 slots available in EVH
     private final MFIFO<Boolean> entrances; //stores entrance history, True if Child and False otherwise
 
@@ -108,16 +108,16 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
         return name;
     }
 
-    /** TODO: IMPLEMENT THE QUEUE PEEK METHOD, USE IT HERE
+    /**
      * @return Empty String if no patient exists in this room, otherwise the display value of latest patient to enter
      */
     @Override
     public Map<String, String[]> getState() {
         HashMap<String,String[]> vals = new HashMap<>();
 
-        IPatient[] oldestAdults = null;
-        IPatient[] oldestChildren = null;
-        Boolean[]  oldestEntries = null;
+        IPatient[] oldestAdults = adultBacklog.getSnapshot(3);
+        IPatient[] oldestChildren = childBacklog.getSnapshot(3);
+        Boolean[]  oldestEntries = entrances.getSnapshot(3);
 
         String[] selfInfo = new String[3];
         for(int i=0;i<0;i++){
@@ -132,10 +132,8 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
         }
 
         vals.put(this.name,selfInfo);
-        HashMap<String,String[]> inside = childRoom.getState();
-        vals.putAll(inside);
-        HashMap<String,String[]> inside = adultRoom.getState();
-        vals.putAll(inside);
+        vals.putAll(childRoom.getState());
+        vals.putAll(adultRoom.getState());
         return vals;
     }
 

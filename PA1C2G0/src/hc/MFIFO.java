@@ -4,7 +4,7 @@ import java.lang.reflect.Array;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class MFIFO<T> {
+public class MFIFO<T> implements hc.interfaces.IFIFO<T> {
 
     private final int size;
     private final T[] queue;
@@ -25,7 +25,8 @@ public class MFIFO<T> {
         cNotEmpty = rl.newCondition();
     }
 
-    public void put( T value ) {
+    @Override
+    public void put(T value) {
         try {
             rl.lock();
             while ( isFull() )
@@ -40,6 +41,7 @@ public class MFIFO<T> {
         }
     }
 
+    @Override
     public T get() {
 
         T val = null;
@@ -59,10 +61,12 @@ public class MFIFO<T> {
         return val;
     }
 
+    @Override
     public boolean isFull() {
         return count == size;
     }
 
+    @Override
     public boolean isEmpty() {
         return count == 0;
     }
@@ -72,6 +76,7 @@ public class MFIFO<T> {
      * @param size size of returned array
      * @return clone of this FIFO's content, oldest items first
      */
+    @Override
     public T[] getSnapshot(int size){
         rl.lock();
         T[] values = (T[]) Array.newInstance(clazz, size);

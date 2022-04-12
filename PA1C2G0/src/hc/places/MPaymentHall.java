@@ -5,6 +5,7 @@ import hc.MFIFO;
 import hc.enums.Worker;
 import hc.interfaces.*;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
@@ -23,7 +24,7 @@ public class MPaymentHall implements IHall {
 
     public MPaymentHall(HCInstance instance,int people){
         this.instance = instance;
-        cashierRoom = WorkerRoom.getRoom(Worker.CASHIER,this,null,"PYH");
+        cashierRoom = WorkerRoom.getRoom(Worker.CASHIER,this,null,"PYR");
         rl = new ReentrantLock();
         backlog = new MFIFO(IPatient[].class,people);
         cashierAvailableSignal = rl.newCondition();
@@ -59,11 +60,23 @@ public class MPaymentHall implements IHall {
     }
 
     /**
-     * TODO: report the current state of this container for logging purposes
-     * @return
+     * Returns this container's occupation status, including contained patients for all sub-containers
+     * @return Map<room names, patient ID strings>
      */
     @Override
     public Map<String, String[]> getState() {
+        Map<String,String[]> states = new HashMap<>();
+        IPatient[] patients = backlog.getSnapshot(3);
+        String [] relevant = new String[3];
+        for(int i=0;i<3;i++){
+            IPatient patient = patients[i];
+            if (patient==null)
+                    break;
+            relevant[i] = patient.getDisplayValue();
+        }
+        states.put(this.name,relevant);
+        states.putAll(cashierRoom.getState());
+
         return null;
     }
 
@@ -128,7 +141,7 @@ public class MPaymentHall implements IHall {
      */
     @Override
     public void leave(IPatient patient) {
-        //TODO: log patient migration
+        instance.notifyGone();
     }
 
 }

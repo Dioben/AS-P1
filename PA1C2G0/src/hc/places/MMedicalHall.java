@@ -5,6 +5,7 @@ import hc.enums.ReleasedRoom;
 import hc.enums.Worker;
 import hc.interfaces.*;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -64,12 +65,28 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
     }
 
     /**
-     * TODO: report the current state of this container for logging purposes
-     * @return
+     * Obtain a map linking each container to patient display name array
+     * Used for UI purposes
+     * @return Map<Container Name, Patient Names>
      */
     @Override
     public Map<String, String[]> getState() {
-        return null;
+        Map<String,String[]> states = new HashMap<>();
+        String[] inWaiting = new String[2];
+        int idx = 0;
+        inWaiting[idx] = childWaitingRoom.getState().values().toArray(new String[1])[0];
+        if (inWaiting[idx]!=null)
+            idx++;
+        inWaiting[idx] = adultWaitingRoom.getState().values().toArray(new String[1])[0];
+        states.put(this.name,inWaiting);
+        states.putAll(adultWaitingRoom.getState());
+        states.putAll(childWorkerRoom1.getState());
+        states.putAll(childWorkerRoom2.getState());
+        states.putAll(adultWorkerRoom1.getState());
+        states.putAll(adultWorkerRoom2.getState());
+
+
+        return states;
     }
 
     /**
