@@ -254,6 +254,7 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
         if (room==childWaitingRoom){
             if (nextSlackChild>0){
                 nextSlackChild--;
+                inChild = false;
                 room.setNext(getFreeChildRoom());
                 room.notifyDone();
             }
@@ -262,6 +263,7 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
         else if (room==adultWaitingRoom){
             if (nextSlackAdult>0){
                 nextSlackAdult--;
+                inAdult = false;
                 room.setNext(getFreeAdultRoom());
                 room.notifyDone();
             }
