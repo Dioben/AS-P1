@@ -169,27 +169,31 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
         if (! (releasedRoom.equals(ReleasedRoom.MDR_CHILD) || releasedRoom.equals(ReleasedRoom.MDR_ADULT))){
             throw new RuntimeException("Medical Hall was notified of the wrong movement: "+releasedRoom.name());
         }
-        rl.lock();
         if (releasedRoom==ReleasedRoom.MDR_ADULT){
+            rl.lock();
             if (inAdult){
                 inAdult = false;
                 adultWaitingRoom.setNext(getFreeAdultRoom());
+                rl.unlock();
                 adultWaitingRoom.notifyDone();
             }else{
                 nextSlackAdult++;
+                rl.unlock();
             }
         }
         if (releasedRoom==ReleasedRoom.MDR_CHILD){
+            rl.lock();
             if (inChild){
                 inChild = false;
                 childWaitingRoom.setNext(getFreeChildRoom());
+                rl.unlock();
                 childWaitingRoom.notifyDone();
             }else{
                 nextSlackChild++;
+                rl.unlock();
             }
         }
-
-        rl.unlock();
+        
     }
 
     private IContainer getFreeAdultRoom() {
