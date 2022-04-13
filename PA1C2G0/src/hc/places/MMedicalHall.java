@@ -53,11 +53,9 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
     public IContainer getFollowingContainer(IPatient patient) {
         rl.lock();
         if (patient.isChild()) {
-            inChild = true;
             rl.unlock();
             return childWaitingRoom;
         }
-        inAdult = true;
         rl.unlock();
         return adultWaitingRoom;
     }
@@ -147,7 +145,6 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
             else{
                 instance.notifyMovement(patientName,adultWorkerRoom2.getDisplayName());
             }
-
             callCenter.notifyAvailable(ReleasedRoom.MDW_ADULT);
         }
         else if (room==adultWorkerRoom1 || room==adultWorkerRoom2){
@@ -252,6 +249,7 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
     public void notifyWaiting(IWaitingRoom room) {
         rl.lock();
         if (room==childWaitingRoom){
+            inChild = true;
             if (nextSlackChild>0){
                 nextSlackChild--;
                 inChild = false;
@@ -261,6 +259,7 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
 
         }
         else if (room==adultWaitingRoom){
+            inAdult = true;
             if (nextSlackAdult>0){
                 nextSlackAdult--;
                 inAdult = false;
