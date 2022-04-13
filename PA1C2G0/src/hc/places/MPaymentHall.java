@@ -112,8 +112,9 @@ public class MPaymentHall implements IHall {
         if (!backlog.isEmpty()) {
             IPatient patient = backlog.get();
             released = patient.getRoomNumber();
+            cashierAvailableSignal.signal();
         }
-        cashierAvailableSignal.signal();
+
         rl.unlock();
 
     }

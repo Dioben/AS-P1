@@ -15,8 +15,8 @@ public class Main {
 //        GUI gui = new GUI(commsClient);
 //        gui.start();
         commsClient.startSim(
-                10,
-                10,
+                2,
+                0,
                 4,
                 100,
                 100,

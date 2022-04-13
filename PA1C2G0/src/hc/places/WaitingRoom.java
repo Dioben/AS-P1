@@ -123,9 +123,12 @@ public class WaitingRoom implements IWaitingRoom {
     public void notifyDone() {
         try {
             rl.lock();
-            IPatient patient = patients.get(); //this notifies the oldest patient, causing them to leave getFollowingContainer
-            released = patient.getRoomNumber();
-            cCanMove.signalAll();
+            if (!patients.isEmpty()){
+                IPatient patient = patients.get(); //this notifies the oldest patient, causing them to leave getFollowingContainer
+                released = patient.getRoomNumber();
+                cCanMove.signalAll();
+            }
+
         } finally {
             rl.unlock();
         }
