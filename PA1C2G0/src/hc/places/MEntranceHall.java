@@ -216,12 +216,18 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
             rl.unlock();
         }
         else{
-            rl.unlock();
-            boolean wasChild = entrances.get();
-            if (wasChild)
-                childRoom.notifyDone();
-            else
-                adultRoom.notifyDone();
+            if (!entrances.isEmpty())
+            {
+                boolean wasChild = entrances.get();
+                rl.unlock();
+                if (wasChild)
+                    childRoom.notifyDone();
+                else
+                    adultRoom.notifyDone();
+            }
+
+
+
         }
     }
 
