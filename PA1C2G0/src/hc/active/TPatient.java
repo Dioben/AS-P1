@@ -67,7 +67,8 @@ public class TPatient extends Thread implements IPatient {
      */
     public void setEntranceNumber(int entranceNumber) {
         this.entranceNumber = entranceNumber;
-        this.displayValue = String.valueOf(entranceNumber);
+        this.displayValue = entranceNumber>=10?"":"0";
+        this.displayValue+= String.valueOf(entranceNumber);
     }
 
     /**
@@ -77,7 +78,8 @@ public class TPatient extends Thread implements IPatient {
      */
     public void setWaitingNumber(int waitingNumber){
         this.waitingNumber = waitingNumber;
-        this.displayValue = String.valueOf(waitingNumber);
+        this.displayValue = waitingNumber>=10?"":"0";
+        this.displayValue+= String.valueOf(waitingNumber);
     }
 
     /**
@@ -87,7 +89,8 @@ public class TPatient extends Thread implements IPatient {
      */
     public void setPaymentNumber(int paymentNumber){
         this.paymentNumber = paymentNumber;
-        this.displayValue = String.valueOf(paymentNumber);
+        this.displayValue = paymentNumber>=10?"":"0";
+        this.displayValue+= String.valueOf(paymentNumber);
     }
 
     /**

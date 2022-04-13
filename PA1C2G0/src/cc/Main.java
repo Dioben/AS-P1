@@ -8,14 +8,14 @@ public class Main {
      * @param args Command line arguments, unused
      */
     public static void main(String[] args) throws InterruptedException {
-        TimeUnit.SECONDS.sleep(1);
+        TimeUnit.SECONDS.sleep(3);
         TCommsClient commsClient = new TCommsClient("localhost", 8000);
         commsClient.start();
 //        GUI.setGUILook("GTK+");
 //        GUI gui = new GUI(commsClient);
 //        gui.start();
         commsClient.startSim(
-                2,
+                4,
                 0,
                 4,
                 100,
