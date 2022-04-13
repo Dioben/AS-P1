@@ -174,6 +174,7 @@ public class PriorityWaitingRoom implements IWaitingRoom {
             else if(!patientsYellow.isEmpty()){
                 patient = patientsYellow.get();
                 releasedYellow = patient.getRoomNumber();
+
             }else if(!patientsBlue.isEmpty()){
                 patient = patientsBlue.get();
                 releasedBlue = patient.getRoomNumber();

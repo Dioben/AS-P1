@@ -51,11 +51,14 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
      */
     @Override
     public IContainer getFollowingContainer(IPatient patient) {
+        rl.lock();
         if (patient.isChild()) {
             inChild = true;
+            rl.unlock();
             return childWaitingRoom;
         }
         inAdult = true;
+        rl.unlock();
         return adultWaitingRoom;
     }
 

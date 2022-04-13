@@ -337,6 +337,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
                 return;
             }
             handleAdultRoomLeave();
+            rl.unlock();
         }
         else if (releasedRoom.equals(ReleasedRoom.WTR_CHILD)){
             rl.lock();
@@ -345,9 +346,10 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
                 return;
             }
             handleChildRoomLeave();
+            rl.unlock();
 
         }
-        rl.unlock();
+
     }
 
     @Override

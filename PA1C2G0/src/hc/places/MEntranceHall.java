@@ -224,6 +224,8 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
                     childRoom.notifyDone();
                 else
                     adultRoom.notifyDone();
+            }else{
+                rl.unlock();
             }
 
 
