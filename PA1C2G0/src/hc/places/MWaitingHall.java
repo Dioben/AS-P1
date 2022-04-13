@@ -309,23 +309,29 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
                 releasedRoom.equals(releasedRoom.MDW_ADULT) || releasedRoom.equals(releasedRoom.MDW_CHILD)) ){
             throw new RuntimeException("Waiting Hall was notified of the wrong movement: "+releasedRoom.name());
         }
-        rl.lock();
         if (releasedRoom.equals(ReleasedRoom.MDW_ADULT)){
+            rl.lock();
             if (inAdult==0){
                 nextSlackAdult++;
+                rl.unlock();
             }
             else{
+                rl.unlock();
                 adultRoom.notifyDone();
             }
         }
         else if (releasedRoom.equals(ReleasedRoom.MDW_CHILD)){
+            rl.lock();
             if (inChild==0){
                 nextSlackChild++;
+                rl.unlock();
             }
             else{
+                rl.unlock();
                 childRoom.notifyDone();
             }
         } else if (releasedRoom.equals(ReleasedRoom.WTR_ADULT)){
+            rl.lock();
             if (inAdult==0){
                 rl.unlock();
                 return;
@@ -333,6 +339,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
             handleAdultRoomLeave();
         }
         else if (releasedRoom.equals(ReleasedRoom.WTR_CHILD)){
+            rl.lock();
             if (inChild==0){
                 rl.unlock();
                 return;
