@@ -113,7 +113,7 @@ public class TPatient extends Thread implements IPatient {
         if (severity == Severity.BLUE)
             suffix = "B";
         if (severity == Severity.YELLOW)
-            suffix = "y";
+            suffix = "Y";
         if (severity == Severity.RED)
             suffix = "R";
         return prefix+displayValue+suffix;
