@@ -211,17 +211,18 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
             throw new RuntimeException("Entrance Hall was notified of the wrong movement: "+releasedRoom.name());
         }
         rl.lock();
-        if (inChild==0 && inAdult==0)
+        if (inChild==0 && inAdult==0){
             nextSlack++;
+            rl.unlock();
+        }
         else{
+            rl.unlock();
             boolean wasChild = entrances.get();
             if (wasChild)
                 childRoom.notifyDone();
             else
                 adultRoom.notifyDone();
         }
-
-        rl.unlock();
     }
 
     @Override

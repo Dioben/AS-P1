@@ -193,7 +193,7 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
                 rl.unlock();
             }
         }
-        
+
     }
 
     private IContainer getFreeAdultRoom() {
