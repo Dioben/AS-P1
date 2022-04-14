@@ -97,6 +97,7 @@ public class GUI {
                 appointmentTimeComboBox.setEnabled(false);
                 paymentTimeComboBox.setEnabled(false);
                 moveTimeComboBox.setEnabled(false);
+                resetFormButton.setEnabled(false);
             }
         });
         suspendButton.addActionListener(new ActionListener() {
@@ -194,6 +195,7 @@ public class GUI {
         appointmentTimeComboBox.setEnabled(true);
         paymentTimeComboBox.setEnabled(true);
         moveTimeComboBox.setEnabled(true);
+        resetFormButton.setEnabled(true);
     }
 
     public static void setGUILook(String wantedLook) {

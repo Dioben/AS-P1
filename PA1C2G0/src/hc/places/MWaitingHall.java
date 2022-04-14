@@ -86,15 +86,15 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
         IFIFO backlog = getBacklog(patient);
         if (assignedAdult==roomMax){
             backlog.put(patient);
+            instance.notifyMovement(patient.getDisplayValue(),null);
             while (getControlNumber(patient)<patient.getRoomNumber()) {
                 try {
                     adultRoomAvailable.await();
                 } catch (InterruptedException e) {}
             }
         }
-
-            assignedAdult++;
-            rl.unlock();
+        assignedAdult++;
+        rl.unlock();
         return adultRoom;
 
     }
@@ -109,13 +109,13 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
         IFIFO backlog = getBacklog(patient);
         if (assignedChild==roomMax){
             backlog.put(patient);
+            instance.notifyMovement(patient.getDisplayValue(),null);
             while(getControlNumber(patient)<patient.getRoomNumber()){
                 try {
                     childRoomAvailable.await();
                 } catch (InterruptedException e) {}
             }
         }
-
         assignedChild++;
         rl.unlock();
         return childRoom;

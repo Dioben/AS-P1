@@ -274,7 +274,9 @@ public class GUI extends Thread {
                     seats[1][i].setVisible(false);
             }
         }
-        ((CardLayout) cardPanel.getLayout()).last(cardPanel);
+        try {
+            ((CardLayout) cardPanel.getLayout()).last(cardPanel);
+        } catch (Exception ignored) {}
         setStateLabel("Stopped");
     }
 
