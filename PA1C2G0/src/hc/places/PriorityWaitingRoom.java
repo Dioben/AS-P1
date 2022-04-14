@@ -186,6 +186,20 @@ public class PriorityWaitingRoom implements IWaitingRoom {
         }
     }
 
+    @Override
+    public IPatient getExpected() {
+        rl.lock();
+        IPatient patient = null;
+        if (!patientsRed.isEmpty())
+            patient = patientsRed.getSnapshot(1)[0];
+        else if (!patientsYellow.isEmpty())
+            patient = patientsYellow.getSnapshot(1)[0];
+        else if (!patientsBlue.isEmpty())
+            patient = patientsBlue.getSnapshot(1)[0];
+        rl.unlock();
+        return patient;
+    }
+
     /**
      * Overrides the next field in cases where it might be ambiguous
      * @param next The container to set as following after this one

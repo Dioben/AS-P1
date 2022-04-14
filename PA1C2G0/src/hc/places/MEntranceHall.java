@@ -18,6 +18,8 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
     private final String name = "ETH";
     private int inChild = 0;
     private int inAdult = 0;
+    private int assignedChild = 0;
+    private int assignedAdult = 0;
     private final int roomMax;
     private final ReentrantLock rl;
     private final Condition childRoomAvailable;
@@ -28,7 +30,6 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
     private final IFIFO<IPatient> childBacklog;
     private final IFIFO<IPatient> adultBacklog;
     private int nextSlack; //we start out with 4 slots available in EVH
-    private final MFIFO<Boolean> entrances; //stores entrance history, True if Child and False otherwise
 
     public MEntranceHall(HCInstance instance, IContainer after, int seatsPerRoom, int adults, int children, int nextRoomSlack){
         this.instance = instance;
@@ -40,7 +41,6 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
         adultRoomAvailable = rl.newCondition();
         childBacklog = new MFIFO(IPatient.class,children);
         adultBacklog = new MFIFO(IPatient.class,adults);
-        entrances = new MFIFO(Boolean.class,seatsPerRoom*2);
         nextSlack = nextRoomSlack;
     }
 
@@ -64,7 +64,7 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
      */
     private IContainer enterAdultRoom(IPatient patient) {
         rl.lock();
-        if (inAdult==roomMax){
+        if (assignedAdult==roomMax){
             adultBacklog.put(patient);
             while (releasedAdult<patient.getRoomNumber()) {
                 try {
@@ -73,8 +73,7 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
             }
         }
 
-            inAdult++;
-            entrances.put(false);
+            assignedAdult++;
             rl.unlock();
         return adultRoom;
 
@@ -88,7 +87,7 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
      */
     private IContainer enterChildRoom(IPatient patient) {
         rl.lock();
-        if (inChild==roomMax){
+        if (assignedChild==roomMax){
             childBacklog.put(patient);
             while(releasedChild<patient.getRoomNumber()){
                 try {
@@ -97,8 +96,7 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
             }
         }
 
-        inChild++;
-        entrances.put(true);
+        assignedChild++;
         rl.unlock();
         return childRoom;
     }
@@ -157,10 +155,6 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
     @Override
     public void notifyDone(IRoom room, IPatient patient) {
         rl.lock();
-        if (inAdult==0 && inChild==0) {
-            rl.unlock();
-            return;
-        }
         if (room==adultRoom)
             handleAdultRoomLeave();
 
@@ -177,6 +171,7 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
      */
     private void handleChildRoomLeave() {
         inChild--;
+        assignedChild--;
         if(!childBacklog.isEmpty()) {
             IPatient patient = childBacklog.get();
             releasedChild = patient.getRoomNumber();
@@ -188,6 +183,7 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
      * Identifies "oldest" adult patient in queue if they exist and tells them to leave, updates containment state
      */
     private void handleAdultRoomLeave() {
+        assignedAdult--;
         inAdult--;
         if(!adultBacklog.isEmpty()) {
             IPatient patient = adultBacklog.get();
@@ -198,7 +194,7 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
 
     }
 
-    /**
+    /** TODO: FIGURING OUT WHO ACTUALLY GOES NEXT
      * Called by CCH to notify that some forward movement is expected
      * @param releasedRoom
      */
@@ -212,22 +208,26 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
             nextSlack++;
             rl.unlock();
         }
+        else if (inChild==0) {
+                rl.unlock();
+                adultRoom.notifyDone();
+        }
+        else if (inAdult==0){
+            rl.unlock();
+            childRoom.notifyDone();
+        }
         else{
-            if (!entrances.isEmpty())
-            {
-                boolean wasChild = entrances.get();
-                rl.unlock();
-                if (wasChild)
-                    childRoom.notifyDone();
-                else
-                    adultRoom.notifyDone();
-            }else{
-                rl.unlock();
+            IPatient nextAdult = adultRoom.getExpected();
+            IPatient nextChild = childRoom.getExpected();
+            if (nextAdult==null || nextChild==null)
+                throw new RuntimeException("Found NULL inside a waiting room");
+            rl.unlock();
+            if (nextAdult.getEntranceNumber()<nextChild.getEntranceNumber())
+                adultRoom.notifyDone();
+            else
+                childRoom.notifyDone();
             }
 
-
-
-        }
     }
 
     @Override
@@ -267,11 +267,15 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
     @Override
     public void notifyWaiting(IWaitingRoom room) {
         rl.lock();
+        if (room==childRoom)
+            inChild++;
+        if (room==adultRoom)
+            inAdult++;
         if (nextSlack>0){
             nextSlack--;
-            entrances.get(); //fast-forward entrance history
+            rl.unlock();
             room.notifyDone();
-        }
-        rl.unlock();
+        }else
+            rl.unlock();
     }
 }

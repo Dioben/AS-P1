@@ -93,6 +93,21 @@ public class TPatient extends Thread implements IPatient {
         this.displayValue+= String.valueOf(paymentNumber);
     }
 
+    @Override
+    public int getEntranceNumber() {
+    return entranceNumber;
+    }
+
+    @Override
+    public int getWaitingNumber() {
+    return  waitingNumber;
+    }
+
+    @Override
+    public int getPaymentNumber() {
+        return paymentNumber;
+    }
+
     /**
      * Used by Nurse entity after evaluation to set user status
      * @param severity User condition severity

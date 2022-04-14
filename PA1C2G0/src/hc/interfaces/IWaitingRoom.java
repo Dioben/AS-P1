@@ -5,4 +5,11 @@ public interface IWaitingRoom extends IRoom{
      * Utilized by the container to tell a waiting room to release a patient
      */
     public void notifyDone();
+
+    /**
+     * Returns the next leaving patient in this room
+     * Used to evaluate which room to release in EntranceHall
+     * @return next patient to leave or null
+     */
+    public IPatient getExpected();
 }

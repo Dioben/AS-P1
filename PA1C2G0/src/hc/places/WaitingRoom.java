@@ -134,6 +134,11 @@ public class WaitingRoom implements IWaitingRoom {
         }
     }
 
+    @Override
+    public IPatient getExpected() {
+        return patients.getSnapshot(1)[0];
+    }
+
 
     /**
      * Overrides the next field in cases where it might be ambiguous
