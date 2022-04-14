@@ -109,6 +109,17 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
     }
 
     /**
+     * Propagates interrupt to contained doctors
+     */
+    @Override
+    public void interrupt() {
+        childWorkerRoom1.interrupt();
+        childWorkerRoom2.interrupt();
+        adultWorkerRoom1.interrupt();
+        adultWorkerRoom2.interrupt();
+    }
+
+    /**
      * Called by contained room to notify that patient is out
      * Can be called by waiting rooms to notify that patient is no longer waiting or by doctor to notify that patient is done
      * Calls logger, call center, updates UI thread

@@ -16,7 +16,7 @@ public class TPatient extends Thread implements IPatient {
      */
     private IContainer surroundings;
     private Severity severity=Severity.UNASSIGNED;
-    private Timer timer;
+    private final Timer timer;
     private final boolean child;
     private int entranceNumber;
     private int paymentNumber;
@@ -35,7 +35,7 @@ public class TPatient extends Thread implements IPatient {
     public void run(){
         if (surroundings != null)
             surroundings.enter(this);
-        while(surroundings != null)
+        while(surroundings != null && !Thread.interrupted())
             tryMove();
     }
 
@@ -51,12 +51,14 @@ public class TPatient extends Thread implements IPatient {
             sleep(timer.getMovementTime());
             if (next != null)
                 next.enter(this);
+            this.surroundings.leave(this,next);
+            this.surroundings = next;
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            surroundings = null;
+            Thread.currentThread().interrupt();
         }
 
-        this.surroundings.leave(this,next);
-        this.surroundings = next;
+
 
     }
 

@@ -92,7 +92,7 @@ public class MCallCenter extends Thread implements ICallCenterWaiter{
      */
     public void run(){
         ReleasedRoom handling;
-        while (true){
+        while (!Thread.interrupted()){
             handling = requests.get();
             switch (handling){
                 case EVH:

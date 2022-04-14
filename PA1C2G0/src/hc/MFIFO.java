@@ -35,7 +35,9 @@ public class MFIFO<T> implements hc.interfaces.IFIFO<T> {
             idxPut = (idxPut+1)%size;
             count++;
             cNotEmpty.signal();
-        } catch ( InterruptedException ignored ) {}
+        } catch ( InterruptedException ignored ) {
+            Thread.currentThread().interrupt();
+        }
         finally {
             rl.unlock();
         }
@@ -54,7 +56,9 @@ public class MFIFO<T> implements hc.interfaces.IFIFO<T> {
             count--;
             cNotFull.signal();
 
-        } catch( InterruptedException ignored ) {}
+        } catch( InterruptedException ignored ) {
+            Thread.currentThread().interrupt();
+        }
         finally {
             rl.unlock();
         }

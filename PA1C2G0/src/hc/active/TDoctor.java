@@ -26,7 +26,7 @@ public class TDoctor extends TServiceWorker{
         try {
             sleep(timer.getAppointmentTime());
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 }

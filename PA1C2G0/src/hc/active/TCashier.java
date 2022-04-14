@@ -24,7 +24,7 @@ public class TCashier extends TServiceWorker{
         try {
             sleep(timer.getPaymentTime());
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 }

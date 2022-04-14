@@ -9,7 +9,6 @@ import hc.places.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Class representing an instance of health center
@@ -119,6 +118,7 @@ public class HCInstance {
     }
 
     public void progress() {
+        callCenter.resume();
         paymentHall.resume();
         medicalHall.resume();
         waitingHall.resume();
@@ -132,6 +132,7 @@ public class HCInstance {
     }
 
     public void pause() {
+        callCenter.suspend();
         paymentHall.suspend();
         medicalHall.suspend();
         waitingHall.suspend();
@@ -146,7 +147,17 @@ public class HCInstance {
     }
 
     public void cleanUp() {
-        //TODO: MANUALLY KILL EVERY THREAD or just STOP EXISTING, who cares really
+        display.interrupt();
+        callCenter.interrupt();
+        entranceHall.interrupt();
+        evaluationHall.interrupt();
+        waitingHall.interrupt();
+        medicalHall.interrupt();
+        paymentHall.interrupt();
+        for(IPatient p : patients){
+            if (p.isAlive())
+                p.interrupt();
+        }
     }
 
     public Timer getTimer() {

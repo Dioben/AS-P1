@@ -72,7 +72,8 @@ public class PriorityWaitingRoom implements IWaitingRoom {
                 try {
                     c.await();
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
+                    return null;
                 }
             }
         } finally {
@@ -154,6 +155,14 @@ public class PriorityWaitingRoom implements IWaitingRoom {
 
     @Override
     public void resume() {
+
+    }
+
+    /**
+     * Due to patient thread pooling there is no need to interrupt patients here
+     */
+    @Override
+    public void interrupt() {
 
     }
 

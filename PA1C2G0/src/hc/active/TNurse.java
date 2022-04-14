@@ -28,7 +28,7 @@ public class TNurse extends TServiceWorker{
             sleep(timer.getEvaluationTime());
             patient.setSeverity(getSeverity());
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
     }
 

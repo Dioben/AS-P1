@@ -42,7 +42,9 @@ public class MDelayFIFO<T> implements hc.interfaces.IDelayFIFO<T> {
             idxPut = (idxPut+1)%size;
             count++;
             cNotEmpty.signal();
-        } catch ( InterruptedException ignored ) {}
+        } catch ( InterruptedException ignored ) {
+            Thread.currentThread().interrupt();
+        }
         finally {
             rl.unlock();
         }
@@ -65,7 +67,9 @@ public class MDelayFIFO<T> implements hc.interfaces.IDelayFIFO<T> {
             awaitingRemoval++;
             count--;
 
-        } catch( InterruptedException ignored ) {}
+        } catch( InterruptedException ignored ) {
+            Thread.currentThread().interrupt();
+        }
         finally {
             rl.unlock();
         }

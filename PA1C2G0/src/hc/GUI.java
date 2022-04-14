@@ -136,7 +136,7 @@ public class GUI extends Thread {
 
     public void run() {
         Map<String, String[]> handling;
-        while (true) {
+        while (!Thread.interrupted()) {
             handling = updates.get();
             for (Map.Entry<String, String[]> entry : handling.entrySet()) {
                 JLayeredPane[] seats = new JLayeredPane[0];
