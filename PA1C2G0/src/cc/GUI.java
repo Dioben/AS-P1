@@ -1,5 +1,8 @@
 package cc;
 
+import hc.MFIFO;
+import hc.interfaces.IFIFO;
+
 import javax.swing.*;
 import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.border.LineBorder;
@@ -9,6 +12,8 @@ import java.awt.event.ActionListener;
 
 public class GUI {
     private TCommsClient commsClient;
+    private final IFIFO<String> requests;
+    private int requestN;
 
     private JPanel mainPanel;
     private JLabel statusLabel;
@@ -33,6 +38,9 @@ public class GUI {
     private JButton confirmLoginButton;
 
     public GUI() {
+        requests = new MFIFO(String.class, 50);
+        requestN = 0;
+
         adultPatientsSpinner.setModel(new SpinnerNumberModel(10, 1, 50, 1));
         childrenPatientsSpinner.setModel(new SpinnerNumberModel(10, 1, 50, 1));
         seatsSpinner.setModel(new SpinnerNumberModel(4, 2, 10, 2));
@@ -47,12 +55,13 @@ public class GUI {
             for (JSpinner spinner : new JSpinner[] {adultPatientsSpinner, childrenPatientsSpinner, seatsSpinner, portSpinner})
                 spinner.setBorder(new LineBorder(new Color(39, 39, 39), 1, true));
 
+        GUI gui = this;
         confirmLoginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String host = hostField.getText();
+                String host = hostField.getText().trim();
                 int port = (int) portSpinner.getValue();
-                commsClient = new TCommsClient(host, port);
+                commsClient = new TCommsClient(host, port, gui);
                 commsClient.start();
                 ((CardLayout) cardPanel.getLayout()).next(cardPanel);
             }
@@ -67,7 +76,6 @@ public class GUI {
                 JComboBox[] fields = new JComboBox[] {
                         evaluationTimeComboBox, appointmentTimeComboBox, paymentTimeComboBox, moveTimeComboBox
                 };
-
                 for (int i = 0; i < 4; i++)
                     switch ((String) fields[i].getSelectedItem()) {
                         case "0" -> times[i] = 0;
@@ -77,8 +85,115 @@ public class GUI {
                         default -> times[i] = 100;
                     }
                 commsClient.startSim(adults, children, seats, times[0], times[1], times[2], times[3]);
+                setStatusLabel("Running");
+                startButton.setEnabled(false);
+                suspendButton.setEnabled(true);
+                stopButton.setEnabled(true);
+
+                adultPatientsSpinner.setEnabled(false);
+                childrenPatientsSpinner.setEnabled(false);
+                seatsSpinner.setEnabled(false);
+                evaluationTimeComboBox.setEnabled(false);
+                appointmentTimeComboBox.setEnabled(false);
+                paymentTimeComboBox.setEnabled(false);
+                moveTimeComboBox.setEnabled(false);
             }
         });
+        suspendButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                commsClient.pauseSim();
+                setStatusLabel("Suspended");
+                suspendButton.setEnabled(false);
+                resumeButton.setEnabled(true);
+            }
+        });
+        resumeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                commsClient.resumeSim();
+                setStatusLabel("Running");
+                resumeButton.setEnabled(false);
+                suspendButton.setEnabled(true);
+            }
+        });
+        stopButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                commsClient.stopSim();
+                setStatusLabel("Stopped");
+                setStopUIState();
+            }
+        });
+        endButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                commsClient.endSim();
+            }
+        });
+        operatingModeComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if ("Manual".equals(operatingModeComboBox.getSelectedItem())) {
+                    commsClient.SwapManual();
+                } else {
+                    while (requestN > 0) {
+                        commsClient.authorize(requests.get());
+                        requestN--;
+                    }
+                    allowPatientButton.setEnabled(false);
+                    commsClient.SwapAuto();
+                }
+            }
+        });
+        allowPatientButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (requestN > 0) {
+                    commsClient.authorize(requests.get());
+                    requestN--;
+                    if (requestN == 0)
+                        allowPatientButton.setEnabled(false);
+                }
+            }
+        });
+        resetFormButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                adultPatientsSpinner.setValue(10);
+                childrenPatientsSpinner.setValue(10);
+                seatsSpinner.setValue(4);
+                evaluationTimeComboBox.setSelectedIndex(1);
+                appointmentTimeComboBox.setSelectedIndex(1);
+                paymentTimeComboBox.setSelectedIndex(1);
+                moveTimeComboBox.setSelectedIndex(1);
+            }
+        });
+    }
+
+    public void putRequest(String roomID) {
+        requests.put(roomID);
+        requestN++;
+        allowPatientButton.setEnabled(true);
+    }
+
+    public void setStatusLabel(String status) {
+        statusLabel.setText("Status: " + status);
+    }
+
+    public void setStopUIState() {
+        stopButton.setEnabled(false);
+        startButton.setEnabled(true);
+        suspendButton.setEnabled(false);
+        resumeButton.setEnabled(false);
+
+        adultPatientsSpinner.setEnabled(true);
+        childrenPatientsSpinner.setEnabled(true);
+        seatsSpinner.setEnabled(true);
+        evaluationTimeComboBox.setEnabled(true);
+        appointmentTimeComboBox.setEnabled(true);
+        paymentTimeComboBox.setEnabled(true);
+        moveTimeComboBox.setEnabled(true);
     }
 
     public static void setGUILook(String wantedLook) {

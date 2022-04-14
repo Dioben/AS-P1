@@ -53,18 +53,25 @@ public class TCommsHandler extends Thread {
                 switch (command[0]) {
                     case "START":
                         startInstance(command);
+                        gui.setStateLabel("Running");
                         break;
                     case "RESUME":
-                        if (instance != null)
+                        if (instance != null) {
                             instance.progress();
+                            gui.setStateLabel("Running");
+                        }
                         break;
                     case "SUSPEND":
-                        if (instance != null)
+                        if (instance != null) {
                             instance.pause();
+                            gui.setStateLabel("Suspended");
+                        }
                         break;
                     case "STOP":
-                        if (instance != null)
+                        if (instance != null) {
                             instance.cleanUp();
+                            gui.setStateLabel("Stopped");
+                        }
                         instance = null;
                         break;
                     case "END":
@@ -77,8 +84,8 @@ public class TCommsHandler extends Thread {
                             instance.setControls(mode);
                         break;
                     case "AUTH":
-                        String patientID = command[1];
-                        instance.permitMovement(patientID);
+                        String roomID = command[1];
+                        instance.permitMovement(roomID);
                         break;
                     default:
                         break;
@@ -126,9 +133,9 @@ public class TCommsHandler extends Thread {
      * Tell client that simulation has finished running naturally
      */
     public void notifyDone(){
-
         writeLock.lock();
         out.println("DONE");
         writeLock.unlock();
+        gui.setStateLabel("Finished");
     }
 }

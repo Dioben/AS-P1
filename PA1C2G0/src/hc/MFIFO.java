@@ -83,7 +83,7 @@ public class MFIFO<T> implements hc.interfaces.IFIFO<T> {
         for (int i = 0;i<count;i++){
             if (i==size)
                 break;
-            values[i] = queue[(idxGet+i)%size];
+            values[i] = queue[(idxGet+i)%this.size];
         }
 
         rl.unlock();

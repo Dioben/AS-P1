@@ -102,9 +102,9 @@ public class MDelayFIFO<T> implements hc.interfaces.IDelayFIFO<T> {
         for (int i = 0;i<count+awaitingRemoval;i++){
             if (i==size)
                 break;
-            idx = (idxGet-awaitingRemoval+i)%size;
+            idx = (idxGet-awaitingRemoval+i)%this.size;
             if (idx<0)
-                idx= size+idx;
+                idx = this.size+idx;
             values[i] = queue[idx];
         }
 

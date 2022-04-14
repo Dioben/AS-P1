@@ -27,3 +27,5 @@ hs_err_pid*
 
 #intellij files
 */.idea/*
+PA1C2G0/logs/log.txt
+logs/log.txt
