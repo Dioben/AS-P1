@@ -73,19 +73,12 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
     @Override
     public Map<String, String[]> getState() {
         Map<String,String[]> states = new HashMap<>();
-        String[] inWaiting = new String[2];
-        int idx = 0;
-        inWaiting[idx] = childWaitingRoom.getState().get(childWaitingRoom.getDisplayName())[0];
-        if (inWaiting[idx]!=null)
-            idx++;
-        inWaiting[idx] = adultWaitingRoom.getState().get(adultWaitingRoom.getDisplayName())[0];
-        states.put(this.name,inWaiting);
+        states.putAll(childWaitingRoom.getState());
         states.putAll(adultWaitingRoom.getState());
         states.putAll(childWorkerRoom1.getState());
         states.putAll(childWorkerRoom2.getState());
         states.putAll(adultWorkerRoom1.getState());
         states.putAll(adultWorkerRoom2.getState());
-
 
         return states;
     }

@@ -117,18 +117,15 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
 
         IPatient[] oldestAdults = adultBacklog.getSnapshot(3);
         IPatient[] oldestChildren = childBacklog.getSnapshot(3);
-        Boolean[]  oldestEntries = entrances.getSnapshot(3);
 
-        String[] selfInfo = new String[3];
-        for(int i=0;i<0;i++){
-            if (oldestEntries[i]==null){
-                selfInfo[i]="";
-            }
-            else if (oldestEntries[i]){ //wasChild
-                selfInfo[i] = oldestChildren[i].getDisplayValue();
-            }else{
-                selfInfo[i] = oldestAdults[i].getDisplayValue();
-            }
+        String[] selfInfo = new String[6];
+        int i = 0;
+        for (IPatient[] oldest : new IPatient[][] {
+                oldestAdults, oldestChildren
+        }) for (IPatient patient : oldest) {
+            if (patient != null)
+                selfInfo[i] = patient.getDisplayValue();
+            i++;
         }
 
         vals.put(this.name,selfInfo);

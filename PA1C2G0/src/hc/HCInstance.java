@@ -2,7 +2,6 @@ package hc;
 
 import hc.active.TCommsHandler;
 import hc.active.TPatient;
-import hc.interfaces.IContainer;
 import hc.interfaces.IHall;
 import hc.interfaces.IPatient;
 import hc.places.*;
@@ -33,8 +32,9 @@ public class HCInstance {
     private int gone = 0;
     private final int seats;
     private final IPatient[] patients;
+    private final GUI display;
 
-    public HCInstance(int adults, int children, int seats, int evalTime, int medicTime, int payTime, int getUpTime, TCommsHandler tCommsHandler, boolean mode) {
+    public HCInstance(int adults, int children, int seats, int evalTime, int medicTime, int payTime, int getUpTime, TCommsHandler tCommsHandler, boolean mode, GUI gui) {
         this.adults = adults;
         this.children = children;
         this.seats = seats;
@@ -68,6 +68,7 @@ public class HCInstance {
         callCenter.setMedicalHall(mh);
         callCenter.setWaitingHall(wh);
 
+        display = gui;
     }
 
     /**
@@ -183,10 +184,7 @@ public class HCInstance {
         UIInfo.putAll(medicalHall.getState());
         UIInfo.putAll(paymentHall.getState());
 
-        /* TODO: INJECT A UI CLASS INTO THIS AND GIVE IT AN UPDATE METHOD
         if (display!=null)
             display.update(UIInfo);
-
-         */
     }
 }

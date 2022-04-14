@@ -1,5 +1,6 @@
 package hc.active;
 
+import hc.GUI;
 import hc.HCInstance;
 
 import java.io.BufferedReader;
@@ -20,11 +21,12 @@ public class TCommsHandler extends Thread {
     private String mode = "AUTO";
     private final ReentrantLock writeLock; //writer is supposed to be thread safe but I want to make sure
     private HCInstance instance;
+    private final GUI gui;
 
-    public TCommsHandler(Socket accept) {
+    public TCommsHandler(Socket accept, GUI gui) {
         comms = accept;
         writeLock = new ReentrantLock();
-
+        this.gui = gui;
     }
 
     /**
@@ -104,7 +106,8 @@ public class TCommsHandler extends Thread {
         int medicTime = Integer.parseInt(command[5]);
         int payTime = Integer.parseInt(command[6]);
         int getUpTime = Integer.parseInt(command[7]);
-        instance = new HCInstance(adults, children, seats, evalTime, medicTime, payTime, getUpTime,this, mode.equals("MANUAL"));
+        gui.setSeatCount(seats);
+        instance = new HCInstance(adults, children, seats, evalTime, medicTime, payTime, getUpTime,this, mode.equals("MANUAL"), gui);
         instance.start();
     }
 

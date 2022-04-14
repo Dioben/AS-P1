@@ -77,6 +77,24 @@
               </hspacer>
             </children>
           </grid>
+          <grid id="63d30" layout-manager="GridBagLayout">
+            <constraints>
+              <card name="Card3"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="858c5" class="javax.swing.JLabel" binding="loadingLabel">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="0.0" weighty="0.0"/>
+                </constraints>
+                <properties>
+                  <text value="Waiting for a CCP..."/>
+                </properties>
+              </component>
+            </children>
+          </grid>
           <grid id="27dc6" layout-manager="GridLayoutManager" row-count="4" column-count="14" same-size-horizontally="false" same-size-vertically="false" hgap="0" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
@@ -379,13 +397,13 @@
                   </grid>
                   <grid id="ccf40" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="1" column="1" row-span="4" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                      <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <component id="a73fc" class="javax.swing.JLabel" binding="enHOverflowLabel">
+                      <component id="a73fc" class="javax.swing.JLabel" binding="enHAROverflowLabel">
                         <constraints>
                           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="2" fill="0" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="0.0" weighty="0.0"/>
@@ -394,7 +412,7 @@
                           <text value="+0"/>
                         </properties>
                       </component>
-                      <grid id="24270" class="javax.swing.JLayeredPane" binding="enHOverflow3" custom-create="true" layout-manager="GridBagLayout">
+                      <grid id="24270" class="javax.swing.JLayeredPane" binding="enHAROverflow3" custom-create="true" layout-manager="GridBagLayout">
                         <constraints>
                           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="0.0" weighty="0.0"/>
@@ -403,7 +421,7 @@
                         <border type="none"/>
                         <children/>
                       </grid>
-                      <grid id="61ce2" class="javax.swing.JLayeredPane" binding="enHOverflow2" custom-create="true" layout-manager="GridBagLayout">
+                      <grid id="61ce2" class="javax.swing.JLayeredPane" binding="enHAROverflow2" custom-create="true" layout-manager="GridBagLayout">
                         <constraints>
                           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="0.0" weighty="0.0"/>
@@ -412,7 +430,53 @@
                         <border type="none"/>
                         <children/>
                       </grid>
-                      <grid id="1a097" class="javax.swing.JLayeredPane" binding="enHOverflow1" custom-create="true" layout-manager="GridBagLayout">
+                      <grid id="1a097" class="javax.swing.JLayeredPane" binding="enHAROverflow1" custom-create="true" layout-manager="GridBagLayout">
+                        <constraints>
+                          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children/>
+                      </grid>
+                    </children>
+                  </grid>
+                  <grid id="5e477" layout-manager="GridBagLayout">
+                    <constraints>
+                      <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                      <gridbag weightx="0.0" weighty="0.0"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <component id="ba1d1" class="javax.swing.JLabel" binding="enHCROverflowLabel">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="2" fill="0" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <text value="+0"/>
+                        </properties>
+                      </component>
+                      <grid id="7c5d1" class="javax.swing.JLayeredPane" binding="enHCROverflow3" custom-create="true" layout-manager="GridBagLayout">
+                        <constraints>
+                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children/>
+                      </grid>
+                      <grid id="73040" class="javax.swing.JLayeredPane" binding="enHCROverflow2" custom-create="true" layout-manager="GridBagLayout">
+                        <constraints>
+                          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children/>
+                      </grid>
+                      <grid id="d320c" class="javax.swing.JLayeredPane" binding="enHCROverflow1" custom-create="true" layout-manager="GridBagLayout">
                         <constraints>
                           <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="0.0" weighty="0.0"/>
@@ -929,13 +993,13 @@
                   </grid>
                   <grid id="fddf9" layout-manager="GridBagLayout">
                     <constraints>
-                      <grid row="1" column="1" row-span="4" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                      <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                       <gridbag weightx="0.0" weighty="0.0"/>
                     </constraints>
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <component id="d6880" class="javax.swing.JLabel" binding="wHOverflowLabel">
+                      <component id="d6880" class="javax.swing.JLabel" binding="wHAROverflowLabel">
                         <constraints>
                           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="0.0" weighty="0.0"/>
@@ -944,7 +1008,7 @@
                           <text value="+0"/>
                         </properties>
                       </component>
-                      <grid id="79f02" class="javax.swing.JLayeredPane" binding="wHOverflow3" custom-create="true" layout-manager="GridBagLayout">
+                      <grid id="79f02" class="javax.swing.JLayeredPane" binding="wHAROverflow3" custom-create="true" layout-manager="GridBagLayout">
                         <constraints>
                           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="0.0" weighty="0.0"/>
@@ -953,7 +1017,7 @@
                         <border type="none"/>
                         <children/>
                       </grid>
-                      <grid id="e8ecb" class="javax.swing.JLayeredPane" binding="wHOverflow2" custom-create="true" layout-manager="GridBagLayout">
+                      <grid id="e8ecb" class="javax.swing.JLayeredPane" binding="wHAROverflow2" custom-create="true" layout-manager="GridBagLayout">
                         <constraints>
                           <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="0.0" weighty="0.0"/>
@@ -962,7 +1026,54 @@
                         <border type="none"/>
                         <children/>
                       </grid>
-                      <grid id="2c5f" class="javax.swing.JLayeredPane" binding="wHOverflow1" custom-create="true" layout-manager="GridBagLayout">
+                      <grid id="2c5f" class="javax.swing.JLayeredPane" binding="wHAROverflow1" custom-create="true" layout-manager="GridBagLayout">
+                        <constraints>
+                          <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children/>
+                      </grid>
+                    </children>
+                  </grid>
+                  <grid id="29b5a" layout-manager="GridBagLayout">
+                    <constraints>
+                      <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                      <gridbag weightx="0.0" weighty="0.0"/>
+                    </constraints>
+                    <properties/>
+                    <border type="none"/>
+                    <children>
+                      <component id="bef46" class="javax.swing.JLabel" binding="wHCROverflowLabel">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="2" fill="0" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <text value="+0"/>
+                        </properties>
+                      </component>
+                      <grid id="4f81d" class="javax.swing.JLayeredPane" binding="wHCROverflow3" custom-create="true" layout-manager="GridBagLayout">
+                        <constraints>
+                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children/>
+                      </grid>
+                      <grid id="36bce" class="javax.swing.JLayeredPane" binding="wHCROverflow2" custom-create="true" layout-manager="GridBagLayout">
+                        <constraints>
+                          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children/>
+                      </grid>
+                      <grid id="2e5c2" class="javax.swing.JLayeredPane" binding="wHCROverflow1" custom-create="true" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                        <margin top="0" left="0" bottom="0" right="0"/>
                         <constraints>
                           <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                           <gridbag weightx="0.0" weighty="0.0"/>

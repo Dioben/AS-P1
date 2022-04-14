@@ -191,29 +191,33 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
         Map<String,String[]> states = new HashMap<>();
         String[] here = new String[6];
         int assignedAdults = 0;
-        int assignedChildren=0;
-        for (IPatient[] patients : new IPatient[][]{childBacklogRed.getSnapshot(3), childBacklogYellow.getSnapshot(3), childBacklogBlue.getSnapshot(3)})
-        {
-            for (int i=0;i<3-assignedChildren;i++){
+        int assignedChildren = 0;
+        for (IPatient[] patients : new IPatient[][]{
+                adultBacklogRed.getSnapshot(3), adultBacklogYellow.getSnapshot(3), adultBacklogBlue.getSnapshot(3)
+        }) {
+            for (int i=0; i<3 && assignedAdults < 3;i++){
                 IPatient patient = patients[i];
                 if (patient==null)
                     break;
-                here[assignedChildren] = patient.getDisplayValue();
-                assignedChildren++;
-            }
-            if (assignedChildren==3)
-                break;
-        }
-        for (IPatient[] patients : new IPatient[][]{adultBacklogRed.getSnapshot(3), adultBacklogYellow.getSnapshot(3), adultBacklogBlue.getSnapshot(3)})
-        {
-            for (int i=0;i<3-assignedAdults;i++){
-                IPatient patient = patients[i];
-                if (patient==null)
-                    break;
-                here[assignedAdults+3] = patient.getDisplayValue();
+                here[assignedAdults] = patient.getDisplayValue();
                 assignedAdults++;
             }
             if (assignedAdults==3)
+                break;
+        }
+        for (IPatient[] patients : new IPatient[][]{
+                childBacklogRed.getSnapshot(3), childBacklogYellow.getSnapshot(3), childBacklogBlue.getSnapshot(3)
+        }) {
+            for (int i=0;i<3 && assignedAdults < 3;i++){
+                if (assignedChildren == 3)
+                    break;
+                IPatient patient = patients[i];
+                if (patient==null)
+                    break;
+                here[assignedChildren+3] = patient.getDisplayValue();
+                assignedChildren++;
+            }
+            if (assignedChildren==3)
                 break;
         }
         states.put(this.name,here);

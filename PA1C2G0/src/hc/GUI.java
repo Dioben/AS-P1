@@ -1,5 +1,8 @@
 package hc;
 
+import hc.active.TCommsServer;
+import hc.interfaces.IFIFO;
+
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
@@ -7,10 +10,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
+import java.util.Arrays;
+import java.util.Map;
 
 import static java.lang.Math.ceil;
 
-public class GUI {
+public class GUI extends Thread {
+
+    private final IFIFO<Map<String, String[]>> updates;
+    private JLayeredPane[] enHARSeats;
+    private JLayeredPane[] enHCRSeats;
+    private JLayeredPane[] wHARSeats;
+    private JLayeredPane[] wHCRSeats;
+
     private JPanel mainPanel;
     private JLabel inLine;
     private JLabel outLine;
@@ -74,33 +86,189 @@ public class GUI {
     private JLayeredPane pHOverflow1;
     private JLayeredPane pHOverflow2;
     private JLayeredPane pHOverflow3;
-    private JLayeredPane enHOverflow1;
-    private JLayeredPane enHOverflow2;
-    private JLayeredPane enHOverflow3;
-    private JLayeredPane wHOverflow1;
-    private JLayeredPane wHOverflow2;
-    private JLayeredPane wHOverflow3;
+    private JLayeredPane enHAROverflow1;
+    private JLayeredPane enHAROverflow2;
+    private JLayeredPane enHAROverflow3;
+    private JLayeredPane enHCROverflow1;
+    private JLayeredPane enHCROverflow2;
+    private JLayeredPane enHCROverflow3;
+    private JLayeredPane wHAROverflow1;
+    private JLayeredPane wHAROverflow2;
+    private JLayeredPane wHAROverflow3;
+    private JLayeredPane wHCROverflow1;
+    private JLayeredPane wHCROverflow2;
+    private JLayeredPane wHCROverflow3;
     private JLabel pHOverflowLabel;
-    private JLabel enHOverflowLabel;
-    private JLabel wHOverflowLabel;
+    private JLabel enHAROverflowLabel;
+    private JLabel wHAROverflowLabel;
     private JPanel cardPanel;
     private JButton confirmLoginButton;
     private JSpinner portSpinner;
-
-    private enum SeverityColor {
-        BLUE,
-        YELLOW,
-        RED,
-        UNASSIGNED
-    }
+    private JLabel enHCROverflowLabel;
+    private JLabel wHCROverflowLabel;
+    private JLabel loadingLabel;
 
     public GUI() {
+        GUI gui = this;
+        updates = new MFIFO(Map.class, 50);
+
+
+        JFrame frame = new JFrame("HCP");
+        frame.setContentPane(this.mainPanel);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setMinimumSize(new Dimension(1010, 450));
+        frame.setPreferredSize(new Dimension(1010, 450));
+        frame.pack();
+        frame.setVisible(true);
+        frame.setTitle("HCP - Unknown");
+        portSpinner.setModel(new SpinnerNumberModel(8000, 0, 65535, 1));
+        ImageIcon loading = new ImageIcon("resources/loading.gif");
+        loadingLabel.setIcon(loading);
+        setBorders();
+
         confirmLoginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                int port = (int) portSpinner.getValue();
+                new TCommsServer(port, gui).start();
                 ((CardLayout) cardPanel.getLayout()).next(cardPanel);
             }
         });
+    }
+
+    public void run() {
+        Map<String, String[]> handling;
+        while (true) {
+            handling = updates.get();
+            for (Map.Entry<String, String[]> entry : handling.entrySet()) {
+                JLayeredPane[] seats = new JLayeredPane[0];
+                switch (entry.getKey()) {
+                    case "ETH":
+                        seats = new JLayeredPane[] {
+                                enHAROverflow1, enHAROverflow2, enHAROverflow3, enHCROverflow1, enHCROverflow2, enHCROverflow3
+                        };
+                        break;
+                    case "ET1":
+                        seats = enHARSeats;
+                        break;
+                    case "ET2":
+                        seats = enHCRSeats;
+                        break;
+                    case "EVR1":
+                        seats = new JLayeredPane[] {
+                                evHR1Seat
+                        };
+                        break;
+                    case "EVR2":
+                        seats = new JLayeredPane[] {
+                                evHR2Seat
+                        };
+                        break;
+                    case "EVR3":
+                        seats = new JLayeredPane[] {
+                                evHR3Seat
+                        };
+                        break;
+                    case "EVR4":
+                        seats = new JLayeredPane[] {
+                                evHR4Seat
+                        };
+                        break;
+                    case "WTH":
+                        seats = new JLayeredPane[] {
+                                wHAROverflow1, wHAROverflow2, wHAROverflow3, wHCROverflow1, wHCROverflow2, wHCROverflow3
+                        };
+                        break;
+                    case "WTR1":
+                        seats = wHARSeats;
+                        break;
+                    case "WTR2":
+                        seats = wHCRSeats;
+                        break;
+                    case "MDW1":
+                        seats = new JLayeredPane[] {
+                                mHWRChildSeat
+                        };
+                        break;
+                    case "MDW2":
+                        seats = new JLayeredPane[] {
+                                mHWRAdultSeat
+                        };
+                        break;
+                    case "MDR1":
+                        seats = new JLayeredPane[] {
+                                mHCR1Seat
+                        };
+                        break;
+                    case "MDR2":
+                        seats = new JLayeredPane[] {
+                                mHCR2Seat
+                        };
+                        break;
+                    case "MDR3":
+                        seats = new JLayeredPane[] {
+                                mHAR1Seat
+                        };
+                        break;
+                    case "MDR4":
+                        seats = new JLayeredPane[] {
+                                mHAR2Seat
+                        };
+                        break;
+                    case "PYH":
+                        seats = new JLayeredPane[] {
+                                pHOverflow1, pHOverflow2, pHOverflow3
+                        };
+                        break;
+                    case "PYR":
+                        seats = new JLayeredPane[] {
+                                pHCSeat
+                        };
+                        break;
+                    default:
+                        System.out.println("GUI got unknown entry: " + entry.getKey());
+                }
+                String[] value = entry.getValue();
+                for (int i = 0; i < seats.length; i++) {
+                    seats[i].removeAll();
+                    seats[i].revalidate();
+                }
+                for (int i = 0; i < value.length; i++)
+                    if (value[i] != null && !value[i].isBlank())
+                        setIcon(seats[i], value[i]);
+            }
+        }
+    }
+
+    public void update(Map<String, String[]> info) {
+        updates.put(info);
+    }
+
+    public void setSeatCount(int seatCount) {
+        enHARSeats = new JLayeredPane[seatCount];
+        enHCRSeats = new JLayeredPane[seatCount];
+        wHARSeats = new JLayeredPane[seatCount];
+        wHCRSeats = new JLayeredPane[seatCount];
+        for (JLayeredPane[][] seats : new JLayeredPane[][][] {
+                {enHARSeats, {enHARSeat1, enHARSeat2, enHARSeat3, enHARSeat4, enHARSeat5}},
+                {enHCRSeats, {enHCRSeat1, enHCRSeat2, enHCRSeat3, enHCRSeat4, enHCRSeat5}},
+                {wHARSeats, {wHARSeat1, wHARSeat2, wHARSeat3, wHARSeat4, wHARSeat5}},
+                {wHCRSeats, {wHCRSeat1, wHCRSeat2, wHCRSeat3, wHCRSeat4, wHCRSeat5}}
+        }) {
+            if ((seatCount & 1) == 0) {
+                System.arraycopy(seats[1], 0, seats[0], 0, seatCount);
+                for (int i = seatCount; i <= 4; i++) {
+                    seats[1][i].setVisible(false);
+                }
+            } else {
+                System.arraycopy(seats[1], 0, seats[0], 0, seatCount - 1);
+                seats[0][seatCount - 1] = seats[1][4];
+                for (int i = seatCount - 1; i <= 3; i++) {
+                    seats[1][i].setVisible(false);
+                }
+            }
+        }
+        ((CardLayout) cardPanel.getLayout()).last(cardPanel);
     }
 
     public static void setGUILook(String wantedLook) {
@@ -119,19 +287,7 @@ public class GUI {
         }
     }
 
-    public void start() {
-        addExtraStyle();
-        JFrame frame = new JFrame("HCP");
-        frame.setContentPane(this.mainPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setMinimumSize(new Dimension(1010, 450));
-        frame.setPreferredSize(new Dimension(1010, 450));
-        frame.pack();
-        frame.setVisible(true);
-        frame.setTitle("HCP - Unknown");
-    }
-
-    private void addExtraStyle() {
+    private void setBorders() {
         inLabel.setBorder(new EmptyBorder(new Insets(0, 5, 0, 5)));
         outLabel.setBorder(new EmptyBorder(new Insets(0, 5, 0, 5)));
         for (JLabel line : new JLabel[]{
@@ -172,8 +328,10 @@ public class GUI {
         }) {
             panel.setBorder(new SoftBevelBorder(0));
         }
-        enHOverflowLabel.setBorder(new EmptyBorder(0,0,0,8));
-        wHOverflowLabel.setBorder(new EmptyBorder(0,0,0,8));
+        enHAROverflowLabel.setBorder(new EmptyBorder(0,0,0,8));
+        enHCROverflowLabel.setBorder(new EmptyBorder(0,0,0,8));
+        wHAROverflowLabel.setBorder(new EmptyBorder(0,0,0,8));
+        wHCROverflowLabel.setBorder(new EmptyBorder(0,0,0,8));
         if (UIManager.getLookAndFeel().getName().equals("GTK look and feel"))
             portSpinner.setBorder(new LineBorder(new Color(39, 39, 39), 1, true));
     }
@@ -213,12 +371,18 @@ public class GUI {
         pHOverflow1 = new JLayeredPane();
         pHOverflow2 = new JLayeredPane();
         pHOverflow3 = new JLayeredPane();
-        enHOverflow1 = new JLayeredPane();
-        enHOverflow2 = new JLayeredPane();
-        enHOverflow3 = new JLayeredPane();
-        wHOverflow1 = new JLayeredPane();
-        wHOverflow2 = new JLayeredPane();
-        wHOverflow3 = new JLayeredPane();
+        enHAROverflow1 = new JLayeredPane();
+        enHAROverflow2 = new JLayeredPane();
+        enHAROverflow3 = new JLayeredPane();
+        enHCROverflow1 = new JLayeredPane();
+        enHCROverflow2 = new JLayeredPane();
+        enHCROverflow3 = new JLayeredPane();
+        wHAROverflow1 = new JLayeredPane();
+        wHAROverflow2 = new JLayeredPane();
+        wHAROverflow3 = new JLayeredPane();
+        wHCROverflow1 = new JLayeredPane();
+        wHCROverflow2 = new JLayeredPane();
+        wHCROverflow3 = new JLayeredPane();
 
         for (JLayeredPane adultSeat: new JLayeredPane[] {
                 enHARSeat1,
@@ -282,8 +446,10 @@ public class GUI {
             hFifo3[2].setBorder(new CompoundBorder(new EmptyBorder(2, 4, 2, 0), new SoftBevelBorder(1)));
         }
         for (JLayeredPane[] vFifo3 : new JLayeredPane[][] {
-                {enHOverflow1, enHOverflow2, enHOverflow3},
-                {wHOverflow1, wHOverflow2, wHOverflow3}
+                {enHAROverflow1, enHAROverflow2, enHAROverflow3},
+                {enHCROverflow1, enHCROverflow2, enHCROverflow3},
+                {wHAROverflow1, wHAROverflow2, wHAROverflow3},
+                {wHCROverflow1, wHCROverflow2, wHCROverflow3}
         }) {
             vFifo3[0].setMinimumSize(new Dimension(52,48));
             vFifo3[0].setMaximumSize(new Dimension(52,48));
@@ -300,14 +466,18 @@ public class GUI {
         }
     }
 
-    private void setIcon(JLayeredPane seat, boolean isChild, SeverityColor severityColor, String id) {
+    private void setIcon(JLayeredPane seat, String patientCode) {
         String imagePath;
-        switch (severityColor) {
-            case BLUE -> imagePath = isChild ? "resources/childBlue.png" : "resources/adultBlue.png";
-            case YELLOW -> imagePath = isChild ? "resources/childYellow.png" : "resources/adultYellow.png";
-            case RED -> imagePath = isChild ? "resources/childRed.png" : "resources/adultRed.png";
-            default -> imagePath = isChild ? "resources/child.png" : "resources/adult.png";
-        }
+        boolean isChild = patientCode.charAt(0) == 'C';
+        if (patientCode.length() > 3)
+            switch (patientCode.charAt(3)) {
+                case 'B' -> imagePath = isChild ? "resources/childBlue.png" : "resources/adultBlue.png";
+                case 'Y' -> imagePath = isChild ? "resources/childYellow.png" : "resources/adultYellow.png";
+                case 'R' -> imagePath = isChild ? "resources/childRed.png" : "resources/adultRed.png";
+                default -> imagePath = isChild ? "resources/child.png" : "resources/adult.png";
+            }
+        else
+            imagePath = isChild ? "resources/child.png" : "resources/adult.png";
         ImageIcon imageIcon = new ImageIcon(imagePath);
         JLabel iconLabel = new JLabel(imageIcon);
         Insets seatBorderInsets = seat.getBorder().getBorderInsets(null);
@@ -318,7 +488,7 @@ public class GUI {
         iconLabel.setBounds(seatWidthBorders/2-iconWidth/2, seatHeightBorders/2-iconHeight/2, iconWidth, iconHeight);
         seat.add(iconLabel, 1);
 
-        JLabel idLabel = new JLabel(id);
+        JLabel idLabel = new JLabel(patientCode.substring(1, 3));
         idLabel.setHorizontalAlignment(SwingConstants.CENTER);
         Font oldFont = idLabel.getFont();
         int idLabelWidth = (int) ceil(oldFont.getStringBounds("50", new FontRenderContext(new AffineTransform(), true, true)).getWidth()) + 4;
@@ -326,9 +496,5 @@ public class GUI {
         idLabel.setOpaque(true);
         idLabel.setBorder(new LineBorder(new Color(39, 39, 39), 1, true));
         seat.add(idLabel, 0);
-    }
-
-    private void removeIcon(JLayeredPane seat) {
-        seat.removeAll();
     }
 }
