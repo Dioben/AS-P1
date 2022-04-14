@@ -394,13 +394,16 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
         rl.lock();
         if (room==childRoom && nextSlackChild>0){
             nextSlackChild--;
+            rl.unlock();
             room.notifyDone();
         }
         else if (room== adultRoom && nextSlackAdult>0){
             nextSlackAdult--;
+            rl.unlock();
             room.notifyDone();
+        }else{
+            rl.unlock();
         }
 
-        rl.unlock();
     }
 }
