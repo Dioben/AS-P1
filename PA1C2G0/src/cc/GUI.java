@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class GUI {
-    private final TCommsClient commsClient;
+    private TCommsClient commsClient;
 
     private JPanel mainPanel;
     private JLabel statusLabel;
@@ -25,18 +25,19 @@ public class GUI {
     private JSpinner seatsSpinner;
     private JComboBox moveTimeComboBox;
     private JComboBox evaluationTimeComboBox;
-    private JComboBox appointmentTimeSpinner;
+    private JComboBox appointmentTimeComboBox;
     private JComboBox paymentTimeComboBox;
     private JButton resetFormButton;
     private JTextField hostField;
     private JSpinner portSpinner;
     private JButton confirmLoginButton;
 
-    public GUI(TCommsClient commsClient) {
-        this.commsClient = commsClient;
+    public GUI() {
         adultPatientsSpinner.setModel(new SpinnerNumberModel(10, 1, 50, 1));
         childrenPatientsSpinner.setModel(new SpinnerNumberModel(10, 1, 50, 1));
         seatsSpinner.setModel(new SpinnerNumberModel(4, 2, 10, 2));
+        portSpinner.setModel(new SpinnerNumberModel(8000, 0, 65535, 1));
+        hostField.setText("localhost");
         suspendButton.setEnabled(false);
         resumeButton.setEnabled(false);
         stopButton.setEnabled(false);
@@ -46,16 +47,36 @@ public class GUI {
             for (JSpinner spinner : new JSpinner[] {adultPatientsSpinner, childrenPatientsSpinner, seatsSpinner, portSpinner})
                 spinner.setBorder(new LineBorder(new Color(39, 39, 39), 1, true));
 
-        startButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                commsClient.startSim(10, 10, 4, 100, 100, 100, 100);
-            }
-        });
         confirmLoginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                String host = hostField.getText();
+                int port = (int) portSpinner.getValue();
+                commsClient = new TCommsClient(host, port);
+                commsClient.start();
                 ((CardLayout) cardPanel.getLayout()).next(cardPanel);
+            }
+        });
+        startButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int adults = (int) adultPatientsSpinner.getValue();
+                int children = (int) childrenPatientsSpinner.getValue();
+                int seats = ((int) seatsSpinner.getValue())/2;
+                int[] times = new int[4];
+                JComboBox[] fields = new JComboBox[] {
+                        evaluationTimeComboBox, appointmentTimeComboBox, paymentTimeComboBox, moveTimeComboBox
+                };
+
+                for (int i = 0; i < 4; i++)
+                    switch ((String) fields[i].getSelectedItem()) {
+                        case "0" -> times[i] = 0;
+                        case "[0, 250]" -> times[i] = 250;
+                        case "[0, 500]" -> times[i] = 500;
+                        case "[0, 1000]" -> times[i] = 1000;
+                        default -> times[i] = 100;
+                    }
+                commsClient.startSim(adults, children, seats, times[0], times[1], times[2], times[3]);
             }
         });
     }

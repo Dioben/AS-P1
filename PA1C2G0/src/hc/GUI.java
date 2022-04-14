@@ -10,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
-import java.util.Arrays;
 import java.util.Map;
 
 import static java.lang.Math.ceil;
