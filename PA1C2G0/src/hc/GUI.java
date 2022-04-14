@@ -228,13 +228,14 @@ public class GUI extends Thread {
                         System.out.println("GUI got unknown entry: " + entry.getKey());
                 }
                 String[] value = entry.getValue();
-                for (int i = 0; i < seats.length; i++) {
+                for (int i = 0; i < value.length; i++) {
                     seats[i].removeAll();
                     seats[i].revalidate();
-                }
-                for (int i = 0; i < value.length; i++)
                     if (value[i] != null && !value[i].isBlank())
                         setIcon(seats[i], value[i]);
+                    else
+                        seats[i].repaint();
+                }
             }
         }
     }
