@@ -17,15 +17,17 @@ public class TCommsClient extends Thread {
     private BufferedReader in;
     private String host;
     private int port;
+    private GUI gui;
 
     /**
      *
      * @param host host of the server, ex: localhost, google.com
      * @param port host server port number
      */
-    TCommsClient(String host, int port) {
+    TCommsClient(String host, int port, GUI gui) {
         this.host = host;
         this.port = port;
+        this.gui = gui;
     }
 
     @Override
@@ -41,15 +43,17 @@ public class TCommsClient extends Thread {
 
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
+                System.out.println(inputLine);
                 String[] notification = inputLine.split(" ");
                 switch (notification[0]) {
-                    //TODO: handle incoming messages
                     case "REQ":
-                        //TODO: Push notification to UI
                         String destination = notification[1];
+                        gui.putRequest(destination);
                         break;
                     case "DONE":
-                        //TODO: Push notification to UI
+                        gui.setStatusLabel("Finished");
+                        gui.setStopUIState();
+                        break;
                     default:
                         break;
                 }

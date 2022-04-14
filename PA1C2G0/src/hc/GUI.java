@@ -17,6 +17,7 @@ import static java.lang.Math.ceil;
 public class GUI extends Thread {
 
     private final IFIFO<Map<String, String[]>> updates;
+    private final JFrame frame;
     private JLayeredPane[] enHARSeats;
     private JLayeredPane[] enHCRSeats;
     private JLayeredPane[] wHARSeats;
@@ -111,15 +112,13 @@ public class GUI extends Thread {
         GUI gui = this;
         updates = new MFIFO(Map.class, 50);
 
-
-        JFrame frame = new JFrame("HCP");
+        frame = new JFrame("HCP");
         frame.setContentPane(this.mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setMinimumSize(new Dimension(1010, 450));
         frame.setPreferredSize(new Dimension(1010, 450));
         frame.pack();
         frame.setVisible(true);
-        frame.setTitle("HCP - Unknown");
         portSpinner.setModel(new SpinnerNumberModel(8000, 0, 65535, 1));
         ImageIcon loading = new ImageIcon("resources/loading.gif");
         loadingLabel.setIcon(loading);
@@ -244,6 +243,10 @@ public class GUI extends Thread {
         updates.put(info);
     }
 
+    public void setStateLabel(String state) {
+        frame.setTitle("HCP - " + state);
+    }
+
     public void setSeatCount(int seatCount) {
         enHARSeats = new JLayeredPane[seatCount];
         enHCRSeats = new JLayeredPane[seatCount];
@@ -257,18 +260,22 @@ public class GUI extends Thread {
         }) {
             if ((seatCount & 1) == 0) {
                 System.arraycopy(seats[1], 0, seats[0], 0, seatCount);
-                for (int i = seatCount; i <= 4; i++) {
+                for (int i = 0; i < seatCount; i++)
+                    seats[1][i].setVisible(true);
+                for (int i = seatCount; i <= 4; i++)
                     seats[1][i].setVisible(false);
-                }
             } else {
                 System.arraycopy(seats[1], 0, seats[0], 0, seatCount - 1);
                 seats[0][seatCount - 1] = seats[1][4];
-                for (int i = seatCount - 1; i <= 3; i++) {
+                seats[1][4].setVisible(true);
+                for (int i = 0; i < seatCount - 1; i++)
+                    seats[1][i].setVisible(true);
+                for (int i = seatCount - 1; i <= 3; i++)
                     seats[1][i].setVisible(false);
-                }
             }
         }
         ((CardLayout) cardPanel.getLayout()).last(cardPanel);
+        setStateLabel("Stopped");
     }
 
     public static void setGUILook(String wantedLook) {
