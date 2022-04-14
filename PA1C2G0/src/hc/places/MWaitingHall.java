@@ -20,6 +20,8 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
     private final String name = "WTH";
     private int inChild = 0;
     private int inAdult = 0;
+    private int assignedAdult = 0; //separate variables due to travel time
+    private int assignedChild = 0;
     private final int roomMax;
     private final ReentrantLock rl;
     private final Condition childRoomAvailable;
@@ -41,7 +43,6 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
     private final IFIFO<IPatient> adultBacklogBlue;
     private int nextSlackAdult; //we start out with 1 adult slots available in MDW
     private int nextSlackChild; //we start out with 1 child slots available in MDW
-    private final String nextRoomName;
 
     public MWaitingHall(HCInstance instance, IContainer after, int seatsPerRoom, int adults, int children, int nextRoomSlackAdult, int nextRoomSlackChild, ICallCenterWaiter callCenter){
         this.instance = instance;
@@ -60,7 +61,6 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
         nextSlackAdult = nextRoomSlackAdult;
         nextSlackChild = nextRoomSlackChild;
         this.callCenter = callCenter;
-        nextRoomName = after.getDisplayName();
     }
 
     /**
@@ -84,7 +84,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
     private IContainer enterAdultRoom(IPatient patient) {
         rl.lock();
         IFIFO backlog = getBacklog(patient);
-        if (inAdult==roomMax){
+        if (assignedAdult==roomMax){
             backlog.put(patient);
             while (getControlNumber(patient)<patient.getRoomNumber()) {
                 try {
@@ -93,12 +93,33 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
             }
         }
 
-            inAdult++;
+            assignedAdult++;
             rl.unlock();
         return adultRoom;
 
     }
+    /**
+     * Called by patient
+     * Move into child room as soon as it is available
+     * @return this hall's child room
+     * @param patient
+     */
+    private IContainer enterChildRoom(IPatient patient) {
+        rl.lock();
+        IFIFO backlog = getBacklog(patient);
+        if (assignedChild==roomMax){
+            backlog.put(patient);
+            while(getControlNumber(patient)<patient.getRoomNumber()){
+                try {
+                    childRoomAvailable.await();
+                } catch (InterruptedException e) {}
+            }
+        }
 
+        assignedChild++;
+        rl.unlock();
+        return childRoom;
+    }
     /**
      * Returns the appropriate release value based on patient severity
      * @param patient
@@ -153,28 +174,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
         return null;
     }
 
-    /**
-     * Called by patient
-     * Move into child room as soon as it is available
-     * @return this hall's child room
-     * @param patient
-     */
-    private IContainer enterChildRoom(IPatient patient) {
-        rl.lock();
-        IFIFO backlog = getBacklog(patient);
-        if (inChild==roomMax){
-            backlog.put(patient);
-            while(getControlNumber(patient)<patient.getRoomNumber()){
-                try {
-                    childRoomAvailable.await();
-                } catch (InterruptedException e) {}
-            }
-        }
 
-        inChild++;
-        rl.unlock();
-        return childRoom;
-    }
 
     @Override
     public String getDisplayName() {
@@ -265,6 +265,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
      */
     private void handleChildRoomLeave() {
         inChild--;
+        assignedChild--;
         if(!childBacklogRed.isEmpty()) {
             IPatient patient = childBacklogRed.get();
             releasedRedChild = patient.getRoomNumber();
@@ -286,6 +287,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
      */
     private void handleAdultRoomLeave() {
         inAdult--;
+        assignedAdult--;
         if(!adultBacklogRed.isEmpty()) {
             IPatient patient = adultBacklogRed.get();
             releasedRedAdult = patient.getRoomNumber();
@@ -338,7 +340,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
             rl.lock();
             if (inAdult==0){
                 rl.unlock();
-                return;
+                throw new RuntimeException("Adult somehow left empty WTR");
             }
             handleAdultRoomLeave();
             rl.unlock();
@@ -347,7 +349,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
             rl.lock();
             if (inChild==0){
                 rl.unlock();
-                return;
+                throw new RuntimeException("Child somehow left empty WTR");
             }
             handleChildRoomLeave();
             rl.unlock();
@@ -391,19 +393,25 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
      */
     @Override
     public void notifyWaiting(IWaitingRoom room) {
-        rl.lock();
-        if (room==childRoom && nextSlackChild>0){
-            nextSlackChild--;
-            rl.unlock();
-            room.notifyDone();
+        if (room==childRoom){
+            rl.lock();
+            inChild++;
+            if (nextSlackChild>0){
+                nextSlackChild--;
+                rl.unlock();
+                room.notifyDone();
+            }else
+                rl.unlock();
         }
-        else if (room== adultRoom && nextSlackAdult>0){
-            nextSlackAdult--;
-            rl.unlock();
-            room.notifyDone();
-        }else{
-            rl.unlock();
+        else if (room== adultRoom){
+            rl.lock();
+            inAdult++;
+            if (nextSlackAdult>0){
+                nextSlackAdult--;
+                rl.unlock();
+                room.notifyDone();
+            }else
+                rl.unlock();
         }
-
     }
 }
