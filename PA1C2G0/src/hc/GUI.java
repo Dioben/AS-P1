@@ -495,13 +495,15 @@ public class GUI extends Thread {
         iconLabel.setBounds(seatWidthBorders/2-iconWidth/2, seatHeightBorders/2-iconHeight/2, iconWidth, iconHeight);
         seat.add(iconLabel, 1);
 
-        JLabel idLabel = new JLabel(patientCode.substring(1, 3));
-        idLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        Font oldFont = idLabel.getFont();
-        int idLabelWidth = (int) ceil(oldFont.getStringBounds("50", new FontRenderContext(new AffineTransform(), true, true)).getWidth()) + 4;
-        idLabel.setBounds(seat.getPreferredSize().width - idLabelWidth - seatBorderInsets.right + 2, seatHeightBorders - oldFont.getSize() - seatBorderInsets.bottom + 2, idLabelWidth, oldFont.getSize());
-        idLabel.setOpaque(true);
-        idLabel.setBorder(new LineBorder(new Color(39, 39, 39), 1, true));
-        seat.add(idLabel, 0);
+        try {
+            JLabel idLabel = new JLabel(patientCode.substring(1, 3));
+            idLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            Font oldFont = idLabel.getFont();
+            int idLabelWidth = (int) ceil(oldFont.getStringBounds("50", new FontRenderContext(new AffineTransform(), true, true)).getWidth()) + 4;
+            idLabel.setBounds(seat.getPreferredSize().width - idLabelWidth - seatBorderInsets.right + 2, seatHeightBorders - oldFont.getSize() - seatBorderInsets.bottom + 2, idLabelWidth, oldFont.getSize());
+            idLabel.setOpaque(true);
+            idLabel.setBorder(new LineBorder(new Color(39, 39, 39), 1, true));
+            seat.add(idLabel, 0);
+        } catch (StringIndexOutOfBoundsException ignored) {}
     }
 }
