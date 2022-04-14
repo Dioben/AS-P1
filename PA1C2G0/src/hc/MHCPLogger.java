@@ -2,10 +2,12 @@ package hc;
 
 import java.io.*;
 import java.util.Map;
+import java.util.concurrent.locks.ReentrantLock;
 
-public class HCPLogger {
+public class MHCPLogger {
     private PrintWriter fileWriter;
-    public HCPLogger(){
+    private final ReentrantLock loggerAccess;
+    public MHCPLogger(){
         String fileName = "logs/log.txt";
         (new File(fileName)).getParentFile().mkdirs(); //write folders up to this point
         try {
@@ -13,14 +15,18 @@ public class HCPLogger {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        loggerAccess = new ReentrantLock();
 
     };
 
     public void  printHeader(int adults, int children, int seats){
+
         String output = "NoA:"+adults+", NoC:"+children+", NoS: "+seats+"\n"+
                 "STT | ETH ET1 ET2 | EVR1 EVR2 EVR3 EVR4 | WTH WTR1 WTR2 | MDH MDR1 MDR2 MDR3 MDR4 | PYH | OUT";
+        loggerAccess.lock();
         fileWriter.println(output);
         System.out.println(output);
+        loggerAccess.unlock();
 
     }
     public void printPosition(String place, String patient){
@@ -64,8 +70,10 @@ public class HCPLogger {
         else
             outputString.append(formatPosition("OUT",null));
         String content = outputString.toString();
+        loggerAccess.lock();
         fileWriter.println(content);
         System.out.println(content);
+        loggerAccess.unlock();
     }
 
     private String formatPosition(String header, String patient) {
@@ -78,9 +86,12 @@ public class HCPLogger {
     }
 
     public void printState(String state){
+
         String output = state.toUpperCase().substring(0,4)+" |             |                     |               |                         |     |    ";
+        loggerAccess.lock();
         fileWriter.println(output);
         System.out.println(output);
+        loggerAccess.lock();
     }
 
 }

@@ -24,8 +24,7 @@ public class HCInstance {
     private final IHall waitingHall;
     private final IHall medicalHall;
     private final IHall paymentHall;
-    private final ReentrantLock loggerAccess;
-    private final HCPLogger logger;
+    private final MHCPLogger logger;
     private final int adults;
     private final int children;
     private boolean started= false;
@@ -41,8 +40,7 @@ public class HCInstance {
 
         patients = new IPatient[adults+children];
 
-        logger = new HCPLogger();
-        loggerAccess = new ReentrantLock();
+        logger = new MHCPLogger();
 
 
         timer = new Timer.Builder()
@@ -160,7 +158,6 @@ public class HCInstance {
      *
      */
     public void notifyMovement(String patient, String room){
-        loggerAccess.lock();
         if (room!=null) //movements that don't warrant logging can happen
             {
                 if (room.equals("OUT"))
@@ -168,7 +165,6 @@ public class HCInstance {
                 logger.printPosition(room,patient);
             }
         updateUI();
-        loggerAccess.unlock();
 
         if (gone==adults+children) {
             callCenter.notifyOver();
