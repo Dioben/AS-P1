@@ -64,7 +64,6 @@ public class HCPLogger {
         else
             outputString.append(formatPosition("OUT",null));
         String content = outputString.toString();
-        content+=Thread.currentThread().getName();
         fileWriter.println(content);
         System.out.println(content);
     }
