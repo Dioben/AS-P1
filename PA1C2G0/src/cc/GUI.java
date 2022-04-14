@@ -137,6 +137,11 @@ public class GUI {
                 if ("Manual".equals(operatingModeComboBox.getSelectedItem())) {
                     commsClient.SwapManual();
                 } else {
+                    while (requestN > 0) {
+                        commsClient.authorize(requests.get());
+                        requestN--;
+                    }
+                    allowPatientButton.setEnabled(false);
                     commsClient.SwapAuto();
                 }
             }
