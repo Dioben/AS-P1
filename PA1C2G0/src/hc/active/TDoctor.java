@@ -2,6 +2,7 @@ package hc.active;
 
 import hc.HCInstance;
 import hc.Timer;
+import hc.enums.Severity;
 import hc.interfaces.IContainer;
 import hc.interfaces.IPatient;
 import hc.interfaces.IWorkerRoom;
@@ -20,7 +21,7 @@ public class TDoctor extends TServiceWorker{
     @Override
     /**
      * Wait for a given <i>appointment</i> time then return
-     * @param patient unchanged
+     * @param patient severity is set to UNASSIGNED
      */
     void serveCustomer(IPatient patient) {
         try {
@@ -28,5 +29,6 @@ public class TDoctor extends TServiceWorker{
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
+        patient.setSeverity(Severity.UNASSIGNED);
     }
 }
