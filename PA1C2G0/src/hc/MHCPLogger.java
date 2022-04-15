@@ -86,12 +86,11 @@ public class MHCPLogger {
     }
 
     public void printState(String state){
-
         String output = state.toUpperCase().substring(0,4)+" |             |                     |               |                         |     |    ";
         loggerAccess.lock();
         fileWriter.println(output);
         System.out.println(output);
-        loggerAccess.lock();
+        loggerAccess.unlock();
     }
 
 }
