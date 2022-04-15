@@ -145,6 +145,7 @@ public class TCommsHandler extends Thread {
         writeLock.lock();
         out.println("DONE");
         writeLock.unlock();
+        logger.printState("STOP");
         gui.setStateLabel("Finished");
     }
 }
