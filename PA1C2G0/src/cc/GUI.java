@@ -13,7 +13,6 @@ import java.awt.event.ActionListener;
 public class GUI {
     private TCommsClient commsClient;
     private final IFIFO<String> requests;
-    private int requestN;
 
     private JPanel mainPanel;
     private JLabel statusLabel;
@@ -39,7 +38,6 @@ public class GUI {
 
     public GUI() {
         requests = new MFIFO(String.class, 50);
-        requestN = 0;
 
         JFrame frame = new JFrame("CCP");
         frame.setContentPane(this.mainPanel);
@@ -49,10 +47,10 @@ public class GUI {
         frame.pack();
         frame.setVisible(true);
 
-        adultPatientsSpinner.setModel(new SpinnerNumberModel(10, 1, 50, 1));
-        childrenPatientsSpinner.setModel(new SpinnerNumberModel(10, 1, 50, 1));
-        seatsSpinner.setModel(new SpinnerNumberModel(4, 2, 10, 2));
-        portSpinner.setModel(new SpinnerNumberModel(8000, 0, 65535, 1));
+        adultPatientsSpinner.setModel(new SpinnerNumberModel(10, Integer.MIN_VALUE, Integer.MAX_VALUE, 1));
+        childrenPatientsSpinner.setModel(new SpinnerNumberModel(10, Integer.MIN_VALUE, Integer.MAX_VALUE, 1));
+        seatsSpinner.setModel(new SpinnerNumberModel(4, Integer.MIN_VALUE, Integer.MAX_VALUE, 2));
+        portSpinner.setModel(new SpinnerNumberModel(8000, Integer.MIN_VALUE, Integer.MAX_VALUE, 1));
         hostField.setText("localhost");
         suspendButton.setEnabled(false);
         resumeButton.setEnabled(false);
@@ -69,9 +67,14 @@ public class GUI {
             public void actionPerformed(ActionEvent e) {
                 String host = hostField.getText().trim();
                 int port = (int) portSpinner.getValue();
-                commsClient = new TCommsClient(host, port, gui);
-                commsClient.start();
-                ((CardLayout) cardPanel.getLayout()).next(cardPanel);
+                if (port > 65535) {
+                    JOptionPane.showMessageDialog(null, "Port number is too high. Maximum is 65535.", "Input error", JOptionPane.WARNING_MESSAGE);
+                } else if (port < 0) {
+                    JOptionPane.showMessageDialog(null, "Port number is too low. Minimum is 0.", "Input error", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    commsClient = new TCommsClient(host, port, gui);
+                    commsClient.start();
+                }
             }
         });
         startButton.addActionListener(new ActionListener() {
@@ -79,33 +82,50 @@ public class GUI {
             public void actionPerformed(ActionEvent e) {
                 int adults = (int) adultPatientsSpinner.getValue();
                 int children = (int) childrenPatientsSpinner.getValue();
-                int seats = ((int) seatsSpinner.getValue())/2;
-                int[] times = new int[4];
-                JComboBox[] fields = new JComboBox[] {
-                        evaluationTimeComboBox, appointmentTimeComboBox, paymentTimeComboBox, moveTimeComboBox
-                };
-                for (int i = 0; i < 4; i++)
-                    switch ((String) fields[i].getSelectedItem()) {
-                        case "0" -> times[i] = 0;
-                        case "[0, 250]" -> times[i] = 250;
-                        case "[0, 500]" -> times[i] = 500;
-                        case "[0, 1000]" -> times[i] = 1000;
-                        default -> times[i] = 100;
-                    }
-                commsClient.startSim(adults, children, seats, times[0], times[1], times[2], times[3]);
-                setStatusLabel("Running");
-                startButton.setEnabled(false);
-                suspendButton.setEnabled(true);
-                stopButton.setEnabled(true);
+                int seats = (int) seatsSpinner.getValue();
+                if (adults > 50) {
+                    JOptionPane.showMessageDialog(null, "Adult count is too high. Maximum is 50.", "Input error", JOptionPane.WARNING_MESSAGE);
+                } else if (adults < 0) {
+                    JOptionPane.showMessageDialog(null, "Adult count is too low. Minimum is 0.", "Input error", JOptionPane.WARNING_MESSAGE);
+                } else if (children > 50) {
+                    JOptionPane.showMessageDialog(null, "Child count is too high. Maximum is 50.", "Input error", JOptionPane.WARNING_MESSAGE);
+                } else if (children < 0) {
+                    JOptionPane.showMessageDialog(null, "Child count is too low. Minimum is 0.", "Input error", JOptionPane.WARNING_MESSAGE);
+                } else if (seats > 10) {
+                    JOptionPane.showMessageDialog(null, "Seat count is too high. Maximum is 10.", "Input error", JOptionPane.WARNING_MESSAGE);
+                } else if (seats < 2) {
+                    JOptionPane.showMessageDialog(null, "Seat count is too low. Minimum is 2.", "Input error", JOptionPane.WARNING_MESSAGE);
+                } else if ((seats & 1) == 1) {
+                    JOptionPane.showMessageDialog(null, "Seat count has to be even.", "Input error", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    seats /= 2;
+                    int[] times = new int[4];
+                    JComboBox[] fields = new JComboBox[] {
+                            evaluationTimeComboBox, appointmentTimeComboBox, paymentTimeComboBox, moveTimeComboBox
+                    };
+                    for (int i = 0; i < 4; i++)
+                        switch ((String) fields[i].getSelectedItem()) {
+                            case "0" -> times[i] = 0;
+                            case "[0, 250]" -> times[i] = 250;
+                            case "[0, 500]" -> times[i] = 500;
+                            case "[0, 1000]" -> times[i] = 1000;
+                            default -> times[i] = 100;
+                        }
+                    commsClient.startSim(adults, children, seats, times[0], times[1], times[2], times[3]);
+                    setStatusLabel("Running");
+                    startButton.setEnabled(false);
+                    suspendButton.setEnabled(true);
+                    stopButton.setEnabled(true);
 
-                adultPatientsSpinner.setEnabled(false);
-                childrenPatientsSpinner.setEnabled(false);
-                seatsSpinner.setEnabled(false);
-                evaluationTimeComboBox.setEnabled(false);
-                appointmentTimeComboBox.setEnabled(false);
-                paymentTimeComboBox.setEnabled(false);
-                moveTimeComboBox.setEnabled(false);
-                resetFormButton.setEnabled(false);
+                    adultPatientsSpinner.setEnabled(false);
+                    childrenPatientsSpinner.setEnabled(false);
+                    seatsSpinner.setEnabled(false);
+                    evaluationTimeComboBox.setEnabled(false);
+                    appointmentTimeComboBox.setEnabled(false);
+                    paymentTimeComboBox.setEnabled(false);
+                    moveTimeComboBox.setEnabled(false);
+                    resetFormButton.setEnabled(false);
+                }
             }
         });
         suspendButton.addActionListener(new ActionListener() {
@@ -132,6 +152,9 @@ public class GUI {
                 commsClient.stopSim();
                 setStatusLabel("Stopped");
                 setStopUIState();
+                notifyButton.setEnabled(false);
+                while (!requests.isEmpty())
+                    requests.get();
             }
         });
         endButton.addActionListener(new ActionListener() {
@@ -146,10 +169,8 @@ public class GUI {
                 if ("Manual".equals(operatingModeComboBox.getSelectedItem())) {
                     commsClient.SwapManual();
                 } else {
-                    while (requestN > 0) {
+                    while (!requests.isEmpty())
                         commsClient.authorize(requests.get());
-                        requestN--;
-                    }
                     notifyButton.setEnabled(false);
                     commsClient.SwapAuto();
                 }
@@ -158,10 +179,9 @@ public class GUI {
         notifyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (requestN > 0) {
+                if (!requests.isEmpty()) {
                     commsClient.authorize(requests.get());
-                    requestN--;
-                    if (requestN == 0)
+                    if (requests.isEmpty())
                         notifyButton.setEnabled(false);
                 }
             }
@@ -182,12 +202,19 @@ public class GUI {
 
     public void putRequest(String roomID) {
         requests.put(roomID);
-        requestN++;
         notifyButton.setEnabled(true);
     }
 
     public void setStatusLabel(String status) {
         statusLabel.setText("Status: " + status);
+    }
+
+    public void connectionStatus(boolean successful) {
+        if (successful) {
+            ((CardLayout) cardPanel.getLayout()).next(cardPanel);
+        } else {
+            JOptionPane.showMessageDialog(null, "Connection failed.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     public void setStopUIState() {

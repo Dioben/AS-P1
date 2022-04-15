@@ -119,7 +119,7 @@ public class GUI extends Thread {
         frame.setPreferredSize(new Dimension(1010, 450));
         frame.pack();
         frame.setVisible(true);
-        portSpinner.setModel(new SpinnerNumberModel(8000, 0, 65535, 1));
+        portSpinner.setModel(new SpinnerNumberModel(8000, Integer.MIN_VALUE, Integer.MAX_VALUE, 1));
         ImageIcon loading = new ImageIcon("resources/loading.gif");
         loadingLabel.setIcon(loading);
         setBorders();
@@ -128,8 +128,14 @@ public class GUI extends Thread {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int port = (int) portSpinner.getValue();
-                new TCommsServer(port, gui).start();
-                ((CardLayout) cardPanel.getLayout()).next(cardPanel);
+                if (port > 65535) {
+                    JOptionPane.showMessageDialog(null, "Port number is too high. Maximum is 65535.", "Input error", JOptionPane.WARNING_MESSAGE);
+                } else if (port < 0) {
+                    JOptionPane.showMessageDialog(null, "Port number is too low. Minimum is 0.", "Input error", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    new TCommsServer(port, gui).start();
+                    ((CardLayout) cardPanel.getLayout()).next(cardPanel);
+                }
             }
         });
     }

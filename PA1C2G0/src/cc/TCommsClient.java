@@ -40,7 +40,7 @@ public class TCommsClient extends Thread {
             comms = new Socket(host, port);
             out = new PrintWriter(comms.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(comms.getInputStream()));
-
+            gui.connectionStatus(true);
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
                 System.out.println(inputLine);
@@ -62,9 +62,8 @@ public class TCommsClient extends Thread {
             in.close();
             out.close();
             comms.close();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
         } catch (IOException e) {
+            gui.connectionStatus(false);
             e.printStackTrace();
         }
     }

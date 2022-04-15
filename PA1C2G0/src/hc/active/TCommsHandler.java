@@ -88,10 +88,9 @@ public class TCommsHandler extends Thread {
                         System.exit(0);
                     case "SWAP":
                         mode = command[1];
-                        if (instance != null) {
+                        logger.printState(mode);
+                        if (instance != null)
                             instance.setControls(mode);
-                            logger.printState(mode);
-                        }
                         break;
                     case "AUTH":
                         String roomID = command[1];
