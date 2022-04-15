@@ -64,7 +64,7 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
      */
     private IContainer enterAdultRoom(IPatient patient) {
         rl.lock();
-        if (assignedAdult==roomMax){
+        if (assignedAdult==roomMax || !adultBacklog.isEmpty()){
             adultBacklog.put(patient);
             while (releasedAdult<patient.getRoomNumber()) {
                 try {
@@ -90,7 +90,7 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
      */
     private IContainer enterChildRoom(IPatient patient) {
         rl.lock();
-        if (assignedChild==roomMax){
+        if (assignedChild==roomMax || !childBacklog.isEmpty()){
             childBacklog.put(patient);
             while(releasedChild<patient.getRoomNumber()){
                 try {
@@ -190,7 +190,7 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
             IPatient patient = childBacklog.get();
             releasedChild = patient.getRoomNumber();
         }
-        childRoomAvailable.signal();
+        childRoomAvailable.signalAll();
     }
 
     /**
@@ -203,9 +203,7 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
             IPatient patient = adultBacklog.get();
             releasedAdult = patient.getRoomNumber();
         }
-        adultRoomAvailable.signal();
-
-
+        adultRoomAvailable.signalAll();
     }
 
     /**
@@ -233,7 +231,7 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
         else{
             IPatient nextAdult = adultRoom.getExpected();
             IPatient nextChild = childRoom.getExpected();
-            if (nextAdult==null || nextChild==null)
+            if (nextAdult==null && nextChild==null)
                 throw new RuntimeException("Found NULL inside a waiting room");
             rl.unlock();
             if (nextAdult.getEntranceNumber()<nextChild.getEntranceNumber())
@@ -241,7 +239,6 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
             else
                 childRoom.notifyDone();
             }
-
     }
 
     @Override

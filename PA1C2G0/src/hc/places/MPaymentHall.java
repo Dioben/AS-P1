@@ -42,9 +42,9 @@ public class MPaymentHall implements IHall {
     @Override
     public IContainer getFollowingContainer(IPatient patient) {
         rl.lock();
-        if (!cashierAvailable){
+        if (!cashierAvailable || !backlog.isEmpty()){
             backlog.put(patient);
-            while (released< patient.getRoomNumber()){
+            while (released != patient.getRoomNumber()){
                 try {
                     cashierAvailableSignal.await();
                 } catch (InterruptedException e) {
@@ -123,7 +123,7 @@ public class MPaymentHall implements IHall {
         if (!backlog.isEmpty()) {
             IPatient patient = backlog.get();
             released = patient.getRoomNumber();
-            cashierAvailableSignal.signal();
+            cashierAvailableSignal.signalAll();
         }
 
         rl.unlock();

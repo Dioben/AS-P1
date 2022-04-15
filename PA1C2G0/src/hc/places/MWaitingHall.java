@@ -84,7 +84,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
     private IContainer enterAdultRoom(IPatient patient) {
         rl.lock();
         IFIFO backlog = getBacklog(patient);
-        if (assignedAdult==roomMax){
+        if (assignedAdult==roomMax || !backlog.isEmpty()){
             backlog.put(patient);
             instance.notifyMovement(patient.getDisplayValue(),null);
             while (getControlNumber(patient)<patient.getRoomNumber()) {
@@ -110,7 +110,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
     private IContainer enterChildRoom(IPatient patient) {
         rl.lock();
         IFIFO backlog = getBacklog(patient);
-        if (assignedChild==roomMax){
+        if (assignedChild==roomMax || !backlog.isEmpty()){
             backlog.put(patient);
             instance.notifyMovement(patient.getDisplayValue(),null);
             while(getControlNumber(patient)<patient.getRoomNumber()){
@@ -292,7 +292,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
             releasedBlueChild = patient.getRoomNumber();
         }
 
-        childRoomAvailable.signal();
+        childRoomAvailable.signalAll();
     }
 
     /**
@@ -314,7 +314,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
             IPatient patient = adultBacklogBlue.get();
             releasedBlueAdult = patient.getRoomNumber();
         }
-        adultRoomAvailable.signal();
+        adultRoomAvailable.signalAll();
 
 
     }
