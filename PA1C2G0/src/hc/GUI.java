@@ -138,104 +138,105 @@ public class GUI extends Thread {
         Map<String, String[]> handling;
         while (!Thread.interrupted()) {
             handling = updates.get();
-            for (Map.Entry<String, String[]> entry : handling.entrySet()) {
-                JLayeredPane[] seats = new JLayeredPane[0];
-                switch (entry.getKey()) {
-                    case "ETH":
-                        seats = new JLayeredPane[] {
-                                enHAROverflow1, enHAROverflow2, enHAROverflow3, enHCROverflow1, enHCROverflow2, enHCROverflow3
-                        };
-                        break;
-                    case "ET1":
-                        seats = enHARSeats;
-                        break;
-                    case "ET2":
-                        seats = enHCRSeats;
-                        break;
-                    case "EVR1":
-                        seats = new JLayeredPane[] {
-                                evHR1Seat
-                        };
-                        break;
-                    case "EVR2":
-                        seats = new JLayeredPane[] {
-                                evHR2Seat
-                        };
-                        break;
-                    case "EVR3":
-                        seats = new JLayeredPane[] {
-                                evHR3Seat
-                        };
-                        break;
-                    case "EVR4":
-                        seats = new JLayeredPane[] {
-                                evHR4Seat
-                        };
-                        break;
-                    case "WTH":
-                        seats = new JLayeredPane[] {
-                                wHAROverflow1, wHAROverflow2, wHAROverflow3, wHCROverflow1, wHCROverflow2, wHCROverflow3
-                        };
-                        break;
-                    case "WTR1":
-                        seats = wHARSeats;
-                        break;
-                    case "WTR2":
-                        seats = wHCRSeats;
-                        break;
-                    case "MDW1":
-                        seats = new JLayeredPane[] {
-                                mHWRChildSeat
-                        };
-                        break;
-                    case "MDW2":
-                        seats = new JLayeredPane[] {
-                                mHWRAdultSeat
-                        };
-                        break;
-                    case "MDR1":
-                        seats = new JLayeredPane[] {
-                                mHCR1Seat
-                        };
-                        break;
-                    case "MDR2":
-                        seats = new JLayeredPane[] {
-                                mHCR2Seat
-                        };
-                        break;
-                    case "MDR3":
-                        seats = new JLayeredPane[] {
-                                mHAR1Seat
-                        };
-                        break;
-                    case "MDR4":
-                        seats = new JLayeredPane[] {
-                                mHAR2Seat
-                        };
-                        break;
-                    case "PYH":
-                        seats = new JLayeredPane[] {
-                                pHOverflow1, pHOverflow2, pHOverflow3
-                        };
-                        break;
-                    case "PYR":
-                        seats = new JLayeredPane[] {
-                                pHCSeat
-                        };
-                        break;
-                    default:
-                        System.out.println("GUI got unknown entry: " + entry.getKey());
+            if (handling != null)
+                for (Map.Entry<String, String[]> entry : handling.entrySet()) {
+                    JLayeredPane[] seats = new JLayeredPane[0];
+                    switch (entry.getKey()) {
+                        case "ETH":
+                            seats = new JLayeredPane[] {
+                                    enHAROverflow1, enHAROverflow2, enHAROverflow3, enHCROverflow1, enHCROverflow2, enHCROverflow3
+                            };
+                            break;
+                        case "ET1":
+                            seats = enHARSeats;
+                            break;
+                        case "ET2":
+                            seats = enHCRSeats;
+                            break;
+                        case "EVR1":
+                            seats = new JLayeredPane[] {
+                                    evHR1Seat
+                            };
+                            break;
+                        case "EVR2":
+                            seats = new JLayeredPane[] {
+                                    evHR2Seat
+                            };
+                            break;
+                        case "EVR3":
+                            seats = new JLayeredPane[] {
+                                    evHR3Seat
+                            };
+                            break;
+                        case "EVR4":
+                            seats = new JLayeredPane[] {
+                                    evHR4Seat
+                            };
+                            break;
+                        case "WTH":
+                            seats = new JLayeredPane[] {
+                                    wHAROverflow1, wHAROverflow2, wHAROverflow3, wHCROverflow1, wHCROverflow2, wHCROverflow3
+                            };
+                            break;
+                        case "WTR1":
+                            seats = wHARSeats;
+                            break;
+                        case "WTR2":
+                            seats = wHCRSeats;
+                            break;
+                        case "MDW1":
+                            seats = new JLayeredPane[] {
+                                    mHWRChildSeat
+                            };
+                            break;
+                        case "MDW2":
+                            seats = new JLayeredPane[] {
+                                    mHWRAdultSeat
+                            };
+                            break;
+                        case "MDR1":
+                            seats = new JLayeredPane[] {
+                                    mHCR1Seat
+                            };
+                            break;
+                        case "MDR2":
+                            seats = new JLayeredPane[] {
+                                    mHCR2Seat
+                            };
+                            break;
+                        case "MDR3":
+                            seats = new JLayeredPane[] {
+                                    mHAR1Seat
+                            };
+                            break;
+                        case "MDR4":
+                            seats = new JLayeredPane[] {
+                                    mHAR2Seat
+                            };
+                            break;
+                        case "PYH":
+                            seats = new JLayeredPane[] {
+                                    pHOverflow1, pHOverflow2, pHOverflow3
+                            };
+                            break;
+                        case "PYR":
+                            seats = new JLayeredPane[] {
+                                    pHCSeat
+                            };
+                            break;
+                        default:
+                            System.out.println("GUI got unknown entry: " + entry.getKey());
+                    }
+                    String[] value = entry.getValue();
+                    for (int i = 0; i < value.length; i++) {
+                        seats[i].removeAll();
+                        seats[i].revalidate();
+                        if (value[i] != null && !value[i].isBlank())
+                            setIcon(seats[i], value[i]);
+                        else
+                            seats[i].repaint();
+                    }
                 }
-                String[] value = entry.getValue();
-                for (int i = 0; i < value.length; i++) {
-                    seats[i].removeAll();
-                    seats[i].revalidate();
-                    if (value[i] != null && !value[i].isBlank())
-                        setIcon(seats[i], value[i]);
-                    else
-                        seats[i].repaint();
-                }
-            }
         }
     }
 
@@ -278,6 +279,10 @@ public class GUI extends Thread {
             ((CardLayout) cardPanel.getLayout()).last(cardPanel);
         } catch (Exception ignored) {}
         setStateLabel("Stopped");
+    }
+
+    public void setLoadingScreen() {
+        ((CardLayout) cardPanel.getLayout()).previous(cardPanel);
     }
 
     public static void setGUILook(String wantedLook) {

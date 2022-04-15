@@ -90,7 +90,7 @@
                   <gridbag weightx="0.0" weighty="0.0"/>
                 </constraints>
                 <properties>
-                  <text value="Waiting for a CCP..."/>
+                  <text value="Waiting for the CCP..."/>
                 </properties>
               </component>
             </children>

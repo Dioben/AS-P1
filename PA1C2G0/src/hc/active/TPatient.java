@@ -19,8 +19,6 @@ public class TPatient extends Thread implements IPatient {
     private final Timer timer;
     private final boolean child;
     private int entranceNumber;
-    private int paymentNumber;
-    private int waitingNumber;
     private int roomNumber;
     private String displayValue="";
     public TPatient(boolean isChild, Timer timer, IContainer surroundings){
@@ -79,7 +77,6 @@ public class TPatient extends Thread implements IPatient {
      * @param waitingNumber the assigned number
      */
     public void setWaitingNumber(int waitingNumber){
-        this.waitingNumber = waitingNumber;
         this.displayValue = waitingNumber>=10?"":"0";
         this.displayValue+= String.valueOf(waitingNumber);
     }
@@ -90,7 +87,6 @@ public class TPatient extends Thread implements IPatient {
      * @param paymentNumber the assigned number
      */
     public void setPaymentNumber(int paymentNumber){
-        this.paymentNumber = paymentNumber;
         this.displayValue = paymentNumber>=10?"":"0";
         this.displayValue+= String.valueOf(paymentNumber);
     }
@@ -98,16 +94,6 @@ public class TPatient extends Thread implements IPatient {
     @Override
     public int getEntranceNumber() {
     return entranceNumber;
-    }
-
-    @Override
-    public int getWaitingNumber() {
-    return  waitingNumber;
-    }
-
-    @Override
-    public int getPaymentNumber() {
-        return paymentNumber;
     }
 
     /**

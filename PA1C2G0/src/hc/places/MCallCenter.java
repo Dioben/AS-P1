@@ -94,23 +94,22 @@ public class MCallCenter extends Thread implements ICallCenterWaiter{
         ReleasedRoom handling;
         while (!Thread.interrupted()){
             handling = requests.get();
-            switch (handling){
-                case EVH:
-                    entranceHall.notifyAvailable(handling);
-                    break;
-                case WTR_ADULT:
-                case WTR_CHILD:
-                case MDW_ADULT:
-                case MDW_CHILD:
-                    waitingHall.notifyAvailable(handling);
-                    break;
-                case MDR_ADULT:
-                case MDR_CHILD:
-                    medicalHall.notifyAvailable(handling);
-                    break;
-
-            }
-
+            if (handling != null)
+                switch (handling){
+                    case EVH:
+                        entranceHall.notifyAvailable(handling);
+                        break;
+                    case WTR_ADULT:
+                    case WTR_CHILD:
+                    case MDW_ADULT:
+                    case MDW_CHILD:
+                        waitingHall.notifyAvailable(handling);
+                        break;
+                    case MDR_ADULT:
+                    case MDR_CHILD:
+                        medicalHall.notifyAvailable(handling);
+                        break;
+                }
         }
     }
 
