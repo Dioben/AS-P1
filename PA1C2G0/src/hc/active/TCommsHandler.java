@@ -56,14 +56,12 @@ public class TCommsHandler extends Thread {
                 switch (command[0]) {
                     case "START":
                         startInstance(command);
-                        gui.setStateLabel("Running");
-                        logger.printState("RUNNING");
                         break;
                     case "RESUME":
                         if (instance != null) {
-                            instance.progress();
                             gui.setStateLabel("Running");
                             logger.printState("RUNNING");
+                            instance.progress();
                         }
                         break;
                     case "SUSPEND":
@@ -124,6 +122,8 @@ public class TCommsHandler extends Thread {
         int getUpTime = Integer.parseInt(command[7]);
         gui.setSeatCount(seats);
         instance = new HCInstance(adults, children, seats, evalTime, medicTime, payTime, getUpTime,this, mode.equals("MANUAL"), gui, logger);
+        gui.setStateLabel("Running");
+        logger.printState("RUNNING");
         instance.start();
     }
 
