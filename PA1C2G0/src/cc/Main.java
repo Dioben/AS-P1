@@ -7,8 +7,7 @@ public class Main {
      */
     public static void main(String[] args) throws InterruptedException {
         GUI.setGUILook("GTK+");
-        GUI gui = new GUI();
-        gui.start();
+        new GUI();
     }
 
 }
