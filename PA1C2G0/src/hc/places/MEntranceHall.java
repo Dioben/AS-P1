@@ -69,7 +69,10 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
             while (releasedAdult<patient.getRoomNumber()) {
                 try {
                     adultRoomAvailable.await();
-                } catch (InterruptedException e) {}
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    return null;
+                }
             }
         }
 
@@ -92,7 +95,10 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
             while(releasedChild<patient.getRoomNumber()){
                 try {
                     childRoomAvailable.await();
-                } catch (InterruptedException e) {}
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    return null;
+                }
             }
         }
 
@@ -149,6 +155,14 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
     }
 
     /**
+     * Due to patient thread pooling there is no need to interrupt patients here
+     */
+    @Override
+    public void interrupt() {
+
+    }
+
+    /**
      * Called by contained room to notify that patient is out
      * @param room identifies room that has finished processing
      */
@@ -194,7 +208,7 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
 
     }
 
-    /** TODO: FIGURING OUT WHO ACTUALLY GOES NEXT
+    /**
      * Called by CCH to notify that some forward movement is expected
      * @param releasedRoom
      */

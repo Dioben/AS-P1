@@ -3,13 +3,14 @@ package hc;
 import hc.active.TCommsHandler;
 import hc.active.TPatient;
 import hc.interfaces.IHall;
+import hc.interfaces.ILogger;
 import hc.interfaces.IPatient;
 import hc.places.*;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Class representing an instance of health center
@@ -24,23 +25,23 @@ public class HCInstance {
     private final IHall waitingHall;
     private final IHall medicalHall;
     private final IHall paymentHall;
-    private final MHCPLogger logger;
+    private final ILogger logger;
     private final int adults;
     private final int children;
     private boolean started= false;
-    private int gone = 0;
+    private AtomicInteger gone = new AtomicInteger(0);
     private final int seats;
     private final IPatient[] patients;
     private final GUI display;
 
-    public HCInstance(int adults, int children, int seats, int evalTime, int medicTime, int payTime, int getUpTime, TCommsHandler tCommsHandler, boolean mode, GUI gui) {
+    public HCInstance(int adults, int children, int seats, int evalTime, int medicTime, int payTime, int getUpTime, TCommsHandler tCommsHandler, boolean mode, GUI gui, ILogger logger) {
         this.adults = adults;
         this.children = children;
         this.seats = seats;
 
         patients = new IPatient[adults+children];
 
-        logger = new MHCPLogger();
+        this.logger = logger;
 
 
         timer = new Timer.Builder()
@@ -67,6 +68,8 @@ public class HCInstance {
         callCenter.setWaitingHall(wh);
 
         display = gui;
+        logger.printHeader(adults,children,seats);
+        logger.printState("INITIALIZE");
     }
 
     /**
@@ -77,7 +80,6 @@ public class HCInstance {
         if (started)
             throw new RuntimeException("HC Instance was already started");
         started = true;
-        logger.printHeader(adults,children,seats);
         Random r = new Random();
         int assignedChildren = 0;
         int assignedAdults = 0;
@@ -115,10 +117,10 @@ public class HCInstance {
         }else if (s.equals("AUTO")){
             callCenter.setManual(false);
         }
-        logger.printState(s);
     }
 
     public void progress() {
+        callCenter.resume();
         paymentHall.resume();
         medicalHall.resume();
         waitingHall.resume();
@@ -128,10 +130,10 @@ public class HCInstance {
             if (p.isAlive())
                 p.resume();
         }
-        logger.printState("RESUME");
     }
 
     public void pause() {
+        callCenter.suspend();
         paymentHall.suspend();
         medicalHall.suspend();
         waitingHall.suspend();
@@ -142,11 +144,20 @@ public class HCInstance {
             if (p.isAlive())
                 p.suspend();
         }
-        logger.printState("PAUSE");
     }
 
     public void cleanUp() {
-        //TODO: MANUALLY KILL EVERY THREAD or just STOP EXISTING, who cares really
+        callCenter.interrupt();
+        entranceHall.interrupt();
+        evaluationHall.interrupt();
+        waitingHall.interrupt();
+        medicalHall.interrupt();
+        paymentHall.interrupt();
+        for(IPatient p : patients){
+            if (p.isAlive())
+                p.interrupt();
+        }
+        display.setLoadingScreen();
     }
 
     public Timer getTimer() {
@@ -161,12 +172,12 @@ public class HCInstance {
         if (room!=null) //movements that don't warrant logging can happen
             {
                 if (room.equals("OUT"))
-                    gone++;
+                    gone.getAndIncrement();
                 logger.printPosition(room,patient);
             }
         updateUI();
 
-        if (gone==adults+children) {
+        if (gone.get()==adults+children) {
             callCenter.notifyOver();
         }
 

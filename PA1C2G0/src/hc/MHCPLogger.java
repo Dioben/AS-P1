@@ -1,10 +1,11 @@
 package hc;
 
+import hc.interfaces.ILogger;
+
 import java.io.*;
-import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class MHCPLogger {
+public class MHCPLogger implements ILogger {
     private PrintWriter fileWriter;
     private final ReentrantLock loggerAccess;
     public MHCPLogger(){
@@ -86,7 +87,7 @@ public class MHCPLogger {
     }
 
     public void printState(String state){
-        String output = state.toUpperCase().substring(0,4)+" |             |                     |               |                         |     |    ";
+        String output = state.toUpperCase().substring(0,3)+" |             |                     |               |                         |     |    ";
         loggerAccess.lock();
         fileWriter.println(output);
         System.out.println(output);

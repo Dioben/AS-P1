@@ -9,4 +9,5 @@ public interface IServiceWorker {
 
     void suspend();
     void resume();
+    void interrupt();
 }

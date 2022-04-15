@@ -13,7 +13,7 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public abstract class TServiceWorker extends Thread implements hc.interfaces.IServiceWorker {
     protected Timer timer;
-    private IWorkerRoom surroundings;
+    private final IWorkerRoom surroundings;
     private IPatient customer;
     private final ReentrantLock rl;
     private final Condition c;
@@ -27,11 +27,12 @@ public abstract class TServiceWorker extends Thread implements hc.interfaces.ISe
     private void handleNextCostumer() {
         try {
             rl.lock();
-            while (customer == null) {
+            while (customer == null && !Thread.interrupted()) {
                 try {
                     c.await();
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
+                    return;
                 }
             }
             serveCustomer(customer);
@@ -53,7 +54,7 @@ public abstract class TServiceWorker extends Thread implements hc.interfaces.ISe
      * infinitely waits for next patient to show up
      */
     public void run(){
-        while(true){
+        while(!Thread.interrupted()){
             handleNextCostumer();
         }
     }

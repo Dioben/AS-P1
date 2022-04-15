@@ -90,7 +90,10 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
             while (getControlNumber(patient)<patient.getRoomNumber()) {
                 try {
                     adultRoomAvailable.await();
-                } catch (InterruptedException e) {}
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    return null;
+                }
             }
         }
         assignedAdult++;
@@ -113,7 +116,10 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
             while(getControlNumber(patient)<patient.getRoomNumber()){
                 try {
                     childRoomAvailable.await();
-                } catch (InterruptedException e) {}
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    return null;
+                }
             }
         }
         assignedChild++;
@@ -242,6 +248,14 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
      */
     @Override
     public void resume() {
+
+    }
+
+    /**
+     * Due to patient thread pooling there is no need to interrupt patients here
+     */
+    @Override
+    public void interrupt() {
 
     }
 

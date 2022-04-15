@@ -2,6 +2,8 @@ package hc.active;
 
 import hc.GUI;
 import hc.HCInstance;
+import hc.MHCPLogger;
+import hc.interfaces.ILogger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,11 +24,13 @@ public class TCommsHandler extends Thread {
     private final ReentrantLock writeLock; //writer is supposed to be thread safe but I want to make sure
     private HCInstance instance;
     private final GUI gui;
+    private final ILogger logger;
 
     public TCommsHandler(Socket accept, GUI gui) {
         comms = accept;
         writeLock = new ReentrantLock();
         this.gui = gui;
+        logger = new MHCPLogger();
     }
 
     /**
@@ -48,40 +52,46 @@ public class TCommsHandler extends Thread {
 
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
-                System.out.println(inputLine);
                 String[] command = inputLine.split(" ");
                 switch (command[0]) {
                     case "START":
                         startInstance(command);
                         gui.setStateLabel("Running");
+                        logger.printState("RUNNING");
                         break;
                     case "RESUME":
                         if (instance != null) {
                             instance.progress();
                             gui.setStateLabel("Running");
+                            logger.printState("RUNNING");
                         }
                         break;
                     case "SUSPEND":
                         if (instance != null) {
                             instance.pause();
                             gui.setStateLabel("Suspended");
+                            logger.printState(command[0]);
                         }
                         break;
                     case "STOP":
                         if (instance != null) {
                             instance.cleanUp();
                             gui.setStateLabel("Stopped");
+                            logger.printState(command[0]);
                         }
                         instance = null;
                         break;
                     case "END":
                         if (instance != null)
                             instance.cleanUp(); //probably not strictly necessary
+                        logger.printState(command[0]);
                         System.exit(0);
                     case "SWAP":
                         mode = command[1];
-                        if (instance != null)
+                        if (instance != null) {
                             instance.setControls(mode);
+                            logger.printState(mode);
+                        }
                         break;
                     case "AUTH":
                         String roomID = command[1];
@@ -114,7 +124,7 @@ public class TCommsHandler extends Thread {
         int payTime = Integer.parseInt(command[6]);
         int getUpTime = Integer.parseInt(command[7]);
         gui.setSeatCount(seats);
-        instance = new HCInstance(adults, children, seats, evalTime, medicTime, payTime, getUpTime,this, mode.equals("MANUAL"), gui);
+        instance = new HCInstance(adults, children, seats, evalTime, medicTime, payTime, getUpTime,this, mode.equals("MANUAL"), gui, logger);
         instance.start();
     }
 

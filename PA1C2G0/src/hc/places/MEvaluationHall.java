@@ -98,6 +98,15 @@ public class MEvaluationHall implements IHall {
     }
 
     /**
+     * Propagates interrupt to contained nurses
+     */
+    @Override
+    public void interrupt() {
+        for (IRoom room:rooms)
+            room.interrupt();
+    }
+
+    /**
      * Called by contained room to notify that patient is out, marks room as available again, should signal Call center
      * @param room identifies room that has finished processing
      */

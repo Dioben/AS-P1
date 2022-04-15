@@ -16,11 +16,9 @@ public class TPatient extends Thread implements IPatient {
      */
     private IContainer surroundings;
     private Severity severity=Severity.UNASSIGNED;
-    private Timer timer;
+    private final Timer timer;
     private final boolean child;
     private int entranceNumber;
-    private int paymentNumber;
-    private int waitingNumber;
     private int roomNumber;
     private String displayValue="";
     public TPatient(boolean isChild, Timer timer, IContainer surroundings){
@@ -35,7 +33,7 @@ public class TPatient extends Thread implements IPatient {
     public void run(){
         if (surroundings != null)
             surroundings.enter(this);
-        while(surroundings != null)
+        while(surroundings != null && !Thread.interrupted())
             tryMove();
     }
 
@@ -51,12 +49,14 @@ public class TPatient extends Thread implements IPatient {
             sleep(timer.getMovementTime());
             if (next != null)
                 next.enter(this);
+            this.surroundings.leave(this,next);
+            this.surroundings = next;
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            surroundings = null;
+            Thread.currentThread().interrupt();
         }
 
-        this.surroundings.leave(this,next);
-        this.surroundings = next;
+
 
     }
 
@@ -77,7 +77,6 @@ public class TPatient extends Thread implements IPatient {
      * @param waitingNumber the assigned number
      */
     public void setWaitingNumber(int waitingNumber){
-        this.waitingNumber = waitingNumber;
         this.displayValue = waitingNumber>=10?"":"0";
         this.displayValue+= String.valueOf(waitingNumber);
     }
@@ -88,7 +87,6 @@ public class TPatient extends Thread implements IPatient {
      * @param paymentNumber the assigned number
      */
     public void setPaymentNumber(int paymentNumber){
-        this.paymentNumber = paymentNumber;
         this.displayValue = paymentNumber>=10?"":"0";
         this.displayValue+= String.valueOf(paymentNumber);
     }
@@ -96,16 +94,6 @@ public class TPatient extends Thread implements IPatient {
     @Override
     public int getEntranceNumber() {
     return entranceNumber;
-    }
-
-    @Override
-    public int getWaitingNumber() {
-    return  waitingNumber;
-    }
-
-    @Override
-    public int getPaymentNumber() {
-        return paymentNumber;
     }
 
     /**

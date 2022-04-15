@@ -47,7 +47,10 @@ public class MPaymentHall implements IHall {
             while (released< patient.getRoomNumber()){
                 try {
                     cashierAvailableSignal.await();
-                } catch (InterruptedException e) {}
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    return null;
+                }
             }
         }
         cashierAvailable = false;
@@ -98,6 +101,14 @@ public class MPaymentHall implements IHall {
     @Override
     public void resume() {
         cashierRoom.resume();
+    }
+
+    /**
+     * Propagates interrupt to cashier
+     */
+    @Override
+    public void interrupt() {
+    cashierRoom.interrupt();
     }
 
     /**

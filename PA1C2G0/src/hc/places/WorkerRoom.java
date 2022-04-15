@@ -87,7 +87,8 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
                 try {
                     c.await();
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
+                    return null;
                 }
             }
         } finally {
@@ -137,6 +138,11 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
     @Override
     public void resume() {
         worker.resume();
+    }
+
+    @Override
+    public void interrupt() {
+        worker.interrupt();
     }
 
     public static WorkerRoom getRoom(Worker worker, IHall container, IContainer next, String name){

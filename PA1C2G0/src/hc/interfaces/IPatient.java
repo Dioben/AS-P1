@@ -9,8 +9,6 @@ public interface IPatient extends Runnable{
     void setPaymentNumber(int paymentNumber);
 
     int getEntranceNumber();
-    int getWaitingNumber();
-    int getPaymentNumber();
 
     void setSeverity(Severity severity);
     Severity getSeverity();
@@ -21,6 +19,7 @@ public interface IPatient extends Runnable{
      */
     void suspend();
     void resume();
+    void interrupt();
     boolean isAlive();
 
 
