@@ -71,15 +71,15 @@ public class MPaymentHall implements IHall {
     @Override
     public Map<String, String[]> getState() {
         Map<String,String[]> states = new HashMap<>();
-        IPatient[] patients = backlog.getSnapshot(3);
-        String [] relevant = new String[3];
-        for(int i=0;i<3;i++){
+        IPatient[] patients = backlog.getSnapshot(entered - released);
+        String[] state = new String[patients.length];
+        for(int i=0;i< patients.length;i++){
             IPatient patient = patients[i];
             if (patient==null)
                     break;
-            relevant[i] = patient.getDisplayValue();
+            state[i] = patient.getDisplayValue();
         }
-        states.put(this.name,relevant);
+        states.put(this.name,state);
         states.putAll(cashierRoom.getState());
 
         return states;

@@ -30,6 +30,8 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
     private final IFIFO<IPatient> childBacklog;
     private final IFIFO<IPatient> adultBacklog;
     private int nextSlack; //we start out with 4 slots available in EVH
+    private final int adults;
+    private final int children;
 
     public MEntranceHall(HCInstance instance, IContainer after, int seatsPerRoom, int adults, int children, int nextRoomSlack){
         this.instance = instance;
@@ -42,6 +44,8 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
         childBacklog = new MFIFO(IPatient.class,children);
         adultBacklog = new MFIFO(IPatient.class,adults);
         nextSlack = nextRoomSlack;
+        this.adults = adults;
+        this.children = children;
     }
 
     /**
@@ -119,20 +123,28 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
     public Map<String, String[]> getState() {
         HashMap<String,String[]> vals = new HashMap<>();
 
-        IPatient[] oldestAdults = adultBacklog.getSnapshot(3);
-        IPatient[] oldestChildren = childBacklog.getSnapshot(3);
+        IPatient[] adults = adultBacklog.getSnapshot(this.adults);
+        IPatient[] children = childBacklog.getSnapshot(this.children);
+        IPatient[][] patients = new IPatient[][] {
+                adults, children
+        };
+        String[] adultsState = new String[adults.length];
+        String[] childrenState = new String[children.length];
+        String[][] patientsState = new String[][] {
+                adultsState, childrenState
+        };
 
-        String[] selfInfo = new String[6];
-        int i = 0;
-        for (IPatient[] oldest : new IPatient[][] {
-                oldestAdults, oldestChildren
-        }) for (IPatient patient : oldest) {
-            if (patient != null)
-                selfInfo[i] = patient.getDisplayValue();
-            i++;
+        for (int i = 0; i < patients.length; i++) {
+            for (int j = 0; j < patients[i].length; j++) {
+                IPatient patient = patients[i][j];
+                if (patient == null)
+                    break;
+                patientsState[i][j] = patient.getDisplayValue();
+            }
         }
 
-        vals.put(this.name,selfInfo);
+        vals.put(this.name + "A",adultsState);
+        vals.put(this.name + "C",childrenState);
         vals.putAll(childRoom.getState());
         vals.putAll(adultRoom.getState());
         return vals;

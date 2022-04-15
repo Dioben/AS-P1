@@ -43,6 +43,8 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
     private final IFIFO<IPatient> adultBacklogBlue;
     private int nextSlackAdult; //we start out with 1 adult slots available in MDW
     private int nextSlackChild; //we start out with 1 child slots available in MDW
+    private final int adults;
+    private final int children;
 
     public MWaitingHall(HCInstance instance, IContainer after, int seatsPerRoom, int adults, int children, int nextRoomSlackAdult, int nextRoomSlackChild, ICallCenterWaiter callCenter){
         this.instance = instance;
@@ -61,6 +63,8 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
         nextSlackAdult = nextRoomSlackAdult;
         nextSlackChild = nextRoomSlackChild;
         this.callCenter = callCenter;
+        this.adults = adults;
+        this.children = children;
     }
 
     /**
@@ -195,38 +199,40 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
     @Override
     public Map<String, String[]> getState() {
         Map<String,String[]> states = new HashMap<>();
-        String[] here = new String[6];
-        int assignedAdults = 0;
-        int assignedChildren = 0;
-        for (IPatient[] patients : new IPatient[][]{
-                adultBacklogRed.getSnapshot(3), adultBacklogYellow.getSnapshot(3), adultBacklogBlue.getSnapshot(3)
-        }) {
-            for (int i=0; i<3 && assignedAdults < 3;i++){
-                IPatient patient = patients[i];
-                if (patient==null)
+        IPatient[] adultsRed = adultBacklogRed.getSnapshot(adults);
+        IPatient[] adultsYellow = adultBacklogYellow.getSnapshot(adults);
+        IPatient[] adultsBlue = adultBacklogBlue.getSnapshot(adults);
+        IPatient[] childrenRed = childBacklogRed.getSnapshot(children);
+        IPatient[] childrenYellow = childBacklogYellow.getSnapshot(children);
+        IPatient[] childrenBlue = childBacklogBlue.getSnapshot(children);
+        IPatient[][] patients = new IPatient[][] {
+                adultsRed, adultsYellow, adultsBlue, childrenRed, childrenYellow, childrenBlue
+        };
+        String[] adultsRedState = new String[adultsRed.length];
+        String[] adultsYellowState = new String[adultsYellow.length];
+        String[] adultsBlueState = new String[adultsBlue.length];
+        String[] childrenRedState = new String[childrenRed.length];
+        String[] childrenYellowState = new String[childrenYellow.length];
+        String[] childrenBlueState = new String[childrenBlue.length];
+        String[][] patientsState = new String[][] {
+                adultsRedState, adultsYellowState, adultsBlueState, childrenRedState, childrenYellowState, childrenBlueState
+        };
+
+        for (int i = 0; i < patients.length; i++) {
+            for (int j = 0; j < patients[i].length; j++) {
+                IPatient patient = patients[i][j];
+                if (patient == null)
                     break;
-                here[assignedAdults] = patient.getDisplayValue();
-                assignedAdults++;
+                patientsState[i][j] = patient.getDisplayValue();
             }
-            if (assignedAdults==3)
-                break;
         }
-        for (IPatient[] patients : new IPatient[][]{
-                childBacklogRed.getSnapshot(3), childBacklogYellow.getSnapshot(3), childBacklogBlue.getSnapshot(3)
-        }) {
-            for (int i=0;i<3 && assignedAdults < 3;i++){
-                if (assignedChildren == 3)
-                    break;
-                IPatient patient = patients[i];
-                if (patient==null)
-                    break;
-                here[assignedChildren+3] = patient.getDisplayValue();
-                assignedChildren++;
-            }
-            if (assignedChildren==3)
-                break;
-        }
-        states.put(this.name,here);
+
+        states.put(this.name + "AR",adultsRedState);
+        states.put(this.name + "AY",adultsYellowState);
+        states.put(this.name + "AB",adultsBlueState);
+        states.put(this.name + "CR",childrenRedState);
+        states.put(this.name + "CY",childrenYellowState);
+        states.put(this.name + "CB",childrenBlueState);
         states.putAll(childRoom.getState());
         states.putAll(adultRoom.getState());
 

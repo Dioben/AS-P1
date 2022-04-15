@@ -142,108 +142,240 @@ public class GUI extends Thread {
 
     public void run() {
         Map<String, String[]> handling;
+        JLayeredPane[] WTHAdultSeats = {
+                wHAROverflow1, wHAROverflow2, wHAROverflow3
+        };
+        JLayeredPane[] WTHChildSeats = {
+                wHCROverflow1, wHCROverflow2, wHCROverflow3
+        };
+        String[] WTHAdultRedValue = new String[0];
+        String[] WTHAdultYellowValue = new String[0];
+        String[] WTHAdultBlueValue = new String[0];
+        String[] WTHChildRedValue = new String[0];
+        String[] WTHChildYellowValue = new String[0];
+        String[] WTHChildBlueValue = new String[0];
+        int assigned;
+        int overflow;
+        int type;
         while (!Thread.interrupted()) {
             handling = updates.get();
-            if (handling != null)
+            if (handling != null) {
                 for (Map.Entry<String, String[]> entry : handling.entrySet()) {
                     JLayeredPane[] seats = new JLayeredPane[0];
                     switch (entry.getKey()) {
-                        case "ETH":
+                        case "ETHA":
                             seats = new JLayeredPane[] {
-                                    enHAROverflow1, enHAROverflow2, enHAROverflow3, enHCROverflow1, enHCROverflow2, enHCROverflow3
+                                    enHAROverflow1, enHAROverflow2, enHAROverflow3
                             };
+                            type = 2;
+                            break;
+                        case "ETHC":
+                            seats = new JLayeredPane[] {
+                                    enHCROverflow1, enHCROverflow2, enHCROverflow3
+                            };
+                            type = 3;
                             break;
                         case "ET1":
                             seats = enHARSeats;
+                            type = 1;
                             break;
                         case "ET2":
                             seats = enHCRSeats;
+                            type = 1;
                             break;
                         case "EVR1":
                             seats = new JLayeredPane[] {
                                     evHR1Seat
                             };
+                            type = 1;
                             break;
                         case "EVR2":
                             seats = new JLayeredPane[] {
                                     evHR2Seat
                             };
+                            type = 1;
                             break;
                         case "EVR3":
                             seats = new JLayeredPane[] {
                                     evHR3Seat
                             };
+                            type = 1;
                             break;
                         case "EVR4":
                             seats = new JLayeredPane[] {
                                     evHR4Seat
                             };
+                            type = 1;
                             break;
-                        case "WTH":
-                            seats = new JLayeredPane[] {
-                                    wHAROverflow1, wHAROverflow2, wHAROverflow3, wHCROverflow1, wHCROverflow2, wHCROverflow3
-                            };
+                        case "WTHAR":
+                            WTHAdultRedValue = entry.getValue();
+                            type = 0;
+                            break;
+                        case "WTHAY":
+                            WTHAdultYellowValue = entry.getValue();
+                            type = 0;
+                            break;
+                        case "WTHAB":
+                            WTHAdultBlueValue = entry.getValue();
+                            type = 0;
+                            break;
+                        case "WTHCR":
+                            WTHChildRedValue = entry.getValue();
+                            type = 0;
+                            break;
+                        case "WTHCY":
+                            WTHChildYellowValue = entry.getValue();
+                            type = 0;
+                            break;
+                        case "WTHCB":
+                            WTHChildBlueValue = entry.getValue();
+                            type = 0;
                             break;
                         case "WTR1":
                             seats = wHARSeats;
+                            type = 1;
                             break;
                         case "WTR2":
                             seats = wHCRSeats;
+                            type = 1;
                             break;
                         case "MDW1":
                             seats = new JLayeredPane[] {
                                     mHWRChildSeat
                             };
+                            type = 1;
                             break;
                         case "MDW2":
                             seats = new JLayeredPane[] {
                                     mHWRAdultSeat
                             };
+                            type = 1;
                             break;
                         case "MDR1":
                             seats = new JLayeredPane[] {
                                     mHCR1Seat
                             };
+                            type = 1;
                             break;
                         case "MDR2":
                             seats = new JLayeredPane[] {
                                     mHCR2Seat
                             };
+                            type = 1;
                             break;
                         case "MDR3":
                             seats = new JLayeredPane[] {
                                     mHAR1Seat
                             };
+                            type = 1;
                             break;
                         case "MDR4":
                             seats = new JLayeredPane[] {
                                     mHAR2Seat
                             };
+                            type = 1;
                             break;
                         case "PYH":
                             seats = new JLayeredPane[] {
                                     pHOverflow1, pHOverflow2, pHOverflow3
                             };
+                            type = 4;
                             break;
                         case "PYR":
                             seats = new JLayeredPane[] {
                                     pHCSeat
                             };
+                            type = 1;
                             break;
                         default:
                             System.out.println("GUI got unknown entry: " + entry.getKey());
+                            type = 0;
                     }
-                    String[] value = entry.getValue();
-                    for (int i = 0; i < value.length; i++) {
-                        seats[i].removeAll();
-                        seats[i].revalidate();
-                        if (value[i] != null && !value[i].isBlank())
-                            setIcon(seats[i], value[i]);
+                    if (type == 1) {
+                        String[] value = entry.getValue();
+                        for (int i = 0; i < seats.length; i++) {
+                            if (i < value.length)
+                                changeSeat(seats[i], value[i]);
+                            else
+                                changeSeat(seats[i], null);
+                        }
+                    } else if (type > 1) {
+                        String[] value = entry.getValue();
+                        if (value.length < 3) {
+                            String[] temp = new String[3];
+                            System.arraycopy(value, 0, temp, 0, value.length);
+                            value = temp;
+                        }
+                        overflow = 0;
+                        for (int i = 0; i < value.length; i++) {
+                            if (i < seats.length) {
+                                changeSeat(seats[i], value[i]);
+                            } else if (value[i] != null) {
+                                overflow++;
+                            } else {
+                                break;
+                            }
+                        }
+                        if (type == 2)
+                            enHAROverflowLabel.setText("+" + overflow);
+                        else if (type == 3)
+                            enHCROverflowLabel.setText("+" + overflow);
                         else
-                            seats[i].repaint();
+                            pHOverflowLabel.setText("+" + overflow);
                     }
                 }
+                assigned = 0;
+                overflow = 0;
+                for (String[] value : new String[][] {
+                        WTHAdultRedValue, WTHAdultYellowValue, WTHAdultBlueValue
+                }) {
+                    for (int i = 0; i < value.length || i < 3; i++) {
+                        if (assigned < 3) {
+                            if (i < value.length && value[i] != null) {
+                                changeSeat(WTHAdultSeats[assigned], value[i]);
+                                assigned++;
+                            } else {
+                                changeSeat(WTHAdultSeats[assigned], null);
+                            }
+                        } else if (i < value.length && value[i] != null) {
+                            overflow++;
+                        }
+                    }
+                }
+                for (int i = assigned; i < 3; i++)
+                    changeSeat(WTHAdultSeats[i], null);
+                wHAROverflowLabel.setText("+" + overflow);
+                assigned = 0;
+                for (String[] value : new String[][] {
+                        WTHChildRedValue, WTHChildYellowValue, WTHChildBlueValue
+                }) {
+                    for (int i = 0; i < value.length || i < 3; i++) {
+                        if (assigned < 3) {
+                            if (i < value.length && value[i] != null) {
+                                changeSeat(WTHChildSeats[assigned], value[i]);
+                                assigned++;
+                            } else {
+                                changeSeat(WTHChildSeats[assigned], null);
+                            }
+                        } else if (i < value.length && value[i] != null) {
+                            overflow++;
+                        }
+                    }
+                }
+                for (int i = assigned; i < 3; i++)
+                    changeSeat(WTHChildSeats[i], null);
+                wHCROverflowLabel.setText("+" + overflow);
+            }
         }
+    }
+
+    private void changeSeat(JLayeredPane seat, String value) {
+        seat.removeAll();
+        seat.revalidate();
+        if (value != null && !value.isBlank())
+            setIcon(seat, value);
+        else
+            seat.repaint();
     }
 
     public void update(Map<String, String[]> info) {
