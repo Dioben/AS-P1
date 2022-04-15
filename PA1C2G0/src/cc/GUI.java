@@ -23,7 +23,7 @@ public class GUI {
     private JButton stopButton;
     private JButton endButton;
     private JComboBox operatingModeComboBox;
-    private JButton allowPatientButton;
+    private JButton notifyButton;
     private JPanel cardPanel;
     private JSpinner adultPatientsSpinner;
     private JSpinner childrenPatientsSpinner;
@@ -41,6 +41,14 @@ public class GUI {
         requests = new MFIFO(String.class, 50);
         requestN = 0;
 
+        JFrame frame = new JFrame("CCP");
+        frame.setContentPane(this.mainPanel);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setMinimumSize(new Dimension(380, 340));
+        frame.setPreferredSize(new Dimension(280, 340));
+        frame.pack();
+        frame.setVisible(true);
+
         adultPatientsSpinner.setModel(new SpinnerNumberModel(10, 1, 50, 1));
         childrenPatientsSpinner.setModel(new SpinnerNumberModel(10, 1, 50, 1));
         seatsSpinner.setModel(new SpinnerNumberModel(4, 2, 10, 2));
@@ -49,7 +57,7 @@ public class GUI {
         suspendButton.setEnabled(false);
         resumeButton.setEnabled(false);
         stopButton.setEnabled(false);
-        allowPatientButton.setEnabled(false);
+        notifyButton.setEnabled(false);
 
         if (UIManager.getLookAndFeel().getName().equals("GTK look and feel"))
             for (JSpinner spinner : new JSpinner[] {adultPatientsSpinner, childrenPatientsSpinner, seatsSpinner, portSpinner})
@@ -142,19 +150,19 @@ public class GUI {
                         commsClient.authorize(requests.get());
                         requestN--;
                     }
-                    allowPatientButton.setEnabled(false);
+                    notifyButton.setEnabled(false);
                     commsClient.SwapAuto();
                 }
             }
         });
-        allowPatientButton.addActionListener(new ActionListener() {
+        notifyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (requestN > 0) {
                     commsClient.authorize(requests.get());
                     requestN--;
                     if (requestN == 0)
-                        allowPatientButton.setEnabled(false);
+                        notifyButton.setEnabled(false);
                 }
             }
         });
@@ -175,7 +183,7 @@ public class GUI {
     public void putRequest(String roomID) {
         requests.put(roomID);
         requestN++;
-        allowPatientButton.setEnabled(true);
+        notifyButton.setEnabled(true);
     }
 
     public void setStatusLabel(String status) {
@@ -212,15 +220,5 @@ public class GUI {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public void start() {
-        JFrame frame = new JFrame("CCP");
-        frame.setContentPane(this.mainPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setMinimumSize(new Dimension(380, 340));
-        frame.setPreferredSize(new Dimension(280, 340));
-        frame.pack();
-        frame.setVisible(true);
     }
 }
