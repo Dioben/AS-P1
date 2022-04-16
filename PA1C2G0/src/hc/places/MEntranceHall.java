@@ -196,7 +196,6 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
      * Identifies "oldest" child patient in queue if they exist and tells them to leave, updates containment state
      */
     private void handleChildRoomLeave() {
-        inChild--;
         assignedChild--;
         if(!childBacklog.isEmpty()) {
             IPatient patient = childBacklog.get();
@@ -210,7 +209,6 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
      */
     private void handleAdultRoomLeave() {
         assignedAdult--;
-        inAdult--;
         if(!adultBacklog.isEmpty()) {
             IPatient patient = adultBacklog.get();
             releasedAdult = patient.getRoomNumber();
@@ -233,10 +231,12 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
             rl.unlock();
         }
         else if (inChild==0) {
+            inAdult--;
                 rl.unlock();
                 adultRoom.notifyDone();
         }
         else if (inAdult==0){
+            inChild--;
             rl.unlock();
             childRoom.notifyDone();
         }
@@ -245,12 +245,22 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
             IPatient nextChild = childRoom.getExpected();
             if (nextAdult==null && nextChild==null)
                 throw new RuntimeException("Found NULL inside a waiting room");
-            rl.unlock();
-            if (nextAdult.getEntranceNumber()<nextChild.getEntranceNumber())
+
+            if (nextAdult.getEntranceNumber()<nextChild.getEntranceNumber()){
+                inAdult--;
+                rl.unlock();
                 adultRoom.notifyDone();
-            else
+            }
+            else {
+                inChild--;
+                rl.unlock();
                 childRoom.notifyDone();
             }
+            }
+        if (inAdult<0)
+            throw new RuntimeException("Negative adults in ETR");
+        if (inChild<0)
+            throw new RuntimeException("Negative children in ETR");
     }
 
     @Override
@@ -290,15 +300,16 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
     @Override
     public void notifyWaiting(IWaitingRoom room) {
         rl.lock();
-        if (room==childRoom)
-            inChild++;
-        if (room==adultRoom)
-            inAdult++;
-        if (nextSlack>0){
+        if (nextSlack>0) {
             nextSlack--;
             rl.unlock();
             room.notifyDone();
-        }else
-            rl.unlock();
+            return;
+        }
+        else if (room==childRoom)
+            inChild++;
+        else if (room==adultRoom)
+            inAdult++;
+        rl.unlock();
     }
 }
