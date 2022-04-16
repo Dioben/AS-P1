@@ -1,10 +1,6 @@
 package cc;
 
-import hc.queue.MFIFO;
-import hc.interfaces.IFIFO;
-
 import javax.swing.*;
-import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,7 +8,7 @@ import java.awt.event.ActionListener;
 
 public class GUI {
     private TCommsClient commsClient;
-    private final IFIFO<String> requests;
+    private final MFIFO<String> requests;
 
     private JPanel mainPanel;
     private JLabel statusLabel;
