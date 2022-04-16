@@ -145,7 +145,6 @@ public class MPaymentHall implements IHall {
     public void enter(IPatient patient) {
         rl.lock();
         patient.setPaymentNumber(entered);
-        patient.setRoomNumber(entered);
         entered++;
         rl.unlock();
     }

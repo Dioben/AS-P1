@@ -19,9 +19,9 @@ public abstract class TServiceWorker extends Thread implements hc.interfaces.ISe
     private final Condition c;
 
     /**
-     * Waits for a customer to be assigned to itself
-     * serves customer
-     * removes customer from self
+     * Waits for a customer to be assigned to itself<p>
+     * serves customer<p>
+     * removes customer from self<p>
      * warns container that they're done
      */
     private void handleNextCostumer() {

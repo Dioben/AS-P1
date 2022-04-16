@@ -13,7 +13,7 @@ import java.net.Socket;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Client handler branched off of main simulation
+ * Client handler branched off of main simulation <p>
  * Contains a Health Center instance and handles message flow with client
  */
 public class TCommsHandler extends Thread {
@@ -21,7 +21,7 @@ public class TCommsHandler extends Thread {
     private final Socket comms;
     private PrintWriter out;
     private String mode = "AUTO";
-    private final ReentrantLock writeLock; //writer is supposed to be thread safe but I want to make sure
+    private final ReentrantLock writeLock; //socket writers are supposed to be thread safe but let's make sure
     private HCInstance instance;
     private final GUI gui;
     private final ILogger logger;
@@ -34,15 +34,15 @@ public class TCommsHandler extends Thread {
     }
 
     /**
-     * repeatedly gets next socket instruction and parses it
-     * valid commands:
-     * START <parameters>
-     * RESUME
-     * SUSPEND
-     * STOP
-     * END
-     * SWAP <mode>
-     * AUTH <patientID>
+     * repeatedly gets next socket instruction and parses it<p>
+     * valid commands:<p>
+     * START {@literal <Parameters>}<p>
+     * RESUME<p>
+     * SUSPEND<p>
+     * STOP<p>
+     * END<p>
+     * SWAP {@literal <Mode>}<p>
+     * AUTH {@literal <Room ID>}<p>
      */
     public void run() {
         try {
@@ -109,8 +109,8 @@ public class TCommsHandler extends Thread {
     }
 
     /**
-     * starts an HC instance based on command
-     * @param command full command string passed to socket, parsing is done internally
+     * creates and starts an HC instance based on command
+     * @param command Full command string passed to socket, parsing is done internally
      */
     private void startInstance(String[] command) {
         int adults = Integer.parseInt(command[1]);
@@ -129,7 +129,7 @@ public class TCommsHandler extends Thread {
 
     /**
      * Request permission for a patient to move in manual mode
-     * @param roomName name of room requesting movement
+     * @param roomName Name of room requesting movement
      *
      */
     public void requestPermission(String roomName) {
@@ -139,7 +139,7 @@ public class TCommsHandler extends Thread {
     }
 
     /**
-     * Tell client that simulation has finished running naturally
+     * Notify client that simulation has finished running naturally
      */
     public void notifyDone(){
         writeLock.lock();

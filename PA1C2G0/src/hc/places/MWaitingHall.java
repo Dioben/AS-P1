@@ -392,7 +392,6 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
     public void enter(IPatient patient) {
         rl.lock();
         patient.setWaitingNumber(entered);
-        patient.setRoomNumber(entered);
         entered++;
         rl.unlock();
     }

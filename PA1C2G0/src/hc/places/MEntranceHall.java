@@ -277,7 +277,6 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
     public void enter(IPatient patient) {
         rl.lock();
         patient.setEntranceNumber(entered);
-        patient.setRoomNumber(entered);
         entered++;
         instance.notifyMovement(patient.getDisplayValue(),this.name);
         rl.unlock();
