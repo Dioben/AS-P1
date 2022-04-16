@@ -15,15 +15,21 @@ public interface IPatient extends Runnable{
     String getDisplayValue();
 
     /**
-     * Thread class methods
+     * Used to get current room priority
+     * @return int representing room priority
      */
+    int getRoomNumber();
+
+    /**
+     * Set room priority<p>
+     * SetEntrance/Payment/WaitingNumber implicitly do this
+     * @param entered the room's priority number
+     */
+    void setRoomNumber(int entered);
+
+    //Thread class methods
     void suspend();
     void resume();
     void interrupt();
     boolean isAlive();
-
-
-    int getRoomNumber();
-    void setRoomNumber(int entered);
-
 }
