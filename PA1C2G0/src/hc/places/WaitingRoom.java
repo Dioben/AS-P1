@@ -18,8 +18,7 @@ public class WaitingRoom implements IWaitingRoom {
     private IContainer next;
     private final String name;
     private final MDelayFIFO<IPatient> patients;
-    private int released = -1; // way to let a patient know if they've been released -> only ever changed by 1
-                               // thread
+    private int released = -1;
     private AtomicInteger entered = new AtomicInteger(0);
     private final int seats;
     private final ReentrantLock rl;
