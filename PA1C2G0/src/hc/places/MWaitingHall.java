@@ -284,7 +284,6 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
      * Locked from parent method
      */
     private void handleChildRoomLeave() {
-        inChild--;
         assignedChild--;
         if(!childBacklogRed.isEmpty()) {
             IPatient patient = childBacklogRed.get();
@@ -306,7 +305,6 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
      * Locked from parent method
      */
     private void handleAdultRoomLeave() {
-        inAdult--;
         assignedAdult--;
         if(!adultBacklogRed.isEmpty()) {
             IPatient patient = adultBacklogRed.get();
@@ -342,6 +340,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
                 rl.unlock();
             }
             else{
+                inAdult--;
                 rl.unlock();
                 adultRoom.notifyDone();
             }
@@ -353,12 +352,13 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
                 rl.unlock();
             }
             else{
+                inChild--;
                 rl.unlock();
                 childRoom.notifyDone();
             }
         } else if (releasedRoom.equals(ReleasedRoom.WTR_ADULT)){
             rl.lock();
-            if (inAdult==0){
+            if (assignedAdult==0){
                 rl.unlock();
                 throw new RuntimeException("Adult somehow left empty WTR");
             }
@@ -367,7 +367,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
         }
         else if (releasedRoom.equals(ReleasedRoom.WTR_CHILD)){
             rl.lock();
-            if (inChild==0){
+            if (assignedChild==0){
                 rl.unlock();
                 throw new RuntimeException("Child somehow left empty WTR");
             }
@@ -415,23 +415,25 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
     public void notifyWaiting(IWaitingRoom room) {
         if (room==childRoom){
             rl.lock();
-            inChild++;
             if (nextSlackChild>0){
                 nextSlackChild--;
                 rl.unlock();
                 room.notifyDone();
-            }else
-                rl.unlock();
+                return;
+            }
+            inChild++;
+            rl.unlock();
         }
         else if (room== adultRoom){
             rl.lock();
-            inAdult++;
             if (nextSlackAdult>0){
                 nextSlackAdult--;
                 rl.unlock();
                 room.notifyDone();
-            }else
-                rl.unlock();
+                return;
+            }
+            inAdult++;
+            rl.unlock();
         }
     }
 }

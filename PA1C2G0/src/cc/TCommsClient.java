@@ -43,7 +43,6 @@ public class TCommsClient extends Thread {
             gui.connectionStatus(true);
             String inputLine;
             while ((inputLine = in.readLine()) != null) {
-                System.out.println(inputLine);
                 String[] notification = inputLine.split(" ");
                 switch (notification[0]) {
                     case "REQ":
