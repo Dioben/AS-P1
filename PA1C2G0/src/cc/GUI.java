@@ -181,9 +181,9 @@ public class GUI {
                 if ("Manual".equals(operatingModeComboBox.getSelectedItem())) {
                     commsClient.SwapManual();
                 } else {
+                    notifyButton.setEnabled(false);
                     while (!requests.isEmpty())
                         commsClient.authorize(requests.get());
-                    notifyButton.setEnabled(false);
                     commsClient.SwapAuto();
                 }
             }
