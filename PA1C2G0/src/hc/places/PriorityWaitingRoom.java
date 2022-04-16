@@ -184,14 +184,16 @@ public class PriorityWaitingRoom implements IWaitingRoom {
             IPatient patient = null;
             if (!patientsRed.isEmpty()) {
                 patient = patientsRed.get();
-                releasedRed = patient.getRoomNumber();
+                int rn = patient.getRoomNumber();
+                releasedRed = releasedRed > rn ? releasedRed : rn;
             } else if (!patientsYellow.isEmpty()) {
                 patient = patientsYellow.get();
-                releasedYellow = patient.getRoomNumber();
-
+                int rn = patient.getRoomNumber();
+                releasedYellow = releasedYellow > rn ? releasedYellow : rn;
             } else if (!patientsBlue.isEmpty()) {
                 patient = patientsBlue.get();
-                releasedBlue = patient.getRoomNumber();
+                int rn = patient.getRoomNumber();
+                releasedBlue = releasedBlue > rn ? releasedBlue : rn;
             }
             if (patient != null)
                 c.signalAll();

@@ -222,7 +222,8 @@ public class MEntranceHall implements IWaitingHall, ICallCenterWaiter {
         assignedChild--;
         if (!childBacklog.isEmpty()) {
             IPatient patient = childBacklog.get();
-            releasedChild = patient.getRoomNumber();
+            int rn = patient.getRoomNumber();
+            releasedChild = releasedChild > rn ? releasedChild : rn;
         }
         childRoomAvailable.signalAll();
     }
@@ -235,7 +236,8 @@ public class MEntranceHall implements IWaitingHall, ICallCenterWaiter {
         assignedAdult--;
         if (!adultBacklog.isEmpty()) {
             IPatient patient = adultBacklog.get();
-            releasedAdult = patient.getRoomNumber();
+            int rn = patient.getRoomNumber();
+            releasedAdult = releasedAdult > rn ? releasedAdult : rn;
         }
         adultRoomAvailable.signalAll();
     }

@@ -144,7 +144,8 @@ public class WaitingRoom implements IWaitingRoom {
             if (!patients.isEmpty()) {
                 IPatient patient = patients.get(); // this notifies the oldest patient, causing them to leave
                                                    // getFollowingContainer
-                released = patient.getRoomNumber();
+                int rn = patient.getRoomNumber();
+                released = released > rn ? released : rn;
                 cCanMove.signalAll();
             }
 
