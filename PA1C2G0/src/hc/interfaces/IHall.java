@@ -11,7 +11,7 @@ public interface IHall extends IContainer{
 
     /**
      * Get the instance this container is a part of
-     * @return Instance container belongs to
+     * @return instance container belongs to
      */
     public HCInstance getInstance();
 }

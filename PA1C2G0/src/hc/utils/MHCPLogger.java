@@ -22,9 +22,9 @@ public class MHCPLogger implements ILogger {
 
     /**
      * Prints the initial log header
-     * @param adults
-     * @param children
-     * @param seats
+     * @param adults number of adults (NoA)
+     * @param children number of children (NoC)
+     * @param seats number of seats (NoS)
      */
     public void  printHeader(int adults, int children, int seats){
 

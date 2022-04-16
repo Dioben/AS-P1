@@ -46,16 +46,16 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
     private final int adults;
     private final int children;
 
-    /** Instances a Waiting Hall
-     *
-     * @param instance Space this hall is contained in
-     * @param after Follow-up container, NULL is expected
+    /**
+     * Instances a Waiting Hall
+     * @param instance space this hall is contained in
+     * @param after follow-up container, <i>NULL</i> is expected
      * @param seatsPerRoom number of seats in each contained room
      * @param adults number of expected adults
      * @param children number of expected children
      * @param nextRoomSlackAdult number of adult slots in next room
      * @param nextRoomSlackChild number of child slots in next room
-     * @param callCenter Entity that must be notified when someone leaves contained subspaces
+     * @param callCenter entity that must be notified when someone leaves contained subspaces
      */
     public MWaitingHall(HCInstance instance, IContainer after, int seatsPerRoom, int adults, int children, int nextRoomSlackAdult, int nextRoomSlackChild, ICallCenterWaiter callCenter){
         this.instance = instance;
@@ -82,7 +82,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
      * Called by patient after they've managed to get to hallway's entrance<p>
      * Will direct patient to correct room but then bar them from entering at all
      * @param patient patient attempting to find next room
-     * @return
+     * @return waiting room matching user with free space
      */
     @Override
     public IContainer getFollowingContainer(IPatient patient) {
@@ -91,10 +91,11 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
         return enterAdultRoom(patient);
     }
 
-    /**Called by patient<p>
+    /**
+     * Called by patient<p>
      * Move into adult room as soon as it is available
      * @return this hall's adult room
-     * @param patient
+     * @param patient patient moving in, current Thread
      */
     private IContainer enterAdultRoom(IPatient patient) {
         rl.lock();
@@ -120,7 +121,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
      * Called by patient<p>
      * Move into child room as soon as it is available
      * @return this hall's child room
-     * @param patient
+     * @param patient patient moving in, current Thread
      */
     private IContainer enterChildRoom(IPatient patient) {
         rl.lock();
@@ -143,7 +144,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
     }
     /**
      * Returns the appropriate release value based on patient severity
-     * @param patient Patient that the return value must be relevant to child/severity wise
+     * @param patient patient that the return value must be relevant to child/severity wise
      * @return WTN of the youngest released user in this severity group
      */
     private int getControlNumber(IPatient patient) {
@@ -167,7 +168,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
 
     /**
      * Returns the user's queue based on severity and age
-     * @param patient
+     * @param patient user
      * @return a backlog for user to wait in
      */
     private IFIFO getBacklog(IPatient patient) {
@@ -336,7 +337,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
 
     /**
      * Called by CCH to notify that some forward movement is expected
-     * @param releasedRoom Type of room, only WTR or MDW variants are valid
+     * @param releasedRoom type of room, only WTR or MDW variants are valid
      */
     @Override
     public void notifyAvailable(ReleasedRoom releasedRoom) {
@@ -419,7 +420,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
 
     /**
      * Allow a waiting room patient to stop waiting without CCH call if we know there's space in MDW
-     * @param room
+     * @param room room that a patient is now waiting inside of
      */
     @Override
     public void notifyWaiting(IWaitingRoom room) {

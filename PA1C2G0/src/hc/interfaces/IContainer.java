@@ -11,16 +11,16 @@ public interface IContainer extends ISeat{
     /**
      * Blocking call made by Patient<p>
      * Patient tries to get access to next room<p>
-     * is not allowed until all required tasks are done.
+     * Is not allowed until all required tasks are done.
      * @param patient patient attempting to find next room
-     * @return The container patient must move into next, <i>NULL</i> when at the end of the line
+     * @return the container patient must move into next, <i>NULL</i> when at the end of the line
      */
     IContainer getFollowingContainer(IPatient patient);
 
 
     /**
      * Get this container's name for logging and UI representation purposes.
-     * @return Container's name
+     * @return container's name
      */
     String getDisplayName();
 
@@ -32,12 +32,12 @@ public interface IContainer extends ISeat{
     Map<String,String[]> getState();
 
     /**
-     * pause any threads involved with this container
+     * Pause any threads involved with this container
      */
     void suspend();
 
     /**
-     * resume any threads involved with this container
+     * Resume any threads involved with this container
      */
     void resume();
 

@@ -34,7 +34,7 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
 
     /**
      * Used to inject a worker inside factory method
-     * @param worker The worker that will reside in room
+     * @param worker the worker that will reside in room
      */
     private void setWorker(IServiceWorker worker){
         this.worker = worker;
@@ -48,10 +48,9 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
 
 
     /**
-     * notifies container that this room is empty<p>
-     * if parent room has anyone waiting they tell that one thread to enter and keep every other one waiting
+     * Notifies container that this room is empty<p>
+     * If parent room has anyone waiting they tell that one thread to enter and keep every other one waiting
      * @param patient individual leaving space
-     *
      */
     @Override
     public void leave(IPatient patient, IContainer next)
@@ -63,8 +62,8 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
     }
 
     /**
-     * notifies current patient that it should start trying to leave<p>
-     * at this stage user is expected to be waiting at getFollowingContainer
+     * Notifies current patient that it should start trying to leave<p>
+     * At this stage user is expected to be waiting at getFollowingContainer
      */
     @Override
     public void notifyDone() {
@@ -79,7 +78,7 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
     /**
      * Locks user up until this room's worker has performed all necessary tasks on them
      * @param patient patient attempting to find next room
-     * @return Next room user must move into
+     * @return next room user must move into
      */
     @Override
     public IContainer getFollowingContainer(IPatient patient) {
@@ -103,7 +102,7 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
     }
     /**
      * This method is locked by the parent container
-     * @param patient the patient attempting to enter the space
+     * @param patient patient attempting to enter the space
      */
     @Override
     public void enter(IPatient patient) {
@@ -129,7 +128,7 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
     }
 
     /**
-     * pause all activity
+     * Pause all activity
      */
     @Override
     public void suspend() {
@@ -151,11 +150,11 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
 
     /**
      * Factory method for generating worker rooms
-     * @param worker Worker type
-     * @param container Room container
-     * @param next Room follow-up container
-     * @param name Room name
-     * @return Room instance or null if no worker provided
+     * @param worker worker type
+     * @param container room container
+     * @param next room follow-up container
+     * @param name room name
+     * @return room instance or null if no worker provided
      */
     public static WorkerRoom getRoom(Worker worker, IHall container, IContainer next, String name){
         if (worker==null)

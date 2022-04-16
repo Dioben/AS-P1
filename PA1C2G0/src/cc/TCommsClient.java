@@ -134,7 +134,7 @@ public class TCommsClient extends Thread {
 
     /**
      * Authorize a given room to notify their vacancy
-     * @param id The name of the authorized room
+     * @param id the name of the authorized room
      */
     public void authorize(String id) {
         out.println("AUTH " + id);

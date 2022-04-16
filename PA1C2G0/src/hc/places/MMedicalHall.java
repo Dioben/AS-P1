@@ -31,9 +31,9 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
 
     /**
      * Instances a Medical Hall
-     * @param instance Instance this Medical Hall is a part of
-     * @param after Follow-up room, a PYH is expected
-     * @param callCenter Entity that must be notified when someone leaves contained subspaces
+     * @param instance instance this Medical Hall is a part of
+     * @param after follow-up room, a PYH is expected
+     * @param callCenter entity that must be notified when someone leaves contained subspaces
      */
     public MMedicalHall(HCInstance instance, IContainer after, ICallCenterWaiter callCenter){
         this.instance = instance;
@@ -52,7 +52,7 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
      * Called by patient after they've managed to get to hallway's entrance<p>
      * Will direct patient to correct room but then bar them from entering at all<p>
      * @param patient patient attempting to find next room
-     * @return Waiting room matching user
+     * @return waiting room matching user
      */
     @Override
     public IContainer getFollowingContainer(IPatient patient) {
@@ -252,7 +252,7 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
 
     /**
      * Allow a waiting room patient to stop waiting without CCH call if we know there's space in MDR
-     * @param room
+     * @param room waiting room
      */
     @Override
     public void notifyWaiting(IWaitingRoom room) {

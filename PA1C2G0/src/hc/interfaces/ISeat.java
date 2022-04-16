@@ -13,8 +13,8 @@ public interface ISeat {
 
     /**
      * Notify given container that a patient has left it
-     * @param patient Individual leaving space
-     * @param next Space being vacated
+     * @param patient individual leaving space
+     * @param next space being vacated
      */
     void leave(IPatient patient, IContainer next);
 }

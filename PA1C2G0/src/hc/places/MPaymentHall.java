@@ -23,10 +23,10 @@ public class MPaymentHall implements IHall {
     private final MFIFO<IPatient> backlog;
     private final String nextRoomName = "OUT";
 
-    /**Instances a Payment Hall
-     *
-     * @param instance Space this hall is contained in
-     * @param after Follow-up room, NULL is expected
+    /**
+     * Instances a Payment Hall
+     * @param instance space this hall is contained in
+     * @param after follow-up room, NULL is expected
      * @param people amount of people expected to pass through this room
      */
     public MPaymentHall(HCInstance instance,IContainer after, int people){
@@ -42,7 +42,7 @@ public class MPaymentHall implements IHall {
      * Called by patient after they've managed to get to hallway's entrance<p>
      * Will return the cashier room once patient's turn is up
      * @param patient patient attempting to find next room
-     * @return
+     * @return cashier room
      */
     @Override
     public IContainer getFollowingContainer(IPatient patient) {

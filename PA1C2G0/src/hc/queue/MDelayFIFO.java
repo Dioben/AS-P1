@@ -5,10 +5,10 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Similar to normal MFIFO
- * does not signal after get
+ * Similar to normal MFIFO<p>
+ * Does not signal after get<p>
  * Instead a call to remove() with the given object must be used to release objects
- * @param <T>
+ * @param <T> the class of the contained object
  */
 public class MDelayFIFO<T> implements hc.interfaces.IDelayFIFO<T> {
 
@@ -78,7 +78,7 @@ public class MDelayFIFO<T> implements hc.interfaces.IDelayFIFO<T> {
 
     /**
      * Signals that one of the objects that has been gotten before has now actually left
-     * it does not matter which one left
+     * It does not matter which one left
      */
     @Override
     public void remove(){

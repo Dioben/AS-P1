@@ -47,8 +47,8 @@ public class WaitingRoom implements IWaitingRoom {
     }
 
     /**
-     * called by patient thread<p>
-     * gets next room only allowed through
+     * Called by patient thread<p>
+     * Gets next room only allowed through
      * @param patient patient attempting to find next room
      * @return the room patient must move into next
      */
@@ -72,10 +72,9 @@ public class WaitingRoom implements IWaitingRoom {
     }
 
     /**
-     * Called by patient thread
+     * Called by patient thread<p>
      * Blocks on attempting to enter FIFO if full
-     *
-     * @param tPatient
+     * @param tPatient patient thread
      */
     @Override
     public void enter(IPatient tPatient) {
@@ -130,7 +129,6 @@ public class WaitingRoom implements IWaitingRoom {
     /**
      * Called from monitor only
      * Causes this room to tell the oldest user to get out
-     *
      */
     @Override
     public void notifyDone() {
@@ -149,7 +147,7 @@ public class WaitingRoom implements IWaitingRoom {
 
     /**
      * Returns next expected departure
-     * @return patient, or NULL if empty
+     * @return patient, or <i>NULL</i> if empty
      */
 
     @Override
@@ -160,7 +158,7 @@ public class WaitingRoom implements IWaitingRoom {
 
     /**
      * Overrides the next field in cases where it might be ambiguous
-     * @param next The container to set as following after this one
+     * @param next the container to set as following after this one
      */
     @Override
     public void setNext(IContainer next) {

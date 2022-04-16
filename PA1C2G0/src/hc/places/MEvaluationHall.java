@@ -18,11 +18,11 @@ public class MEvaluationHall implements IHall {
     private final ICallCenterWaiter callCenter;
     private final String nextHallName;
 
-    /** Instances an Evaluation Hall
-     *
-     * @param instance Space we are working inside of
-     * @param after Following container, a WTR is expected
-     * @param callCenter Entity that must be notified when someone leaves this space
+    /**
+     * Instances an Evaluation Hall
+     * @param instance space we are working inside of
+     * @param after following container, a WTR is expected
+     * @param callCenter entity that must be notified when someone leaves this space
      */
     public MEvaluationHall(HCInstance instance, IContainer after, ICallCenterWaiter callCenter){
         this.instance = instance;
@@ -42,7 +42,7 @@ public class MEvaluationHall implements IHall {
      * Will direct patient to correct room<p>
      * If a patient has been allowed in here at all there IS an available room therefore there is no need to halt them
      * @param patient patient attempting to find next room
-     * @return
+     * @return empty evaluation room
      */
     @Override
     public IContainer getFollowingContainer(IPatient patient) {
@@ -71,7 +71,7 @@ public class MEvaluationHall implements IHall {
 
     /**
      * Gets current state of all rooms inside
-     * @return A map linking room name to list of patients inside with length 1, may contain null
+     * @return a map linking room name to list of patients inside with length 1, may contain null
      */
     @Override
     public Map<String, String[]> getState() {
@@ -113,8 +113,8 @@ public class MEvaluationHall implements IHall {
 
     /**
      * Called by contained room to notify that patient is out<p>
-     * marks room as available again<p>
-     * signals Call center
+     * Marks room as available again<p>
+     * Signals Call center
      * @param room identifies room that has finished processing
      */
     @Override
@@ -142,7 +142,7 @@ public class MEvaluationHall implements IHall {
 
     /**
      * Allow patient to enter this Hall<p>
-     * no additional processing required
+     * No additional processing required
      * @param patient the patient attempting to enter the space
      */
     @Override

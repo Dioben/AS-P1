@@ -20,9 +20,9 @@ public abstract class TServiceWorker extends Thread implements hc.interfaces.ISe
 
     /**
      * Waits for a customer to be assigned to itself<p>
-     * serves customer<p>
-     * removes customer from self<p>
-     * warns container that they're done
+     * Serves customer<p>
+     * Removes customer from self<p>
+     * Warns container that they're done
      */
     private void handleNextCostumer() {
         try {
@@ -51,7 +51,7 @@ public abstract class TServiceWorker extends Thread implements hc.interfaces.ISe
     }
 
     /**
-     * infinitely waits for next patient to show up
+     * Infinitely waits for next patient to show up
      */
     public void run(){
         while(!Thread.interrupted()){

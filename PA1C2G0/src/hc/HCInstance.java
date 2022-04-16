@@ -36,8 +36,8 @@ public class HCInstance {
     private final IPatient[] patients;
     private final GUI display;
 
-    /**Instance a health center
-     *
+    /**
+     * Instance a health center
      * @param adults number of adults
      * @param children number of children
      * @param seats number of seats
@@ -122,8 +122,8 @@ public class HCInstance {
     }
 
     /**
-     * Propagate a movement allowance notification from cooms
-     * @param roomID
+     * Propagate a movement allowance notification from rooms
+     * @param roomID name of the room
      */
     public void permitNotification(String roomID) {
         callCenter.releaseRequest(roomID);
@@ -193,7 +193,6 @@ public class HCInstance {
 
     /**
      * Gets all room statuses and passes them to logger/UI
-     *
      */
     public void notifyMovement(String patient, String room){
         if (room!=null) //movements that don't warrant logging can happen

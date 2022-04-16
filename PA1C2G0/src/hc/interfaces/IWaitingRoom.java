@@ -9,7 +9,7 @@ public interface IWaitingRoom extends IRoom{
     /**
      * Returns the next leaving patient in this room
      * Used to evaluate which room to release in EntranceHall
-     * @return next patient to leave or null
+     * @return next patient to leave or <i>NULL</i>
      */
     public IPatient getExpected();
 }

@@ -35,12 +35,12 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
 
     /**
      * Instance an entrance hall
-     * @param instance Containing instance
-     * @param after Following Hall, EVR is expected but not required
-     * @param seatsPerRoom Number of seats in the waiting rooms
-     * @param adults Expected adult count
-     * @param children Expected child count
-     * @param nextRoomSlack How many rooms next container has
+     * @param instance containing instance
+     * @param after following Hall, EVR is expected but not required
+     * @param seatsPerRoom number of seats in the waiting rooms
+     * @param adults expected adult count
+     * @param children expected child count
+     * @param nextRoomSlack how many rooms next container has
      */
     public MEntranceHall(HCInstance instance, IContainer after, int seatsPerRoom, int adults, int children, int nextRoomSlack){
         this.instance = instance;
@@ -61,7 +61,7 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
      * Called by patient after they've managed to get to hallway's entrance<p>
      * Will direct patient to correct room but then bar them from entering at all<p>
      * @param patient patient attempting to find next room
-     * @return
+     * @return entrance hall room matching user and with free space
      */
     @Override
     public IContainer getFollowingContainer(IPatient patient) {
@@ -70,7 +70,8 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
         return enterAdultRoom(patient);
     }
 
-    /**Called by patient<p>
+    /**
+     * Called by patient<p>
      * Move into adult room as soon as it is available
      * @return this hall's adult room
      * @param patient patient moving in, current Thread
@@ -126,7 +127,7 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
     }
 
     /**
-     * @return Mapping of contained room names to patient name array, one key per room
+     * @return mapping of contained room names to patient name array, one key per room
      */
     @Override
     public Map<String, String[]> getState() {
@@ -185,7 +186,7 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
 
     /**
      * Called by contained room to notify that patient is out
-     * @param room Identifies room that has finished processing
+     * @param room identifies room that has finished processing
      */
     @Override
     public void notifyDone(IRoom room, IPatient patient) {
@@ -227,7 +228,7 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
 
     /**
      * Called by CCH to notify that some forward movement is expected
-     * @param releasedRoom The type of room that was released, anything except EVH will throw a Runtime Exception
+     * @param releasedRoom the type of room that was released, anything except EVH will throw a Runtime Exception
      */
     @Override
     public void notifyAvailable(ReleasedRoom releasedRoom) {
@@ -294,7 +295,7 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
     /**
      * Notifies that a patient has left this hall and entered the waiting rooms<p>
      * As the counters were preemptively increased earlier and this class does not signal Call Center this function only notifies instance to log changes
-     * @param patient Individual leaving space
+     * @param patient individual leaving space
      */
     @Override
     public void leave(IPatient patient,IContainer next) {
@@ -303,7 +304,7 @@ public class MEntranceHall implements IWaitingHall,ICallCenterWaiter {
 
     /**
      * Allow a waiting room patient to stop waiting without CCH call if we know there's space in EVH
-     * @param room Room that a patient is now waiting inside of
+     * @param room room that a patient is now waiting inside of
      */
     @Override
     public void notifyWaiting(IWaitingRoom room) {

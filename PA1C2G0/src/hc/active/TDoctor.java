@@ -9,8 +9,8 @@ public class TDoctor extends TServiceWorker{
 
     /**
      * Instance Doctor Worker, this subclass of ServiceWorker waits <i>appointment</i> time
-     * @param timer The wait interval provider class
-     * @param surroundings The room this worker is a part of
+     * @param timer the wait interval provider class
+     * @param surroundings the room this worker is a part of
      */
     public TDoctor(Timer timer, IWorkerRoom surroundings) {
         super(timer, surroundings);
@@ -19,7 +19,7 @@ public class TDoctor extends TServiceWorker{
     @Override
     /**
      * Wait for a given <i>appointment</i> time then return
-     * @param patient Severity is set to UNASSIGNED
+     * @param patient severity is set to UNASSIGNED
      */
     void serveCustomer(IPatient patient) {
         try {

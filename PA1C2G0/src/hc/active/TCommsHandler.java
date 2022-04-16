@@ -34,8 +34,8 @@ public class TCommsHandler extends Thread {
     }
 
     /**
-     * repeatedly gets next socket instruction and parses it<p>
-     * valid commands:<p>
+     * Repeatedly gets next socket instruction and parses it<p>
+     * Valid commands:<p>
      * START {@literal <Parameters>}<p>
      * RESUME<p>
      * SUSPEND<p>
@@ -109,8 +109,8 @@ public class TCommsHandler extends Thread {
     }
 
     /**
-     * creates and starts an HC instance based on command
-     * @param command Full command string passed to socket, parsing is done internally
+     * Creates and starts an HC instance based on command
+     * @param command full command string passed to socket, parsing is done internally
      */
     private void startInstance(String[] command) {
         if (instance != null)
@@ -131,8 +131,7 @@ public class TCommsHandler extends Thread {
 
     /**
      * Request permission for a patient to move in manual mode
-     * @param roomName Name of room requesting movement
-     *
+     * @param roomName name of room requesting movement
      */
     public void requestPermission(String roomName) {
         writeLock.lock();

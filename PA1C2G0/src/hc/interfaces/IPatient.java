@@ -16,7 +16,7 @@ public interface IPatient extends Runnable{
 
     /**
      * Used to get current room priority
-     * @return int representing room priority
+     * @return <b>int</b> representing room priority
      */
     int getRoomNumber();
 

@@ -31,7 +31,7 @@ public class MTCallCenter extends Thread implements ICallCenterWaiter{
 
     /**
      * Sets this class's operation mode, only ever called by comms thread so safe by default
-     * @param b True for manual operation, False for automatic mode
+     * @param b true for manual operation, False for automatic mode
      */
     public void setManual(boolean b) {
     manual = b;
@@ -40,7 +40,7 @@ public class MTCallCenter extends Thread implements ICallCenterWaiter{
     /**
      * Registers a new movement request from a room that was freed up<p>
      * Movement will be sent to client instead if this object is in manual mode
-     * @param room The room type that got freed up
+     * @param room the room type that got freed up
      */
     public void notifyAvailable(ReleasedRoom room){
         if (!manual)
@@ -51,10 +51,10 @@ public class MTCallCenter extends Thread implements ICallCenterWaiter{
     }
 
 
-    /**Called by communication socket after movement is approved
+    /**
+     * Called by communication socket after movement is approved
      * Releases ONE patient request for the given room
-     *
-     * @param ID: The allowed room's name
+     * @param ID the allowed room's name
      */
     public void releaseRequest(String ID){
         switch (ID){
@@ -88,8 +88,7 @@ public class MTCallCenter extends Thread implements ICallCenterWaiter{
     /**
      * Gets the latest request<p>
      * Selects appropriate hall<p>
-     * Notifies highest priority patient in hall if any
-     *
+     * Notifies the highest priority patient in hall if any
      */
     public void run(){
         ReleasedRoom handling;

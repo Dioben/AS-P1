@@ -97,7 +97,7 @@ public class TPatient extends Thread implements IPatient {
 
     /**
      * Only used in Entrance Hall to decide whether to release an adult or a child based on lowest value.<p>
-     * @return This patient's serial ID for Entrance Hall entry
+     * @return this patient's serial ID for Entrance Hall entry
      */
     @Override
     public int getEntranceNumber() {
@@ -107,7 +107,7 @@ public class TPatient extends Thread implements IPatient {
     /**
      * Used by Nurse entity after evaluation to set user status<p>
      * Used by Doctor entity to dismiss severity post-treatment<p>
-     * @param severity User condition severity
+     * @param severity user condition severity
      */
     public void setSeverity(Severity severity){
         this.severity=severity;
@@ -140,9 +140,9 @@ public class TPatient extends Thread implements IPatient {
 
     /**
      * Used in the majority of rooms to get user's entrance serial ID.<p>
-     * Checked to assess whether a user is allowed to leave  a room.<p>
+     * Checked to assess whether a user is allowed to leave a room.<p>
      * This value can be set by the setter function or any other room value setter function.
-     * @return
+     * @return room number
      */
     @Override
     public int getRoomNumber() {
@@ -151,7 +151,7 @@ public class TPatient extends Thread implements IPatient {
 
     /**
      * Set a user's room priority, generally with a serial ID<p>
-     * @param entered User priority in this given room
+     * @param entered user priority in this given room
      */
     @Override
     public void setRoomNumber(int entered) {

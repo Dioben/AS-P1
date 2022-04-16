@@ -7,7 +7,7 @@ package hc.interfaces;
 public interface IWaitingHall extends IHall{
     /**
      * Notify container that a user is now contained within this room, in case container wants to allow them to pass instantly
-     * @param room Room that has a new presence
+     * @param room room that has a new presence
      */
     void notifyWaiting(IWaitingRoom room);
 }
