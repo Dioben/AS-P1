@@ -1,6 +1,6 @@
 package cc;
 
-import hc.MFIFO;
+import hc.queue.MFIFO;
 import hc.interfaces.IFIFO;
 
 import javax.swing.*;

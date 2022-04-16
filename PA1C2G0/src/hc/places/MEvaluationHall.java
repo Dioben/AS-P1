@@ -4,7 +4,6 @@ import hc.HCInstance;
 import hc.enums.ReleasedRoom;
 import hc.enums.Worker;
 import hc.interfaces.*;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
@@ -19,6 +18,12 @@ public class MEvaluationHall implements IHall {
     private final ICallCenterWaiter callCenter;
     private final String nextHallName;
 
+    /** Instances an Evaluation Hall
+     *
+     * @param instance Space we are working inside of
+     * @param after Following container, a WTR is expected
+     * @param callCenter Entity that must be notified when someone leaves this space
+     */
     public MEvaluationHall(HCInstance instance, IContainer after, ICallCenterWaiter callCenter){
         this.instance = instance;
         available = new boolean[]{true, true, true, true};
@@ -33,8 +38,8 @@ public class MEvaluationHall implements IHall {
     }
 
     /**
-     * Called by patient after they've managed to get to hallway's entrance
-     * Will direct patient to correct room
+     * Called by patient after they've managed to get to hallway's entrance<p>
+     * Will direct patient to correct room<p>
      * If a patient has been allowed in here at all there IS an available room therefore there is no need to halt them
      * @param patient patient attempting to find next room
      * @return
@@ -77,7 +82,7 @@ public class MEvaluationHall implements IHall {
     }
 
     /**
-     * Pause all contained threads
+     * Pause all contained threads<p>
      * Due to patient pooling this only affects the contained nurses
      */
     @Override
@@ -88,7 +93,7 @@ public class MEvaluationHall implements IHall {
     }
 
     /**
-     * Resume all contained threads
+     * Resume all contained threads<p>
      * Due to patient pooling this only affects the contained nurses
      */
     @Override
@@ -107,7 +112,9 @@ public class MEvaluationHall implements IHall {
     }
 
     /**
-     * Called by contained room to notify that patient is out, marks room as available again, should signal Call center
+     * Called by contained room to notify that patient is out<p>
+     * marks room as available again<p>
+     * signals Call center
      * @param room identifies room that has finished processing
      */
     @Override
@@ -134,7 +141,7 @@ public class MEvaluationHall implements IHall {
     }
 
     /**
-     * Allow patient to enter this Hall
+     * Allow patient to enter this Hall<p>
      * no additional processing required
      * @param patient the patient attempting to enter the space
      */
@@ -143,8 +150,8 @@ public class MEvaluationHall implements IHall {
     }
 
     /**
-     * Notifies that a patient has left this hall and entered the evaluation rooms
-     * Room availability has already been changed to false, as such this method does not need to do anything
+     * Notifies that a patient has left this hall and entered the evaluation rooms<p>
+     * Room availability has already been changed to false, as such this method only needs to do logging
      * @param patient individual leaving space
      */
     @Override

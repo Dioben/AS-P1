@@ -1,7 +1,7 @@
 package hc.places;
 
 import hc.HCInstance;
-import hc.MFIFO;
+import hc.queue.MFIFO;
 import hc.enums.ReleasedRoom;
 import hc.enums.Severity;
 import hc.interfaces.*;
@@ -46,6 +46,17 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
     private final int adults;
     private final int children;
 
+    /** Instances a Waiting Hall
+     *
+     * @param instance Space this hall is contained in
+     * @param after Follow-up container, NULL is expected
+     * @param seatsPerRoom number of seats in each contained room
+     * @param adults number of expected adults
+     * @param children number of expected children
+     * @param nextRoomSlackAdult number of adult slots in next room
+     * @param nextRoomSlackChild number of child slots in next room
+     * @param callCenter Entity that must be notified when someone leaves contained subspaces
+     */
     public MWaitingHall(HCInstance instance, IContainer after, int seatsPerRoom, int adults, int children, int nextRoomSlackAdult, int nextRoomSlackChild, ICallCenterWaiter callCenter){
         this.instance = instance;
         childRoom = new PriorityWaitingRoom(this,after,"WTR2",seatsPerRoom);
@@ -68,7 +79,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
     }
 
     /**
-     * Called by patient after they've managed to get to hallway's entrance
+     * Called by patient after they've managed to get to hallway's entrance<p>
      * Will direct patient to correct room but then bar them from entering at all
      * @param patient patient attempting to find next room
      * @return
@@ -80,7 +91,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
         return enterAdultRoom(patient);
     }
 
-    /**Called by patient
+    /**Called by patient<p>
      * Move into adult room as soon as it is available
      * @return this hall's adult room
      * @param patient
@@ -106,7 +117,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
 
     }
     /**
-     * Called by patient
+     * Called by patient<p>
      * Move into child room as soon as it is available
      * @return this hall's child room
      * @param patient
@@ -132,7 +143,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
     }
     /**
      * Returns the appropriate release value based on patient severity
-     * @param patient
+     * @param patient Patient that the return value must be relevant to child/severity wise
      * @return WTN of the youngest released user in this severity group
      */
     private int getControlNumber(IPatient patient) {
@@ -155,7 +166,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
     }
 
     /**
-     * Returns the user's queue based on severity
+     * Returns the user's queue based on severity and age
      * @param patient
      * @return a backlog for user to wait in
      */
@@ -192,9 +203,9 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
     }
 
     /**
-     * Reports this container's state for UI purposes, prioritizing older items
+     * Reports this container's state for UI purposes, prioritizing older items<p>
      * Key WTH will return 6 items, 3 children first then 3 adults
-     * @return
+     * @return Map(Room Name, patientID[])
      */
     @Override
     public Map<String, String[]> getState() {
@@ -240,7 +251,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
     }
 
     /**
-     * Pause all contained threads
+     * Pause all contained threads<p>
      * Due to patient pooling this method does not actually do anything
      */
     @Override
@@ -249,7 +260,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
     }
 
     /**
-     * Resume all contained threads
+     * Resume all contained threads<p>
      * Due to patient pooling this method does not actually do anything
      */
     @Override
@@ -280,7 +291,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
     }
 
     /**
-     * Identifies "oldest" child patient in queue if they exist and tells them to leave, updates containment state
+     * Identifies highest-priority child patient in queue if they exist and tells them to leave, updates containment state<p>
      * Locked from parent method
      */
     private void handleChildRoomLeave() {
@@ -301,7 +312,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
     }
 
     /**
-     * Identifies "oldest" adult patient in queue if they exist and tells them to leave, updates containment state
+     * Identifies highest-priority adult patient in queue if they exist and tells them to leave, updates containment state<p>
      * Locked from parent method
      */
     private void handleAdultRoomLeave() {
@@ -325,7 +336,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
 
     /**
      * Called by CCH to notify that some forward movement is expected
-     * @param releasedRoom
+     * @param releasedRoom Type of room, only WTR or MDW variants are valid
      */
     @Override
     public void notifyAvailable(ReleasedRoom releasedRoom) {
@@ -384,7 +395,7 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
     }
 
     /**
-     * Allow patient to enter this Hall
+     * Allow patient to enter this Hall<p>
      * Automatically sets their room number and increments counter
      * @param patient the patient attempting to enter the space
      */
@@ -392,13 +403,12 @@ public class MWaitingHall implements IWaitingHall,ICallCenterWaiter {
     public void enter(IPatient patient) {
         rl.lock();
         patient.setWaitingNumber(entered);
-        patient.setRoomNumber(entered);
         entered++;
         rl.unlock();
     }
 
     /**
-     * Notifies that a patient has left this hall and entered the waiting rooms
+     * Notifies that a patient has left this hall and entered the waiting rooms<p>
      * As the counters were preemptively increased earlier and this class does not signal Call Center this function does nothing
      * @param patient individual leaving space
      */

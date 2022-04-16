@@ -1,4 +1,4 @@
-package hc;
+package hc.utils;
 
 import hc.interfaces.ILogger;
 
@@ -20,6 +20,12 @@ public class MHCPLogger implements ILogger {
 
     };
 
+    /**
+     * Prints the initial log header
+     * @param adults
+     * @param children
+     * @param seats
+     */
     public void  printHeader(int adults, int children, int seats){
 
         String output = "NoA:"+adults+", NoC:"+children+", NoS: "+seats+"\n"+
@@ -30,6 +36,12 @@ public class MHCPLogger implements ILogger {
         loggerAccess.unlock();
 
     }
+
+    /**
+     * Prints a position update for a given patient string in a given header column
+     * @param place header column
+     * @param patient patient string
+     */
     public void printPosition(String place, String patient){
         StringBuilder outputString = new StringBuilder();
         outputString.append("    | "); //STT is always empty in these
@@ -86,6 +98,10 @@ public class MHCPLogger implements ILogger {
         return patient;
     }
 
+    /**
+     * Prints a given state change notification
+     * @param state state name
+     */
     public void printState(String state){
         String output = state.toUpperCase().substring(0,3)+" |             |                     |               |                         |     |    ";
         loggerAccess.lock();

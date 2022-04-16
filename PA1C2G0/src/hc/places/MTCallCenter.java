@@ -1,18 +1,18 @@
 package hc.places;
 
-import hc.MFIFO;
+import hc.queue.MFIFO;
 import hc.active.TCommsHandler;
 import hc.enums.ReleasedRoom;
 import hc.interfaces.ICallCenterWaiter;
 import hc.interfaces.IFIFO;
 
 /**
- * Class responsible for propagating availability notifications
- * Stores a queue of tasks
- * Supports manual/auto mode
+ * Class responsible for propagating availability notifications<p>
+ * Stores a queue of tasks<p>
+ * Supports manual/auto mode<p>
  * In manual mode requests are propagated to controller process and echoed after user approval
  */
-public class MCallCenter extends Thread implements ICallCenterWaiter{
+public class MTCallCenter extends Thread implements ICallCenterWaiter{
 
     private final TCommsHandler comms;
     private final IFIFO<ReleasedRoom> requests; //this fifo provides all the synchronicity we need
@@ -22,7 +22,7 @@ public class MCallCenter extends Thread implements ICallCenterWaiter{
     private ICallCenterWaiter medicalHall;
 
 
-    public MCallCenter(boolean manual, TCommsHandler tCommsHandler,int people){
+    public MTCallCenter(boolean manual, TCommsHandler tCommsHandler, int people){
 
         this.manual = manual;
         comms = tCommsHandler;
@@ -30,7 +30,7 @@ public class MCallCenter extends Thread implements ICallCenterWaiter{
     }
 
     /**
-     * Sets this class's operation mode, only ever called by comms so safe by default
+     * Sets this class's operation mode, only ever called by comms thread so safe by default
      * @param b True for manual operation, False for automatic mode
      */
     public void setManual(boolean b) {
@@ -38,7 +38,8 @@ public class MCallCenter extends Thread implements ICallCenterWaiter{
     }
 
     /**
-     * Registers a new movement request from a room that got was freed up
+     * Registers a new movement request from a room that was freed up<p>
+     * Movement will be sent to client instead if this object is in manual mode
      * @param room The room type that got freed up
      */
     public void notifyAvailable(ReleasedRoom room){
@@ -85,9 +86,9 @@ public class MCallCenter extends Thread implements ICallCenterWaiter{
 
 
     /**
-     * gets the latest request
-     * lock into appropriate hall
-     * notify oldest patient in hall if any
+     * Gets the latest request<p>
+     * Selects appropriate hall<p>
+     * Notifies highest priority patient in hall if any
      *
      */
     public void run(){
@@ -114,7 +115,7 @@ public class MCallCenter extends Thread implements ICallCenterWaiter{
     }
 
     /**
-     * Called by instance to claim that simulation has finished running
+     * Called by instance to state that simulation has finished running
      */
     public void notifyOver(){
         comms.notifyDone();

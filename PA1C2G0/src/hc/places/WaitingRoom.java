@@ -1,6 +1,6 @@
 package hc.places;
 
-import hc.MDelayFIFO;
+import hc.queue.MDelayFIFO;
 import hc.interfaces.*;
 
 import java.util.HashMap;
@@ -11,6 +11,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Class for rooms that hold several users
+ * Uses a single FIFO for removal logic
  */
 public class WaitingRoom implements IWaitingRoom {
     private final IWaitingHall container;
@@ -34,9 +35,9 @@ public class WaitingRoom implements IWaitingRoom {
         cCanMove = rl.newCondition();
     }
 
-
     /**
-     * Remove user -> at this point they have been notified and are leaving
+     * Remove user<p>
+     * At this point the user has called enter() on their next container<p>
      * This is called by the patient thread itself
      */
     @Override
@@ -46,8 +47,8 @@ public class WaitingRoom implements IWaitingRoom {
     }
 
     /**
-     * called by patient thread
-     * uses non-sync variable released but only reads it
+     * called by patient thread<p>
+     * gets next room only allowed through
      * @param patient patient attempting to find next room
      * @return the room patient must move into next
      */
@@ -72,7 +73,7 @@ public class WaitingRoom implements IWaitingRoom {
 
     /**
      * Called by patient thread
-     * Blocks on attempting to enter FIFO
+     * Blocks on attempting to enter FIFO if full
      *
      * @param tPatient
      */
@@ -87,7 +88,10 @@ public class WaitingRoom implements IWaitingRoom {
         return name;
     }
 
-
+    /**
+     * Maps all patients in this room by descending ID
+     * @return Map(room name, patientID[])
+     */
     @Override
     public Map<String, String[]> getState() {
         HashMap<String,String[]> map = new HashMap();
@@ -142,6 +146,11 @@ public class WaitingRoom implements IWaitingRoom {
             rl.unlock();
         }
     }
+
+    /**
+     * Returns next expected departure
+     * @return patient, or NULL if empty
+     */
 
     @Override
     public IPatient getExpected() {

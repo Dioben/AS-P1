@@ -5,7 +5,7 @@ import hc.GUI;
 import java.io.IOException;
 import java.net.ServerSocket;
 
-/**
+/** Main server class for this project
  * Endlessly accepts connection requests and deploys handler threads
  */
 public class TCommsServer extends Thread {

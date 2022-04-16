@@ -48,7 +48,7 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
 
 
     /**
-     * notifies container that this room is empty
+     * notifies container that this room is empty<p>
      * if parent room has anyone waiting they tell that one thread to enter and keep every other one waiting
      * @param patient individual leaving space
      *
@@ -63,7 +63,7 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
     }
 
     /**
-     * notifies current patient that it should start trying to leave
+     * notifies current patient that it should start trying to leave<p>
      * at this stage user is expected to be waiting at getFollowingContainer
      */
     @Override
@@ -76,6 +76,11 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
         }
     }
 
+    /**
+     * Locks user up until this room's worker has performed all necessary tasks on them
+     * @param patient patient attempting to find next room
+     * @return Next room user must move into
+     */
     @Override
     public IContainer getFollowingContainer(IPatient patient) {
         try {
@@ -113,8 +118,7 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
 
 
     /**
-     *
-     * @return string detailing room's contained patient
+     * @return Map(room name, patientId[1])
      */
     @Override
     public Map<String, String[]> getState() {
@@ -145,6 +149,14 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
         worker.interrupt();
     }
 
+    /**
+     * Factory method for generating worker rooms
+     * @param worker Worker type
+     * @param container Room container
+     * @param next Room follow-up container
+     * @param name Room name
+     * @return Room instance or null if no worker provided
+     */
     public static WorkerRoom getRoom(Worker worker, IHall container, IContainer next, String name){
         if (worker==null)
             return null;

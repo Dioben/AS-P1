@@ -19,7 +19,7 @@ public class TCommsClient extends Thread {
     private int port;
     private GUI gui;
 
-    /**
+    /**Instances a comms client that connects to a remote HCP server
      *
      * @param host host of the server, ex: localhost, google.com
      * @param port host server port number
@@ -30,11 +30,11 @@ public class TCommsClient extends Thread {
         this.gui = gui;
     }
 
-    @Override
     /**
-     * establishes connection to server and attempts to parse any data received
-     * Receives movement requisitions (REQ) or finish notifications (DONE)
+     * Establishes connection to server and attempts to parse any data received
+     * Receives movement requisitions (REQ  {@literal <ROOM>}; ) or finish notifications (DONE)
      */
+    @Override
     public void run() {
         try {
             comms = new Socket(host, port);
@@ -90,28 +90,28 @@ public class TCommsClient extends Thread {
     }
 
     /**
-     * unpauses simulation
+     * Unpauses simulation
      */
     public void resumeSim() {
         out.println("RESUME");
     }
 
     /**
-     * pauses simulation
+     * Pauses simulation
      */
     public void pauseSim() {
         out.println("SUSPEND");
     }
 
     /**
-     * stops simulation
+     * Stops simulation
      */
     public void stopSim() {
         out.println("STOP");
     }
 
     /**
-     * stops simulation, kills both processes
+     * Stops simulation, kills both processes
      */
     public void endSim() {
         out.println("END");
@@ -119,22 +119,22 @@ public class TCommsClient extends Thread {
     }
 
     /**
-     * sets control mode to automatic
+     * Sets control mode to automatic
      */
     public void SwapAuto() {
         out.println("SWAP AUTO");
     }
 
     /**
-     * sets control mode to manual
+     * Sets control mode to manual
      */
     public void SwapManual() {
         out.println("SWAP MANUAL");
     }
 
     /**
-     * Authorize a given user to transition rooms
-     * @param id the identifier for the given user
+     * Authorize a given room to notify their vacancy
+     * @param id The name of the authorized room
      */
     public void authorize(String id) {
         out.println("AUTH " + id);

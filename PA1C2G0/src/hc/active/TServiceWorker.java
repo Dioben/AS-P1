@@ -1,6 +1,6 @@
 package hc.active;
 
-import hc.Timer;
+import hc.utils.Timer;
 import hc.interfaces.IPatient;
 import hc.interfaces.IWorkerRoom;
 
@@ -12,16 +12,16 @@ import java.util.concurrent.locks.ReentrantLock;
  * Implements every method except ServeCustomer()
  */
 public abstract class TServiceWorker extends Thread implements hc.interfaces.IServiceWorker {
-    protected Timer timer;
+    protected Timer timer;//protected for use in subclasses
     private final IWorkerRoom surroundings;
     private IPatient customer;
     private final ReentrantLock rl;
     private final Condition c;
 
     /**
-     * Waits for a customer to be assigned to itself
-     * serves customer
-     * removes customer from self
+     * Waits for a customer to be assigned to itself<p>
+     * serves customer<p>
+     * removes customer from self<p>
      * warns container that they're done
      */
     private void handleNextCostumer() {
