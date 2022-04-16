@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
 import static java.lang.Math.ceil;
@@ -23,7 +24,7 @@ public class TGUI extends Thread {
     private JLayeredPane[] enHCRSeats;
     private JLayeredPane[] wHARSeats;
     private JLayeredPane[] wHCRSeats;
-    private final JLabel[] loadedIcons = new JLabel[56];
+    private final ImageIcon[] loadedIcons = new ImageIcon[8];
     private final JLabel[] loadedIconLabels = new JLabel[700];
 
     private JPanel mainPanel;
@@ -126,6 +127,15 @@ public class TGUI extends Thread {
         ImageIcon loading = new ImageIcon("resources/loading.gif");
         loadingLabel.setIcon(loading);
         setBorders();
+
+        String[] imagePaths = new String[] {
+                "resources/child.png", "resources/adult.png",
+                "resources/childRed.png", "resources/adultRed.png",
+                "resources/childYellow.png", "resources/adultYellow.png",
+                "resources/childBlue.png", "resources/adultBlue.png"
+        };
+        for (int i = 0; i < 8; i++)
+            loadedIcons[i] = new ImageIcon(imagePaths[i]);
 
         confirmLoginButton.addActionListener(new ActionListener() {
             @Override
@@ -381,7 +391,16 @@ public class TGUI extends Thread {
             seat.removeAll();
             seat.revalidate();
             if (value != null && !value.isBlank())
-                setIcon(seat, value);
+                try {
+                    SwingUtilities.invokeAndWait(new Runnable() {
+                        @Override
+                        public void run() {
+                            setIcon(seat, value);
+                        }
+                    });
+                } catch (InterruptedException | InvocationTargetException e) {
+                    e.printStackTrace();
+                }
             else
                 seat.repaint();
         }
@@ -430,7 +449,10 @@ public class TGUI extends Thread {
     }
 
     public void setLoadingScreen() {
-        ((CardLayout) cardPanel.getLayout()).previous(cardPanel);
+        try {
+            ((CardLayout) cardPanel.getLayout()).previous(cardPanel);
+        } catch (Exception ignored) {
+        }
     }
 
     public static void setGUILook(String[] wantedLooks) {
@@ -634,29 +656,25 @@ public class TGUI extends Thread {
     }
 
     private void setIcon(JLayeredPane seat, String patientCode) {
-        String imagePath;
+        ImageIcon imageIcon;
         boolean isChild = patientCode.charAt(0) == 'C';
-        int pos = isChild ? 28 : 0;
         if (patientCode.length() > 3)
             switch (patientCode.charAt(3)) {
                 case 'B':
-                    imagePath = isChild ? "resources/childBlue.png" : "resources/adultBlue.png";
-                    pos += 21;
+                    imageIcon = isChild ? loadedIcons[6] : loadedIcons[7];
                     break;
                 case 'Y':
-                    imagePath = isChild ? "resources/childYellow.png" : "resources/adultYellow.png";
-                    pos += 14;
+                    imageIcon = isChild ? loadedIcons[4] : loadedIcons[5];
                     break;
                 case 'R':
-                    imagePath = isChild ? "resources/childRed.png" : "resources/adultRed.png";
-                    pos += 7;
+                    imageIcon = isChild ? loadedIcons[2] : loadedIcons[3];
                     break;
                 default:
-                    imagePath = isChild ? "resources/child.png" : "resources/adult.png";
+                    imageIcon = isChild ? loadedIcons[0] : loadedIcons[1];
                     break;
             }
         else
-            imagePath = isChild ? "resources/child.png" : "resources/adult.png";
+            imageIcon = isChild ? loadedIcons[0] : loadedIcons[1];
 
         Insets seatBorderInsets = seat.getBorder().getBorderInsets(null);
         int seatWidthBorders = seat.getPreferredSize().width + (seatBorderInsets.left - seatBorderInsets.right);
@@ -680,25 +698,13 @@ public class TGUI extends Thread {
         else
             seatSize = -1;
 
-        pos += seatSize;
-
-        JLabel loadedIcon = loadedIcons[pos];
-        if (loadedIcon != null) {
-            seat.add(loadedIcon, 1);
-        } else {
-            ImageIcon imageIcon = new ImageIcon(imagePath);
-            JLabel iconLabel = new JLabel(imageIcon);
-            int iconWidth = iconLabel.getIcon().getIconWidth();
-            int iconHeight = iconLabel.getIcon().getIconHeight();
-            iconLabel.setBounds(seatWidthBorders / 2 - iconWidth / 2, seatHeightBorders / 2 - iconHeight / 2, iconWidth,
-                    iconHeight);
-            seat.add(iconLabel, 1);
-            loadedIcons[pos] = iconLabel;
-        }
+        JLabel iconLabel = new JLabel(imageIcon);
+        iconLabel.setBounds(seatWidthBorders / 2 - 28 / 2, seatHeightBorders / 2 - 32 / 2, 28, 32);
+        seat.add(iconLabel, 1);
 
         try {
             String patientNumber = patientCode.substring(1, 3);
-            pos = (100 * seatSize) + Integer.parseInt(patientNumber);
+            int pos = (100 * seatSize) + Integer.parseInt(patientNumber);
             JLabel loadedIconLabel = loadedIconLabels[pos];
             if (loadedIconLabel != null) {
                 seat.add(loadedIconLabel, 0);
@@ -720,6 +726,5 @@ public class TGUI extends Thread {
         } catch (StringIndexOutOfBoundsException | NumberFormatException ignored) {
             // the first 2 lines of this try seems to fail sometimes, no idea why
         }
-
     }
 }
