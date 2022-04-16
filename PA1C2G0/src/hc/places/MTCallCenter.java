@@ -1,6 +1,6 @@
 package hc.places;
 
-import hc.MFIFO;
+import hc.queue.MFIFO;
 import hc.active.TCommsHandler;
 import hc.enums.ReleasedRoom;
 import hc.interfaces.ICallCenterWaiter;

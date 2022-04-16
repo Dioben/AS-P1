@@ -1,9 +1,12 @@
-package hc;
+package hc.utils;
 
 import java.util.Random;
 
+/**
+ * Class responsible for providing wait timers instance-wide
+ */
 public class Timer {
-    private Random generator; //docs claim thread-safe
+    private Random generator; //thread-safe random generator
     private int evalMin; //inclusive value
     private int evalMax; //exclusive value
     private int appointMin;
@@ -77,11 +80,9 @@ public class Timer {
             return timer;
         }
     }
-
-    //Fields omitted for brevity.
+    
     private Timer() {
         generator = new Random();
-        //Constructor is now private.
     }
 
     public int getEvaluationTime(){return generator.nextInt(evalMin,evalMax);}

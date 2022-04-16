@@ -1,6 +1,6 @@
 package hc.places;
 
-import hc.MDelayFIFO;
+import hc.queue.MDelayFIFO;
 import hc.enums.Severity;
 import hc.interfaces.IContainer;
 import hc.interfaces.IPatient;

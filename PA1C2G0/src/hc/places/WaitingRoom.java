@@ -1,6 +1,6 @@
 package hc.places;
 
-import hc.MDelayFIFO;
+import hc.queue.MDelayFIFO;
 import hc.interfaces.*;
 
 import java.util.HashMap;

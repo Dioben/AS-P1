@@ -6,6 +6,7 @@ import hc.interfaces.IHall;
 import hc.interfaces.ILogger;
 import hc.interfaces.IPatient;
 import hc.places.*;
+import hc.utils.Timer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +16,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Class representing an instance of health center
  * Includes all halls and patients
+ * Must be started manually
  */
 public class HCInstance {
 
@@ -34,6 +36,20 @@ public class HCInstance {
     private final IPatient[] patients;
     private final GUI display;
 
+    /**Instance a health center
+     *
+     * @param adults number of adults
+     * @param children number of children
+     * @param seats number of seats
+     * @param evalTime max nurse evaluation time
+     * @param medicTime  max doctor appointment time
+     * @param payTime  max payment time
+     * @param getUpTime  max movement time
+     * @param tCommsHandler container that handles contact with controller
+     * @param mode whether this program is starting in manual or automatic mode
+     * @param gui the UI object
+     * @param logger a logger implementation
+     */
     public HCInstance(int adults, int children, int seats, int evalTime, int medicTime, int payTime, int getUpTime, TCommsHandler tCommsHandler, boolean mode, GUI gui, ILogger logger) {
         this.adults = adults;
         this.children = children;
@@ -73,7 +89,7 @@ public class HCInstance {
     }
 
     /**
-     * Instances and starts all patients
+     * Instances and starts all patients<p>
      * Attempts to randomize whether a patient is a child while possible
      */
     public void start(){
@@ -105,10 +121,12 @@ public class HCInstance {
             throw new RuntimeException("Somehow too many children were instanced");
     }
 
-
-    public void permitMovement(String roomID) {
+    /**
+     * Propagate a movement allowance notification from cooms
+     * @param roomID
+     */
+    public void permitNotification(String roomID) {
         callCenter.releaseRequest(roomID);
-
     }
 
     public void setControls(String s) {
@@ -119,6 +137,9 @@ public class HCInstance {
         }
     }
 
+    /**
+     * Unpause this instance
+     */
     public void progress() {
         callCenter.resume();
         paymentHall.resume();
@@ -132,6 +153,9 @@ public class HCInstance {
         }
     }
 
+    /**
+     * Pause this instance
+     */
     public void pause() {
         callCenter.suspend();
         paymentHall.suspend();
@@ -146,6 +170,9 @@ public class HCInstance {
         }
     }
 
+    /**
+     * Make all contained threads shut down elegantly
+     */
     public void cleanUp() {
         callCenter.interrupt();
         entranceHall.interrupt();
@@ -183,6 +210,9 @@ public class HCInstance {
 
     }
 
+    /**
+     * Obtains all relevant system information and passes it to the render thread
+     */
     private void updateUI() {
         Map<String,String[]> UIInfo = new HashMap<>();
         UIInfo.putAll(entranceHall.getState());

@@ -1,4 +1,4 @@
-package hc;
+package hc.queue;
 
 import java.lang.reflect.Array;
 import java.util.concurrent.locks.Condition;

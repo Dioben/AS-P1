@@ -1,7 +1,7 @@
 package hc.active;
 
 import hc.enums.Severity;
-import hc.Timer;
+import hc.utils.Timer;
 import hc.interfaces.IContainer;
 import hc.interfaces.IPatient;
 

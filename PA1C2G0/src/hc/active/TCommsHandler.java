@@ -2,7 +2,7 @@ package hc.active;
 
 import hc.GUI;
 import hc.HCInstance;
-import hc.MHCPLogger;
+import hc.utils.MHCPLogger;
 import hc.interfaces.ILogger;
 
 import java.io.BufferedReader;
@@ -92,7 +92,7 @@ public class TCommsHandler extends Thread {
                         break;
                     case "AUTH":
                         String roomID = command[1];
-                        instance.permitMovement(roomID);
+                        instance.permitNotification(roomID);
                         break;
                     default:
                         break;

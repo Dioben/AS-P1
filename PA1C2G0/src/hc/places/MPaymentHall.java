@@ -1,8 +1,7 @@
 package hc.places;
 
 import hc.HCInstance;
-import hc.MFIFO;
-import hc.enums.Severity;
+import hc.queue.MFIFO;
 import hc.enums.Worker;
 import hc.interfaces.*;
 

@@ -1,7 +1,7 @@
 package hc.places;
 
 import hc.HCInstance;
-import hc.MFIFO;
+import hc.queue.MFIFO;
 import hc.enums.ReleasedRoom;
 import hc.interfaces.*;
 

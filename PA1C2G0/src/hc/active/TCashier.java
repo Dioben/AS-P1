@@ -1,6 +1,6 @@
 package hc.active;
 
-import hc.Timer;
+import hc.utils.Timer;
 import hc.interfaces.IPatient;
 import hc.interfaces.IWorkerRoom;
 
