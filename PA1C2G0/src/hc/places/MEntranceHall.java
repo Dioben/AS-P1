@@ -268,8 +268,17 @@ public class MEntranceHall implements IWaitingHall, ICallCenterWaiter {
             IPatient nextChild = childRoom.getExpected();
             if (nextAdult == null && nextChild == null)
                 throw new RuntimeException("Found NULL inside a waiting room");
-
-            if (nextAdult.getEntranceNumber() < nextChild.getEntranceNumber()) {
+            else if (nextAdult==null){
+                inChild--;
+                rl.unlock();
+                childRoom.notifyDone();
+            }
+            else if (nextChild==null){
+                inAdult--;
+                rl.unlock();
+                adultRoom.notifyDone();
+            }
+            else if (nextAdult.getEntranceNumber() < nextChild.getEntranceNumber()) {
                 inAdult--;
                 rl.unlock();
                 adultRoom.notifyDone();
