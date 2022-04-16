@@ -374,12 +374,14 @@ public class GUI extends Thread {
     }
 
     private void changeSeat(JLayeredPane seat, String value) {
-        seat.removeAll();
-        seat.revalidate();
-        if (value != null && !value.isBlank())
-            setIcon(seat, value);
-        else
-            seat.repaint();
+        if (seat != null) {
+            seat.removeAll();
+            seat.revalidate();
+            if (value != null && !value.isBlank())
+                setIcon(seat, value);
+            else
+                seat.repaint();
+        }
     }
 
     public void update(Map<String, String[]> info) {
