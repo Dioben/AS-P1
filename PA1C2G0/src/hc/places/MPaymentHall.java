@@ -24,7 +24,13 @@ public class MPaymentHall implements IHall {
     private final MFIFO<IPatient> backlog;
     private final String nextRoomName = "OUT";
 
-    public MPaymentHall(HCInstance instance,int people){
+    /**Instances a Payment Hall
+     *
+     * @param instance Space this hall is contained in
+     * @param after Follow-up room, NULL is expected
+     * @param people amount of people expected to pass through this room
+     */
+    public MPaymentHall(HCInstance instance,IContainer after, int people){
         this.instance = instance;
         cashierRoom = WorkerRoom.getRoom(Worker.CASHIER,this,null,"PYR");
         rl = new ReentrantLock();
@@ -34,7 +40,7 @@ public class MPaymentHall implements IHall {
     }
 
     /**
-     * Called by patient after they've managed to get to hallway's entrance
+     * Called by patient after they've managed to get to hallway's entrance<p>
      * Will return the cashier room once patient's turn is up
      * @param patient patient attempting to find next room
      * @return
@@ -66,7 +72,7 @@ public class MPaymentHall implements IHall {
 
     /**
      * Returns this container's occupation status, including contained patients for all sub-containers
-     * @return Map<room names, patient ID strings>
+     * @return Map(room names, patientID[])
      */
     @Override
     public Map<String, String[]> getState() {
@@ -86,7 +92,7 @@ public class MPaymentHall implements IHall {
     }
 
     /**
-     * Pause all contained threads
+     * Pause all contained threads<p>
      * Due to patient pooling this only affects the contained cashier
      */
     @Override
@@ -95,7 +101,7 @@ public class MPaymentHall implements IHall {
     }
 
     /**
-     * Resume all contained threads
+     * Resume all contained threads<p>
      * Due to patient pooling this only affects the contained cashier
      */
     @Override
@@ -140,7 +146,7 @@ public class MPaymentHall implements IHall {
     }
 
     /**
-     * Allow patient to enter this Hall
+     * Allow patient to enter this Hall<p>
      * Automatically sets their room number and increments counter
      * @param patient the patient attempting to enter the space
      */
@@ -153,7 +159,7 @@ public class MPaymentHall implements IHall {
     }
 
     /**
-     * Notifies that a patient has left this hall and entered the waiting rooms
+     * Notifies that a patient has left this hall and entered the waiting rooms<p>
      * Used for logging purposes
      * @param patient individual leaving space
      */

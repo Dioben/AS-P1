@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class HCInstance {
 
     private final Timer timer;
-    private final MCallCenter callCenter;
+    private final MTCallCenter callCenter;
     private final IHall entranceHall;
     private final IHall evaluationHall;
     private final IHall waitingHall;
@@ -51,10 +51,10 @@ public class HCInstance {
                 .withMovementTimeRange(getUpTime).build();
 
 
-        callCenter = new MCallCenter(mode, tCommsHandler,adults+children);
+        callCenter = new MTCallCenter(mode, tCommsHandler,adults+children);
         callCenter.start();
 
-        paymentHall = new MPaymentHall(this,adults+children);
+        paymentHall = new MPaymentHall(this,null,adults+children);
         MMedicalHall mh = new MMedicalHall(this,paymentHall,callCenter);
         medicalHall = mh;
         MWaitingHall wh = new MWaitingHall(this, medicalHall, seats, adults, children, 1, 1, callCenter);

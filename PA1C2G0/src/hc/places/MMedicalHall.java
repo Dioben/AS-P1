@@ -4,7 +4,6 @@ import hc.HCInstance;
 import hc.enums.ReleasedRoom;
 import hc.enums.Worker;
 import hc.interfaces.*;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
@@ -30,6 +29,12 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
     private boolean inChild = false;
     private final ICallCenterWaiter callCenter;
 
+    /**
+     * Instances a Medical Hall
+     * @param instance Instance this Medical Hall is a part of
+     * @param after Follow-up room, a PYH is expected
+     * @param callCenter Entity that must be notified when someone leaves contained subspaces
+     */
     public MMedicalHall(HCInstance instance, IContainer after, ICallCenterWaiter callCenter){
         this.instance = instance;
         childWorkerRoom1 = WorkerRoom.getRoom(Worker.DOCTOR,this,after,"MDR1");
@@ -44,10 +49,10 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
     }
 
     /**
-     * Called by patient after they've managed to get to hallway's entrance
-     * Will direct patient to correct room but then bar them from entering at all
+     * Called by patient after they've managed to get to hallway's entrance<p>
+     * Will direct patient to correct room but then bar them from entering at all<p>
      * @param patient patient attempting to find next room
-     * @return
+     * @return Waiting room matching user
      */
     @Override
     public IContainer getFollowingContainer(IPatient patient) {
@@ -66,9 +71,9 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
     }
 
     /**
-     * Obtain a map linking each container to patient display name array
+     * Obtain a map linking each container to patient display name array<p>
      * Used for UI purposes
-     * @return Map<Container Name, Patient Names>
+     * @return Map(Container Name, Patient Name[])
      */
     @Override
     public Map<String, String[]> getState() {
@@ -84,7 +89,7 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
     }
 
     /**
-     * Pause all contained threads
+     * Pause all contained threads<p>
      * Due to patient pooling this only stops the container doctors
      */
     @Override
@@ -97,7 +102,7 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
     }
 
     /**
-     * Resume all contained threads
+     * Resume all contained threads<p>
      * Due to patient pooling this only stops the container doctors
      */
     @Override
@@ -120,8 +125,8 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
     }
 
     /**
-     * Called by contained room to notify that patient is out
-     * Can be called by waiting rooms to notify that patient is no longer waiting or by doctor to notify that patient is done
+     * Called by contained room to notify that patient is out<p>
+     * Can be called by waiting rooms to notify that patient is no longer waiting or by doctor to notify that patient is done<p>
      * Calls logger, call center, updates UI thread
      * @param room identifies room that has finished processing
      */
@@ -164,7 +169,7 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
     }
 
     /**
-     * Called by CCH to notify that some forward movement is expected
+     * Called by CCH to notify that some forward movement is expected<p>
      * Will notify a patient in the correct room to start moving again
      * @param releasedRoom type of room that is now available
      */
@@ -222,7 +227,7 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
     }
 
     /**
-     * Allow patient to enter this Hall
+     * Allow patient to enter this Hall<p>
      * Automatically sets their room number and increments counter
      * @param patient the patient attempting to enter the space
      */
@@ -236,7 +241,7 @@ public class MMedicalHall implements IWaitingHall,ICallCenterWaiter {
     }
 
     /**
-     * Notifies that a patient has left this hall and entered the waiting rooms
+     * Notifies that a patient has left this hall and entered the waiting rooms<p>
      * As this hall itself is just a transition point there is no need to do anything here, see notifyDone() for call center signals
      * @param patient individual leaving space
      */

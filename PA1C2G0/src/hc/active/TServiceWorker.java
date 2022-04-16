@@ -12,7 +12,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * Implements every method except ServeCustomer()
  */
 public abstract class TServiceWorker extends Thread implements hc.interfaces.IServiceWorker {
-    protected Timer timer;
+    protected Timer timer;//protected for use in subclasses
     private final IWorkerRoom surroundings;
     private IPatient customer;
     private final ReentrantLock rl;

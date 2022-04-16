@@ -15,7 +15,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * Class for rooms that hold several users
- * This room can overflow if used on their own, container object must implement limiting logic
+ * Implements severity band priority logic
  */
 public class PriorityWaitingRoom implements IWaitingRoom {
     private final IWaitingHall container;
@@ -47,7 +47,8 @@ public class PriorityWaitingRoom implements IWaitingRoom {
 
 
     /**
-     * Remove user -> at this point they have been notified and are leaving
+     * Remove user<p>
+     * At this point the user has called enter() on their next container<p>
      * This is called by the patient thread itself
      */
     @Override
@@ -58,8 +59,8 @@ public class PriorityWaitingRoom implements IWaitingRoom {
     }
 
     /**
-     * called by patient thread
-     * uses non-sync variable released but only reads it
+     * called by patient thread<p>
+     * gets next room only allowed through
      * @param patient patient attempting to find next room
      * @return the room patient must move into next
      */
@@ -105,8 +106,8 @@ public class PriorityWaitingRoom implements IWaitingRoom {
     }
 
     /**
-     * Called by patient thread
-     * Blocks on attempting to enter FIFO
+     * Called by patient thread<p>
+     * Blocks on attempting to enter FIFO if full
      *
      * @param tPatient
      */
@@ -125,7 +126,7 @@ public class PriorityWaitingRoom implements IWaitingRoom {
 
     /**
      * Maps all patients in this room by descending severity and ID
-     * @return Map<room name, patient string list>
+     * @return Map(room name, patientID[])
      */
     @Override
     public Map<String, String[]> getState() {
@@ -167,8 +168,8 @@ public class PriorityWaitingRoom implements IWaitingRoom {
     }
 
     /**
-     * Called from monitor only
-     * Causes this room to tell the oldest user to get out
+     * Called from monitor only<p>
+     * Causes this room to tell the oldest user to get out if any exists
      *
      */
     @Override
@@ -195,6 +196,10 @@ public class PriorityWaitingRoom implements IWaitingRoom {
         }
     }
 
+    /**
+     * Returns the next expected departure
+     * @return patient, or NULL if empty
+     */
     @Override
     public IPatient getExpected() {
         rl.lock();
