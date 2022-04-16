@@ -32,6 +32,12 @@ public class GUI {
     private JSpinner portSpinner;
     private JButton confirmLoginButton;
 
+    /**
+     * Constructor of GUI
+     * <p>
+     * Initializes the frame, variables and contains the action listeners for the
+     * many inputs
+     */
     public GUI() {
         requests = new MFIFO(String.class, 50);
 
@@ -206,15 +212,31 @@ public class GUI {
         });
     }
 
+    /**
+     * Puts a request in a FIFO to notify HCP that movement was acknowledged
+     *
+     * @param roomID the name of the room in which the movement was acknowledged
+     */
     public void putRequest(String roomID) {
         requests.put(roomID);
         notifyButton.setEnabled(true);
     }
 
+    /**
+     * Changes the label which indicates the status of the HCP
+     *
+     * @param status the status to be shown
+     */
     public void setStatusLabel(String status) {
         statusLabel.setText("Status: " + status);
     }
 
+    /**
+     * Can either change the UI to the main page/state or show an error message that
+     * the connection failed
+     *
+     * @param successful boolean which decides what happens
+     */
     public void connectionStatus(boolean successful) {
         if (successful) {
             ((CardLayout) cardPanel.getLayout()).next(cardPanel);
@@ -223,6 +245,9 @@ public class GUI {
         }
     }
 
+    /**
+     * Enables and disables inputs accordingly to when the HCP is stopped
+     */
     public void setStopUIState() {
         stopButton.setEnabled(false);
         startButton.setEnabled(true);
@@ -239,6 +264,14 @@ public class GUI {
         resetFormButton.setEnabled(true);
     }
 
+    /**
+     * Changes the theme of the UI window
+     * <p>
+     * If computer doesn't have any of the themes provided the computer's default
+     * one will be used
+     *
+     * @param wantedLooks list of theme names
+     */
     public static void setGUILook(String[] wantedLooks) {
         UIManager.LookAndFeelInfo[] looks = UIManager.getInstalledLookAndFeels();
         String chosenLook = null;

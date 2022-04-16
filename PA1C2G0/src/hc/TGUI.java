@@ -112,6 +112,12 @@ public class TGUI extends Thread {
     private JLabel wHCROverflowLabel;
     private JLabel loadingLabel;
 
+    /**
+     * Constructor of TGUI
+     * <p>
+     * Initializes the frame, variables and contains the action listener for the
+     * login button
+     */
     public TGUI() {
         TGUI gui = this;
         updates = new MFIFO(Map.class, 50);
@@ -155,6 +161,9 @@ public class TGUI extends Thread {
         });
     }
 
+    /**
+     * Makes the TGUI start listening for updates requests and update the UI
+     */
     public void run() {
         Map<String, String[]> handling;
         JLayeredPane[] WTHAdultSeats = {
@@ -386,16 +395,23 @@ public class TGUI extends Thread {
         }
     }
 
-    private void changeSeat(JLayeredPane seat, String value) {
+    /**
+     * Clears a JLayeredPane seat and loads the patient given
+     *
+     * @param seat        the seat to change
+     * @param patientCode the patient code which informs what kind of patient to
+     *                    load
+     */
+    private void changeSeat(JLayeredPane seat, String patientCode) {
         if (seat != null) {
             seat.removeAll();
             seat.revalidate();
-            if (value != null && !value.isBlank())
+            if (patientCode != null && !patientCode.isBlank())
                 try {
                     SwingUtilities.invokeAndWait(new Runnable() {
                         @Override
                         public void run() {
-                            setIcon(seat, value);
+                            setIcon(seat, patientCode);
                         }
                     });
                 } catch (InterruptedException | InvocationTargetException e) {
@@ -406,14 +422,32 @@ public class TGUI extends Thread {
         }
     }
 
+    /**
+     * Adds the update request to a FIFO to be processed
+     *
+     * @param info what the update entails
+     */
     public void update(Map<String, String[]> info) {
         updates.put(info);
     }
 
+    /**
+     * Changes the title of the UI window
+     *
+     * @param state what will be added to the title
+     */
     public void setStateLabel(String state) {
-        frame.setTitle("HCP - " + state);
+        if (state != null)
+            frame.setTitle("HCP - " + state);
+        else
+            frame.setTitle("HCP");
     }
 
+    /**
+     * Changes the number of seats to be displayed in some rooms of the UI
+     *
+     * @param seatCount the number of seats to be displayed in each room
+     */
     public void setSeatCount(int seatCount) {
         enHARSeats = new JLayeredPane[seatCount];
         enHCRSeats = new JLayeredPane[seatCount];
@@ -448,6 +482,11 @@ public class TGUI extends Thread {
         setStateLabel("Stopped");
     }
 
+    /**
+     * Sets the UI window to its loading state
+     * <p>
+     * Only works if it's in the state showing the hospital
+     */
     public void setLoadingScreen() {
         try {
             ((CardLayout) cardPanel.getLayout()).previous(cardPanel);
@@ -455,6 +494,14 @@ public class TGUI extends Thread {
         }
     }
 
+    /**
+     * Changes the theme of the UI window
+     * <p>
+     * If computer doesn't have any of the themes provided the computer's default
+     * one will be used
+     *
+     * @param wantedLooks list of theme names
+     */
     public static void setGUILook(String[] wantedLooks) {
         UIManager.LookAndFeelInfo[] looks = UIManager.getInstalledLookAndFeels();
         String chosenLook = null;
@@ -476,6 +523,9 @@ public class TGUI extends Thread {
         }
     }
 
+    /**
+     * Auxiliary function which adds borders to many UI elements
+     */
     private void setBorders() {
         inLabel.setBorder(new EmptyBorder(new Insets(0, 5, 0, 5)));
         outLabel.setBorder(new EmptyBorder(new Insets(0, 5, 0, 5)));
@@ -525,6 +575,12 @@ public class TGUI extends Thread {
             portSpinner.setBorder(new LineBorder(new Color(39, 39, 39), 1, true));
     }
 
+    /**
+     * Creates many custom elements not able to be initialized through the .form
+     * file
+     * <p>
+     * Is automatically ran when TGUI is initialized
+     */
     private void createUIComponents() {
         pHCSeat = new JLayeredPane();
         enHARSeat1 = new JLayeredPane();
@@ -655,6 +711,13 @@ public class TGUI extends Thread {
         }
     }
 
+    /**
+     * Adds the patient icon and label to a JLayeredPane seat according to a patient
+     * code
+     *
+     * @param seat        the seat to change
+     * @param patientCode the patient code which informs what icon and label to add
+     */
     private void setIcon(JLayeredPane seat, String patientCode) {
         ImageIcon imageIcon;
         boolean isChild = patientCode.charAt(0) == 'C';
