@@ -14,7 +14,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * Room meant to hold Doctor/Nurse/Cashier and a single patient at a time
  * The worker is a thread but the room itself is not
  */
-public class WorkerRoom implements IWorkerRoom,ISeat {
+public class WorkerRoom implements IWorkerRoom, ISeat {
     private final IHall container;
     private IContainer next;
     private IPatient user;
@@ -23,8 +23,7 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
     private final ReentrantLock rl;
     private final Condition c;
 
-
-    protected WorkerRoom(IHall container, IContainer next, String name){
+    protected WorkerRoom(IHall container, IContainer next, String name) {
         this.container = container;
         this.next = next;
         this.name = name;
@@ -34,35 +33,36 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
 
     /**
      * Used to inject a worker inside factory method
+     * 
      * @param worker the worker that will reside in room
      */
-    private void setWorker(IServiceWorker worker){
+    private void setWorker(IServiceWorker worker) {
         this.worker = worker;
     }
 
-
     public boolean canEnter() {
-        return user==null;
+        return user == null;
     }
 
-
-
     /**
-     * Notifies container that this room is empty<p>
-     * If parent room has anyone waiting they tell that one thread to enter and keep every other one waiting
+     * Notifies container that this room is empty
+     * <p>
+     * If parent room has anyone waiting they tell that one thread to enter and keep
+     * every other one waiting
+     * 
      * @param patient individual leaving space
      */
     @Override
-    public void leave(IPatient patient, IContainer next)
-    {
-        if (patient==user){
+    public void leave(IPatient patient, IContainer next) {
+        if (patient == user) {
             user = null;
-            container.notifyDone(this,patient);
+            container.notifyDone(this, patient);
         }
     }
 
     /**
-     * Notifies current patient that it should start trying to leave<p>
+     * Notifies current patient that it should start trying to leave
+     * <p>
      * At this stage user is expected to be waiting at getFollowingContainer
      */
     @Override
@@ -76,7 +76,9 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
     }
 
     /**
-     * Locks user up until this room's worker has performed all necessary tasks on them
+     * Locks user up until this room's worker has performed all necessary tasks on
+     * them
+     * 
      * @param patient patient attempting to find next room
      * @return next room user must move into
      */
@@ -84,10 +86,10 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
     public IContainer getFollowingContainer(IPatient patient) {
         try {
             rl.lock();
-            if (! user.equals(patient))
+            if (!user.equals(patient))
                 throw new RuntimeException("Patient getting worker follower does not match contained");
             worker.providePatient(user);
-            while(worker.isBusy()){
+            while (worker.isBusy()) {
                 try {
                     c.await();
                 } catch (InterruptedException e) {
@@ -100,8 +102,10 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
         }
         return next;
     }
+
     /**
      * This method is locked by the parent container
+     * 
      * @param patient patient attempting to enter the space
      */
     @Override
@@ -109,21 +113,19 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
         user = patient;
     }
 
-
     @Override
     public String getDisplayName() {
         return name;
     }
-
 
     /**
      * @return Map(room name, patientId[1])
      */
     @Override
     public Map<String, String[]> getState() {
-        String[] info = {user==null?"": user.getDisplayValue()};
+        String[] info = { user == null ? "" : user.getDisplayValue() };
         HashMap<String, String[]> val = new HashMap<>();
-        val.put(this.name,info);
+        val.put(this.name, info);
         return val;
     }
 
@@ -150,26 +152,25 @@ public class WorkerRoom implements IWorkerRoom,ISeat {
 
     /**
      * Factory method for generating worker rooms
-     * @param worker worker type
+     * 
+     * @param worker    worker type
      * @param container room container
-     * @param next room follow-up container
-     * @param name room name
+     * @param next      room follow-up container
+     * @param name      room name
      * @return room instance or null if no worker provided
      */
-    public static WorkerRoom getRoom(Worker worker, IHall container, IContainer next, String name){
-        if (worker==null)
+    public static WorkerRoom getRoom(Worker worker, IHall container, IContainer next, String name) {
+        if (worker == null)
             return null;
-        WorkerRoom workerRoom = new WorkerRoom(container,next,name);
+        WorkerRoom workerRoom = new WorkerRoom(container, next, name);
         TServiceWorker workerThread = null;
         HCInstance instance = container.getInstance();
-        if (worker==Worker.DOCTOR){
-            workerThread = new TDoctor(instance.getTimer(),workerRoom);
-        }
-        else if (worker==Worker.NURSE){
-            workerThread = new TNurse(instance.getTimer(),workerRoom);
-        }
-        else if (worker==Worker.CASHIER){
-            workerThread = new TCashier(instance.getTimer(),workerRoom);
+        if (worker == Worker.DOCTOR) {
+            workerThread = new TDoctor(instance.getTimer(), workerRoom);
+        } else if (worker == Worker.NURSE) {
+            workerThread = new TNurse(instance.getTimer(), workerRoom);
+        } else if (worker == Worker.CASHIER) {
+            workerThread = new TCashier(instance.getTimer(), workerRoom);
         }
         workerRoom.setWorker(workerThread);
         workerThread.start();

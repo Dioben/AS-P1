@@ -18,14 +18,14 @@ public class WaitingRoom implements IWaitingRoom {
     private IContainer next;
     private final String name;
     private final MDelayFIFO<IPatient> patients;
-    private int released = -1; //way to let a patient know if they've been released -> only ever changed by 1 thread
-    private AtomicInteger entered =  new AtomicInteger(0);
+    private int released = -1; // way to let a patient know if they've been released -> only ever changed by 1
+                               // thread
+    private AtomicInteger entered = new AtomicInteger(0);
     private final int seats;
     private final ReentrantLock rl;
     private final Condition cCanMove;
 
-
-    public WaitingRoom(IWaitingHall container, IContainer next, String name, int seats){
+    public WaitingRoom(IWaitingHall container, IContainer next, String name, int seats) {
         this.container = container;
         this.next = next;
         this.name = name;
@@ -36,19 +36,23 @@ public class WaitingRoom implements IWaitingRoom {
     }
 
     /**
-     * Remove user<p>
-     * At this point the user has called enter() on their next container<p>
+     * Remove user
+     * <p>
+     * At this point the user has called enter() on their next container
+     * <p>
      * This is called by the patient thread itself
      */
     @Override
     public void leave(IPatient patient, IContainer next) {
         patients.remove();
-        container.notifyDone(this,patient);
+        container.notifyDone(this, patient);
     }
 
     /**
-     * Called by patient thread<p>
+     * Called by patient thread
+     * <p>
      * Gets next room only allowed through
+     * 
      * @param patient patient attempting to find next room
      * @return the room patient must move into next
      */
@@ -72,8 +76,10 @@ public class WaitingRoom implements IWaitingRoom {
     }
 
     /**
-     * Called by patient thread<p>
+     * Called by patient thread
+     * <p>
      * Blocks on attempting to enter FIFO if full
+     * 
      * @param tPatient patient thread
      */
     @Override
@@ -89,23 +95,24 @@ public class WaitingRoom implements IWaitingRoom {
 
     /**
      * Maps all patients in this room by descending ID
+     * 
      * @return Map(room name, patientID[])
      */
     @Override
     public Map<String, String[]> getState() {
-        HashMap<String,String[]> map = new HashMap();
+        HashMap<String, String[]> map = new HashMap();
         IPatient[] patientList = patients.getSnapshot(seats);
         String[] patientText = new String[seats];
 
-        for(int i=0;i<seats;i++){
+        for (int i = 0; i < seats; i++) {
             IPatient patient = patientList[i];
-            if (patient==null)
+            if (patient == null)
                 break;
             patientText[i] = patient.getDisplayValue();
         }
 
-        map.put(this.name,patientText);
-       return map;
+        map.put(this.name, patientText);
+        return map;
     }
 
     @Override
@@ -134,8 +141,9 @@ public class WaitingRoom implements IWaitingRoom {
     public void notifyDone() {
         try {
             rl.lock();
-            if (!patients.isEmpty()){
-                IPatient patient = patients.get(); //this notifies the oldest patient, causing them to leave getFollowingContainer
+            if (!patients.isEmpty()) {
+                IPatient patient = patients.get(); // this notifies the oldest patient, causing them to leave
+                                                   // getFollowingContainer
                 released = patient.getRoomNumber();
                 cCanMove.signalAll();
             }
@@ -147,6 +155,7 @@ public class WaitingRoom implements IWaitingRoom {
 
     /**
      * Returns next expected departure
+     * 
      * @return patient, or <i>NULL</i> if empty
      */
 
@@ -155,13 +164,13 @@ public class WaitingRoom implements IWaitingRoom {
         return patients.getSnapshot(1)[0];
     }
 
-
     /**
      * Overrides the next field in cases where it might be ambiguous
+     * 
      * @param next the container to set as following after this one
      */
     @Override
     public void setNext(IContainer next) {
-    this.next = next;
+        this.next = next;
     }
 }

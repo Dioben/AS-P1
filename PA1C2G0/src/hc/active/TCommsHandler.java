@@ -13,7 +13,8 @@ import java.net.Socket;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Client handler branched off of main simulation <p>
+ * Client handler branched off of main simulation
+ * <p>
  * Contains a Health Center instance and handles message flow with client
  */
 public class TCommsHandler extends Thread {
@@ -21,7 +22,7 @@ public class TCommsHandler extends Thread {
     private final Socket comms;
     private PrintWriter out;
     private String mode = "AUTO";
-    private final ReentrantLock writeLock; //socket writers are supposed to be thread safe but let's make sure
+    private final ReentrantLock writeLock; // socket writers are supposed to be thread safe but let's make sure
     private HCInstance instance;
     private final GUI gui;
     private final ILogger logger;
@@ -34,15 +35,23 @@ public class TCommsHandler extends Thread {
     }
 
     /**
-     * Repeatedly gets next socket instruction and parses it<p>
-     * Valid commands:<p>
-     * START {@literal <Parameters>}<p>
-     * RESUME<p>
-     * SUSPEND<p>
-     * STOP<p>
-     * END<p>
-     * SWAP {@literal <Mode>}<p>
-     * AUTH {@literal <Room ID>}<p>
+     * Repeatedly gets next socket instruction and parses it
+     * <p>
+     * Valid commands:
+     * <p>
+     * START {@literal <Parameters>}
+     * <p>
+     * RESUME
+     * <p>
+     * SUSPEND
+     * <p>
+     * STOP
+     * <p>
+     * END
+     * <p>
+     * SWAP {@literal <Mode>}
+     * <p>
+     * AUTH {@literal <Room ID>}
      */
     public void run() {
         try {
@@ -81,7 +90,7 @@ public class TCommsHandler extends Thread {
                         break;
                     case "END":
                         if (instance != null)
-                            instance.cleanUp(); //probably not strictly necessary
+                            instance.cleanUp(); // probably not strictly necessary
                         logger.printState(command[0]);
                         System.exit(0);
                     case "SWAP":
@@ -110,7 +119,9 @@ public class TCommsHandler extends Thread {
 
     /**
      * Creates and starts an HC instance based on command
-     * @param command full command string passed to socket, parsing is done internally
+     * 
+     * @param command full command string passed to socket, parsing is done
+     *                internally
      */
     private void startInstance(String[] command) {
         if (instance != null)
@@ -123,7 +134,8 @@ public class TCommsHandler extends Thread {
         int payTime = Integer.parseInt(command[6]);
         int getUpTime = Integer.parseInt(command[7]);
         gui.setSeatCount(seats);
-        instance = new HCInstance(adults, children, seats, evalTime, medicTime, payTime, getUpTime,this, mode.equals("MANUAL"), gui, logger);
+        instance = new HCInstance(adults, children, seats, evalTime, medicTime, payTime, getUpTime, this,
+                mode.equals("MANUAL"), gui, logger);
         gui.setStateLabel("Running");
         logger.printState("RUNNING");
         instance.start();
@@ -131,6 +143,7 @@ public class TCommsHandler extends Thread {
 
     /**
      * Request permission for a patient to move in manual mode
+     * 
      * @param roomName name of room requesting movement
      */
     public void requestPermission(String roomName) {
@@ -142,7 +155,7 @@ public class TCommsHandler extends Thread {
     /**
      * Notify client that simulation has finished running naturally
      */
-    public void notifyDone(){
+    public void notifyDone() {
         writeLock.lock();
         out.println("DONE");
         writeLock.unlock();

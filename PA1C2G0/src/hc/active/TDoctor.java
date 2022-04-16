@@ -5,11 +5,13 @@ import hc.enums.Severity;
 import hc.interfaces.IPatient;
 import hc.interfaces.IWorkerRoom;
 
-public class TDoctor extends TServiceWorker{
+public class TDoctor extends TServiceWorker {
 
     /**
-     * Instance Doctor Worker, this subclass of ServiceWorker waits <i>appointment</i> time
-     * @param timer the wait interval provider class
+     * Instance Doctor Worker, this subclass of ServiceWorker waits
+     * <i>appointment</i> time
+     * 
+     * @param timer        the wait interval provider class
      * @param surroundings the room this worker is a part of
      */
     public TDoctor(Timer timer, IWorkerRoom surroundings) {
@@ -19,6 +21,7 @@ public class TDoctor extends TServiceWorker{
     @Override
     /**
      * Wait for a given <i>appointment</i> time then return
+     * 
      * @param patient severity is set to UNASSIGNED
      */
     void serveCustomer(IPatient patient) {

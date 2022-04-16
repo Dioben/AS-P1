@@ -30,7 +30,7 @@ public class HCInstance {
     private final ILogger logger;
     private final int adults;
     private final int children;
-    private boolean started= false;
+    private boolean started = false;
     private AtomicInteger gone = new AtomicInteger(0);
     private final int seats;
     private final IPatient[] patients;
@@ -38,27 +38,29 @@ public class HCInstance {
 
     /**
      * Instance a health center
-     * @param adults number of adults
-     * @param children number of children
-     * @param seats number of seats
-     * @param evalTime max nurse evaluation time
-     * @param medicTime  max doctor appointment time
-     * @param payTime  max payment time
-     * @param getUpTime  max movement time
+     * 
+     * @param adults        number of adults
+     * @param children      number of children
+     * @param seats         number of seats
+     * @param evalTime      max nurse evaluation time
+     * @param medicTime     max doctor appointment time
+     * @param payTime       max payment time
+     * @param getUpTime     max movement time
      * @param tCommsHandler container that handles contact with controller
-     * @param mode whether this program is starting in manual or automatic mode
-     * @param gui the UI object
-     * @param logger a logger implementation
+     * @param mode          whether this program is starting in manual or automatic
+     *                      mode
+     * @param gui           the UI object
+     * @param logger        a logger implementation
      */
-    public HCInstance(int adults, int children, int seats, int evalTime, int medicTime, int payTime, int getUpTime, TCommsHandler tCommsHandler, boolean mode, GUI gui, ILogger logger) {
+    public HCInstance(int adults, int children, int seats, int evalTime, int medicTime, int payTime, int getUpTime,
+            TCommsHandler tCommsHandler, boolean mode, GUI gui, ILogger logger) {
         this.adults = adults;
         this.children = children;
         this.seats = seats;
 
-        patients = new IPatient[adults+children];
+        patients = new IPatient[adults + children];
 
         this.logger = logger;
-
 
         timer = new Timer.Builder()
                 .withEvaluationTimeRange(evalTime)
@@ -66,17 +68,16 @@ public class HCInstance {
                 .withPaymentTimeRange(payTime)
                 .withMovementTimeRange(getUpTime).build();
 
-
-        callCenter = new MTCallCenter(mode, tCommsHandler,adults+children);
+        callCenter = new MTCallCenter(mode, tCommsHandler, adults + children);
         callCenter.start();
 
-        paymentHall = new MPaymentHall(this,null,adults+children);
-        MMedicalHall mh = new MMedicalHall(this,paymentHall,callCenter);
+        paymentHall = new MPaymentHall(this, null, adults + children);
+        MMedicalHall mh = new MMedicalHall(this, paymentHall, callCenter);
         medicalHall = mh;
         MWaitingHall wh = new MWaitingHall(this, medicalHall, seats, adults, children, 1, 1, callCenter);
         waitingHall = wh;
-        evaluationHall = new MEvaluationHall(this,waitingHall,callCenter);
-        MEntranceHall eh = new MEntranceHall(this,evaluationHall,seats, adults,children,4);
+        evaluationHall = new MEvaluationHall(this, waitingHall, callCenter);
+        MEntranceHall eh = new MEntranceHall(this, evaluationHall, seats, adults, children, 4);
         entranceHall = eh;
 
         callCenter.setEntranceHall(eh);
@@ -84,15 +85,16 @@ public class HCInstance {
         callCenter.setWaitingHall(wh);
 
         display = gui;
-        logger.printHeader(adults,children,seats);
+        logger.printHeader(adults, children, seats);
         logger.printState("INITIALIZE");
     }
 
     /**
-     * Instances and starts all patients<p>
+     * Instances and starts all patients
+     * <p>
      * Attempts to randomize whether a patient is a child while possible
      */
-    public void start(){
+    public void start() {
         if (started)
             throw new RuntimeException("HC Instance was already started");
         started = true;
@@ -100,29 +102,29 @@ public class HCInstance {
         int assignedChildren = 0;
         int assignedAdults = 0;
         boolean isChild;
-        for (int i=0;i<adults+children;i++){
-            if (assignedAdults==adults)
-                isChild=true;
-            else if (assignedChildren==children)
-                isChild=false;
-            else{
+        for (int i = 0; i < adults + children; i++) {
+            if (assignedAdults == adults)
+                isChild = true;
+            else if (assignedChildren == children)
+                isChild = false;
+            else {
                 isChild = r.nextBoolean();
             }
-            assignedChildren+= isChild?1:0;
-            assignedAdults+= isChild?0:1;
-            patients[i]=new TPatient(isChild,timer,entranceHall);
+            assignedChildren += isChild ? 1 : 0;
+            assignedAdults += isChild ? 0 : 1;
+            patients[i] = new TPatient(isChild, timer, entranceHall);
             ((TPatient) patients[i]).start();
         }
 
-
-        if (assignedAdults>adults)
+        if (assignedAdults > adults)
             throw new RuntimeException("Somehow too many adults were instanced");
-        if (assignedChildren>children)
+        if (assignedChildren > children)
             throw new RuntimeException("Somehow too many children were instanced");
     }
 
     /**
      * Propagate a movement allowance notification from rooms
+     * 
      * @param roomID name of the room
      */
     public void permitNotification(String roomID) {
@@ -130,9 +132,9 @@ public class HCInstance {
     }
 
     public void setControls(String s) {
-        if (s.equals("MANUAL")){
+        if (s.equals("MANUAL")) {
             callCenter.setManual(true);
-        }else if (s.equals("AUTO")){
+        } else if (s.equals("AUTO")) {
             callCenter.setManual(false);
         }
     }
@@ -147,7 +149,7 @@ public class HCInstance {
         waitingHall.resume();
         evaluationHall.resume();
         entranceHall.resume();
-        for(IPatient p : patients){
+        for (IPatient p : patients) {
             if (p.isAlive())
                 p.resume();
         }
@@ -164,7 +166,7 @@ public class HCInstance {
         evaluationHall.suspend();
         entranceHall.suspend();
 
-        for(IPatient p : patients){
+        for (IPatient p : patients) {
             if (p.isAlive())
                 p.suspend();
         }
@@ -180,7 +182,7 @@ public class HCInstance {
         waitingHall.interrupt();
         medicalHall.interrupt();
         paymentHall.interrupt();
-        for(IPatient p : patients){
+        for (IPatient p : patients) {
             if (p.isAlive())
                 p.interrupt();
         }
@@ -188,22 +190,22 @@ public class HCInstance {
     }
 
     public Timer getTimer() {
-        return  timer;
+        return timer;
     }
 
     /**
      * Gets all room statuses and passes them to logger/UI
      */
-    public void notifyMovement(String patient, String room){
-        if (room!=null) //movements that don't warrant logging can happen
-            {
-                if (room.equals("OUT"))
-                    gone.getAndIncrement();
-                logger.printPosition(room,patient);
-            }
+    public void notifyMovement(String patient, String room) {
+        if (room != null) // movements that don't warrant logging can happen
+        {
+            if (room.equals("OUT"))
+                gone.getAndIncrement();
+            logger.printPosition(room, patient);
+        }
         updateUI();
 
-        if (gone.get()==adults+children) {
+        if (gone.get() == adults + children) {
             callCenter.notifyOver();
         }
 
@@ -213,14 +215,14 @@ public class HCInstance {
      * Obtains all relevant system information and passes it to the render thread
      */
     private void updateUI() {
-        Map<String,String[]> UIInfo = new HashMap<>();
+        Map<String, String[]> UIInfo = new HashMap<>();
         UIInfo.putAll(entranceHall.getState());
         UIInfo.putAll(evaluationHall.getState());
         UIInfo.putAll(waitingHall.getState());
         UIInfo.putAll(medicalHall.getState());
         UIInfo.putAll(paymentHall.getState());
 
-        if (display!=null)
+        if (display != null)
             display.update(UIInfo);
     }
 }

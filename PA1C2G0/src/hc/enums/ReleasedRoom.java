@@ -10,7 +10,5 @@ public enum ReleasedRoom {
     MDW_ADULT,
     MDW_CHILD,
     MDR_ADULT,
-    MDR_CHILD;
-
-
+    MDR_CHILD
 }

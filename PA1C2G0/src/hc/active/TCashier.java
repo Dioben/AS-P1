@@ -4,11 +4,14 @@ import hc.utils.Timer;
 import hc.interfaces.IPatient;
 import hc.interfaces.IWorkerRoom;
 
-public class TCashier extends TServiceWorker{
+public class TCashier extends TServiceWorker {
 
     /**
-     * Instance Cashier Worker,<p> this subclass of ServiceWorker waits <i>payment</i> time
-     * @param timer the wait interval provider class
+     * Instance Cashier Worker,
+     * <p>
+     * This subclass of ServiceWorker waits <i>payment</i> time
+     * 
+     * @param timer        the wait interval provider class
      * @param surroundings the room this worker is a part of
      */
     public TCashier(Timer timer, IWorkerRoom surroundings) {
@@ -17,6 +20,7 @@ public class TCashier extends TServiceWorker{
 
     /**
      * Wait for a given <i>payment</i> time then return
+     * 
      * @param patient unchanged
      */
     @Override

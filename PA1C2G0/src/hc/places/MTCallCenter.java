@@ -7,57 +7,64 @@ import hc.interfaces.ICallCenterWaiter;
 import hc.interfaces.IFIFO;
 
 /**
- * Class responsible for propagating availability notifications<p>
- * Stores a queue of tasks<p>
- * Supports manual/auto mode<p>
- * In manual mode requests are propagated to controller process and echoed after user approval
+ * Class responsible for propagating availability notifications
+ * <p>
+ * Stores a queue of tasks
+ * <p>
+ * Supports manual/auto mode
+ * <p>
+ * In manual mode requests are propagated to controller process and echoed after
+ * user approval
  */
-public class MTCallCenter extends Thread implements ICallCenterWaiter{
+public class MTCallCenter extends Thread implements ICallCenterWaiter {
 
     private final TCommsHandler comms;
-    private final IFIFO<ReleasedRoom> requests; //this fifo provides all the synchronicity we need
+    private final IFIFO<ReleasedRoom> requests; // this fifo provides all the synchronicity we need
     private boolean manual;
     private ICallCenterWaiter entranceHall;
     private ICallCenterWaiter waitingHall;
     private ICallCenterWaiter medicalHall;
 
-
-    public MTCallCenter(boolean manual, TCommsHandler tCommsHandler, int people){
+    public MTCallCenter(boolean manual, TCommsHandler tCommsHandler, int people) {
 
         this.manual = manual;
         comms = tCommsHandler;
-        requests = new MFIFO(ReleasedRoom.class,people);
+        requests = new MFIFO(ReleasedRoom.class, people);
     }
 
     /**
-     * Sets this class's operation mode, only ever called by comms thread so safe by default
+     * Sets this class's operation mode, only ever called by comms thread so safe by
+     * default
+     * 
      * @param b true for manual operation, False for automatic mode
      */
     public void setManual(boolean b) {
-    manual = b;
+        manual = b;
     }
 
     /**
-     * Registers a new movement request from a room that was freed up<p>
+     * Registers a new movement request from a room that was freed up
+     * <p>
      * Movement will be sent to client instead if this object is in manual mode
+     * 
      * @param room the room type that got freed up
      */
-    public void notifyAvailable(ReleasedRoom room){
+    public void notifyAvailable(ReleasedRoom room) {
         if (!manual)
             requests.put(room);
-        else{
+        else {
             comms.requestPermission(room.name());
         }
     }
 
-
     /**
      * Called by communication socket after movement is approved
      * Releases ONE patient request for the given room
+     * 
      * @param ID the allowed room's name
      */
-    public void releaseRequest(String ID){
-        switch (ID){
+    public void releaseRequest(String ID) {
+        switch (ID) {
             case "EVH":
                 requests.put(ReleasedRoom.EVH);
                 break;
@@ -84,18 +91,19 @@ public class MTCallCenter extends Thread implements ICallCenterWaiter{
         }
     }
 
-
     /**
-     * Gets the latest request<p>
-     * Selects appropriate hall<p>
+     * Gets the latest request
+     * <p>
+     * Selects appropriate hall
+     * <p>
      * Notifies the highest priority patient in hall if any
      */
-    public void run(){
+    public void run() {
         ReleasedRoom handling;
-        while (!Thread.interrupted()){
+        while (!Thread.interrupted()) {
             handling = requests.get();
             if (handling != null)
-                switch (handling){
+                switch (handling) {
                     case EVH:
                         entranceHall.notifyAvailable(handling);
                         break;
@@ -116,10 +124,9 @@ public class MTCallCenter extends Thread implements ICallCenterWaiter{
     /**
      * Called by instance to state that simulation has finished running
      */
-    public void notifyOver(){
+    public void notifyOver() {
         comms.notifyDone();
     }
-
 
     public void setEntranceHall(ICallCenterWaiter entranceHall) {
         this.entranceHall = entranceHall;

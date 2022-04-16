@@ -132,9 +132,11 @@ public class GUI extends Thread {
             public void actionPerformed(ActionEvent e) {
                 int port = (int) portSpinner.getValue();
                 if (port > 65535) {
-                    JOptionPane.showMessageDialog(null, "Port number is too high. Maximum is 65535.", "Input error", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Port number is too high. Maximum is 65535.", "Input error",
+                            JOptionPane.WARNING_MESSAGE);
                 } else if (port < 0) {
-                    JOptionPane.showMessageDialog(null, "Port number is too low. Minimum is 0.", "Input error", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Port number is too low. Minimum is 0.", "Input error",
+                            JOptionPane.WARNING_MESSAGE);
                 } else {
                     new TCommsServer(port, gui).start();
                     ((CardLayout) cardPanel.getLayout()).next(cardPanel);
@@ -399,10 +401,10 @@ public class GUI extends Thread {
         wHARSeats = new JLayeredPane[seatCount];
         wHCRSeats = new JLayeredPane[seatCount];
         for (JLayeredPane[][] seats : new JLayeredPane[][][] {
-                {enHARSeats, {enHARSeat1, enHARSeat2, enHARSeat3, enHARSeat4, enHARSeat5}},
-                {enHCRSeats, {enHCRSeat1, enHCRSeat2, enHCRSeat3, enHCRSeat4, enHCRSeat5}},
-                {wHARSeats, {wHARSeat1, wHARSeat2, wHARSeat3, wHARSeat4, wHARSeat5}},
-                {wHCRSeats, {wHCRSeat1, wHCRSeat2, wHCRSeat3, wHCRSeat4, wHCRSeat5}}
+                { enHARSeats, { enHARSeat1, enHARSeat2, enHARSeat3, enHARSeat4, enHARSeat5 } },
+                { enHCRSeats, { enHCRSeat1, enHCRSeat2, enHCRSeat3, enHCRSeat4, enHCRSeat5 } },
+                { wHARSeats, { wHARSeat1, wHARSeat2, wHARSeat3, wHARSeat4, wHARSeat5 } },
+                { wHCRSeats, { wHCRSeat1, wHCRSeat2, wHCRSeat3, wHCRSeat4, wHCRSeat5 } }
         }) {
             if ((seatCount & 1) == 0) {
                 System.arraycopy(seats[1], 0, seats[0], 0, seatCount);
@@ -422,7 +424,8 @@ public class GUI extends Thread {
         }
         try {
             ((CardLayout) cardPanel.getLayout()).last(cardPanel);
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         setStateLabel("Stopped");
     }
 
@@ -454,7 +457,7 @@ public class GUI extends Thread {
     private void setBorders() {
         inLabel.setBorder(new EmptyBorder(new Insets(0, 5, 0, 5)));
         outLabel.setBorder(new EmptyBorder(new Insets(0, 5, 0, 5)));
-        for (JLabel line : new JLabel[]{
+        for (JLabel line : new JLabel[] {
                 inLine,
                 outLine,
                 midLine1,
@@ -464,7 +467,7 @@ public class GUI extends Thread {
         }) {
             line.setBorder(new LineBorder(new Color(128, 128, 128), 1));
         }
-        for (JPanel panel : new JPanel[]{
+        for (JPanel panel : new JPanel[] {
                 entranceHallPanel,
                 evaluationHallPanel,
                 waitingHallPanel,
@@ -473,7 +476,7 @@ public class GUI extends Thread {
         }) {
             panel.setBorder(new MatteBorder(0, 1, 0, 1, new Color(128, 128, 128)));
         }
-        for (JPanel panel : new JPanel[]{
+        for (JPanel panel : new JPanel[] {
                 enHAdultRoomPanel,
                 enHChildRoomPanel,
                 evHRoom1Panel,
@@ -492,10 +495,10 @@ public class GUI extends Thread {
         }) {
             panel.setBorder(new SoftBevelBorder(0));
         }
-        enHAROverflowLabel.setBorder(new EmptyBorder(0,0,0,8));
-        enHCROverflowLabel.setBorder(new EmptyBorder(0,0,0,8));
-        wHAROverflowLabel.setBorder(new EmptyBorder(0,0,0,8));
-        wHCROverflowLabel.setBorder(new EmptyBorder(0,0,0,8));
+        enHAROverflowLabel.setBorder(new EmptyBorder(0, 0, 0, 8));
+        enHCROverflowLabel.setBorder(new EmptyBorder(0, 0, 0, 8));
+        wHAROverflowLabel.setBorder(new EmptyBorder(0, 0, 0, 8));
+        wHCROverflowLabel.setBorder(new EmptyBorder(0, 0, 0, 8));
         if (UIManager.getLookAndFeel().getName().equals("GTK look and feel"))
             portSpinner.setBorder(new LineBorder(new Color(39, 39, 39), 1, true));
     }
@@ -548,7 +551,7 @@ public class GUI extends Thread {
         wHCROverflow2 = new JLayeredPane();
         wHCROverflow3 = new JLayeredPane();
 
-        for (JLayeredPane adultSeat: new JLayeredPane[] {
+        for (JLayeredPane adultSeat : new JLayeredPane[] {
                 enHARSeat1,
                 enHARSeat2,
                 enHARSeat3,
@@ -594,36 +597,36 @@ public class GUI extends Thread {
             childSeat.setBorder(new CompoundBorder(new EmptyBorder(2, 2, 2, 2), new SoftBevelBorder(1)));
         }
         for (JLayeredPane[] hFifo3 : new JLayeredPane[][] {
-                {pHOverflow1, pHOverflow2, pHOverflow3}
+                { pHOverflow1, pHOverflow2, pHOverflow3 }
         }) {
-            hFifo3[0].setMinimumSize(new Dimension(46,48));
-            hFifo3[0].setMaximumSize(new Dimension(46,48));
-            hFifo3[0].setPreferredSize(new Dimension(46,48));
-            hFifo3[1].setMinimumSize(new Dimension(40,44));
-            hFifo3[1].setMaximumSize(new Dimension(40,44));
-            hFifo3[1].setPreferredSize(new Dimension(40,44));
-            hFifo3[2].setMinimumSize(new Dimension(40,40));
-            hFifo3[2].setMaximumSize(new Dimension(40,40));
-            hFifo3[2].setPreferredSize(new Dimension(40,40));
+            hFifo3[0].setMinimumSize(new Dimension(46, 48));
+            hFifo3[0].setMaximumSize(new Dimension(46, 48));
+            hFifo3[0].setPreferredSize(new Dimension(46, 48));
+            hFifo3[1].setMinimumSize(new Dimension(40, 44));
+            hFifo3[1].setMaximumSize(new Dimension(40, 44));
+            hFifo3[1].setPreferredSize(new Dimension(40, 44));
+            hFifo3[2].setMinimumSize(new Dimension(40, 40));
+            hFifo3[2].setMaximumSize(new Dimension(40, 40));
+            hFifo3[2].setPreferredSize(new Dimension(40, 40));
             hFifo3[0].setBorder(new CompoundBorder(new EmptyBorder(2, 0, 2, 2), new SoftBevelBorder(1)));
             hFifo3[1].setBorder(new CompoundBorder(new EmptyBorder(2, 0, 2, 0), new SoftBevelBorder(1)));
             hFifo3[2].setBorder(new CompoundBorder(new EmptyBorder(2, 4, 2, 0), new SoftBevelBorder(1)));
         }
         for (JLayeredPane[] vFifo3 : new JLayeredPane[][] {
-                {enHAROverflow1, enHAROverflow2, enHAROverflow3},
-                {enHCROverflow1, enHCROverflow2, enHCROverflow3},
-                {wHAROverflow1, wHAROverflow2, wHAROverflow3},
-                {wHCROverflow1, wHCROverflow2, wHCROverflow3}
+                { enHAROverflow1, enHAROverflow2, enHAROverflow3 },
+                { enHCROverflow1, enHCROverflow2, enHCROverflow3 },
+                { wHAROverflow1, wHAROverflow2, wHAROverflow3 },
+                { wHCROverflow1, wHCROverflow2, wHCROverflow3 }
         }) {
-            vFifo3[0].setMinimumSize(new Dimension(52,48));
-            vFifo3[0].setMaximumSize(new Dimension(52,48));
-            vFifo3[0].setPreferredSize(new Dimension(52,48));
-            vFifo3[1].setMinimumSize(new Dimension(48,44));
-            vFifo3[1].setMaximumSize(new Dimension(48,44));
-            vFifo3[1].setPreferredSize(new Dimension(48,44));
-            vFifo3[2].setMinimumSize(new Dimension(44,40));
-            vFifo3[2].setMaximumSize(new Dimension(44,40));
-            vFifo3[2].setPreferredSize(new Dimension(44,40));
+            vFifo3[0].setMinimumSize(new Dimension(52, 48));
+            vFifo3[0].setMaximumSize(new Dimension(52, 48));
+            vFifo3[0].setPreferredSize(new Dimension(52, 48));
+            vFifo3[1].setMinimumSize(new Dimension(48, 44));
+            vFifo3[1].setMaximumSize(new Dimension(48, 44));
+            vFifo3[1].setPreferredSize(new Dimension(48, 44));
+            vFifo3[2].setMinimumSize(new Dimension(44, 40));
+            vFifo3[2].setMaximumSize(new Dimension(44, 40));
+            vFifo3[2].setPreferredSize(new Dimension(44, 40));
             vFifo3[0].setBorder(new CompoundBorder(new EmptyBorder(0, 0, 2, 8), new SoftBevelBorder(1)));
             vFifo3[1].setBorder(new CompoundBorder(new EmptyBorder(0, 0, 0, 8), new SoftBevelBorder(1)));
             vFifo3[2].setBorder(new CompoundBorder(new EmptyBorder(2, 0, 0, 8), new SoftBevelBorder(1)));
@@ -687,7 +690,8 @@ public class GUI extends Thread {
             JLabel iconLabel = new JLabel(imageIcon);
             int iconWidth = iconLabel.getIcon().getIconWidth();
             int iconHeight = iconLabel.getIcon().getIconHeight();
-            iconLabel.setBounds(seatWidthBorders/2-iconWidth/2, seatHeightBorders/2-iconHeight/2, iconWidth, iconHeight);
+            iconLabel.setBounds(seatWidthBorders / 2 - iconWidth / 2, seatHeightBorders / 2 - iconHeight / 2, iconWidth,
+                    iconHeight);
             seat.add(iconLabel, 1);
             loadedIcons[pos] = iconLabel;
         }
@@ -702,8 +706,12 @@ public class GUI extends Thread {
                 JLabel idLabel = new JLabel(patientNumber);
                 idLabel.setHorizontalAlignment(SwingConstants.CENTER);
                 Font oldFont = idLabel.getFont();
-                int idLabelWidth = (int) ceil(oldFont.getStringBounds("50", new FontRenderContext(new AffineTransform(), true, true)).getWidth()) + 4;
-                idLabel.setBounds(seat.getPreferredSize().width - idLabelWidth - seatBorderInsets.right + 2, seatHeightBorders - oldFont.getSize() - seatBorderInsets.bottom + 2, idLabelWidth, oldFont.getSize());
+                int idLabelWidth = (int) ceil(oldFont
+                        .getStringBounds("50", new FontRenderContext(new AffineTransform(), true, true)).getWidth())
+                        + 4;
+                idLabel.setBounds(seat.getPreferredSize().width - idLabelWidth - seatBorderInsets.right + 2,
+                        seatHeightBorders - oldFont.getSize() - seatBorderInsets.bottom + 2, idLabelWidth,
+                        oldFont.getSize());
                 idLabel.setOpaque(true);
                 idLabel.setBorder(new LineBorder(new Color(39, 39, 39), 1, true));
                 seat.add(idLabel, 0);

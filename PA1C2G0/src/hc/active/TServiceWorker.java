@@ -12,16 +12,19 @@ import java.util.concurrent.locks.ReentrantLock;
  * Implements every method except ServeCustomer()
  */
 public abstract class TServiceWorker extends Thread implements hc.interfaces.IServiceWorker {
-    protected Timer timer;//protected for use in subclasses
+    protected Timer timer;// protected for use in subclasses
     private final IWorkerRoom surroundings;
     private IPatient customer;
     private final ReentrantLock rl;
     private final Condition c;
 
     /**
-     * Waits for a customer to be assigned to itself<p>
-     * Serves customer<p>
-     * Removes customer from self<p>
+     * Waits for a customer to be assigned to itself
+     * <p>
+     * Serves customer
+     * <p>
+     * Removes customer from self
+     * <p>
      * Warns container that they're done
      */
     private void handleNextCostumer() {
@@ -37,13 +40,13 @@ public abstract class TServiceWorker extends Thread implements hc.interfaces.ISe
             }
             serveCustomer(customer);
             customer = null;
-            surroundings.notifyDone();//allow patient to getNextRoom
+            surroundings.notifyDone();// allow patient to getNextRoom
         } finally {
             rl.unlock();
         }
     }
 
-    public TServiceWorker(Timer timer,IWorkerRoom surroundings){
+    public TServiceWorker(Timer timer, IWorkerRoom surroundings) {
         this.timer = timer;
         this.surroundings = surroundings;
         rl = new ReentrantLock();
@@ -53,22 +56,23 @@ public abstract class TServiceWorker extends Thread implements hc.interfaces.ISe
     /**
      * Infinitely waits for next patient to show up
      */
-    public void run(){
-        while(!Thread.interrupted()){
+    public void run() {
+        while (!Thread.interrupted()) {
             handleNextCostumer();
         }
     }
 
     /**
      * Attempts to provide a patient to this worker
+     * 
      * @param patient the provided patient
      * @return whether the patient was accepted, not expected to fail
      */
-    public boolean providePatient(IPatient patient){
+    public boolean providePatient(IPatient patient) {
         boolean val = false;
         try {
             rl.lock();
-            if (!isBusy()){
+            if (!isBusy()) {
                 this.customer = patient;
                 c.signal();
                 val = true;
@@ -79,9 +83,9 @@ public abstract class TServiceWorker extends Thread implements hc.interfaces.ISe
         return val;
     }
 
-
-    public boolean isBusy(){
-        return customer !=null;
+    public boolean isBusy() {
+        return customer != null;
     }
+
     abstract void serveCustomer(IPatient patient);
 }

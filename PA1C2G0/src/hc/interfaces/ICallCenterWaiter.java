@@ -8,7 +8,9 @@ import hc.enums.ReleasedRoom;
 public interface ICallCenterWaiter {
     /**
      * Used by call center to inform of available rooms further ahead
-     * @param releasedRoom the type of room released, used to fix ambiguity in waiting and medical halls
+     * 
+     * @param releasedRoom the type of room released, used to fix ambiguity in
+     *                     waiting and medical halls
      */
     void notifyAvailable(ReleasedRoom releasedRoom);
 }

@@ -5,9 +5,13 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Similar to normal MFIFO<p>
- * Does not signal after get<p>
- * Instead a call to remove() with the given object must be used to release objects
+ * Similar to normal MFIFO
+ * <p>
+ * Does not signal after get
+ * <p>
+ * Instead a call to remove() with the given object must be used to release
+ * objects
+ * 
  * @param <T> the class of the contained object
  */
 public class MDelayFIFO<T> implements hc.interfaces.IDelayFIFO<T> {
@@ -17,13 +21,13 @@ public class MDelayFIFO<T> implements hc.interfaces.IDelayFIFO<T> {
     private final ReentrantLock rl;
     private final Condition cNotFull;
     private final Condition cNotEmpty;
-    private int idxGet=0;
-    private int idxPut=0;
+    private int idxGet = 0;
+    private int idxPut = 0;
     private int count = 0;
     private int awaitingRemoval = 0;
-    private final Class<T> clazz; //for snapshot purposes
+    private final Class<T> clazz; // for snapshot purposes
 
-    public MDelayFIFO(Class<T> clazz, int arraySize){
+    public MDelayFIFO(Class<T> clazz, int arraySize) {
         this.size = arraySize;
         this.clazz = clazz;
         queue = (T[]) Array.newInstance(clazz, size);
@@ -36,58 +40,58 @@ public class MDelayFIFO<T> implements hc.interfaces.IDelayFIFO<T> {
     public void put(T value) {
         try {
             rl.lock();
-            while ( isFull() )
+            while (isFull())
                 cNotFull.await();
-            queue[ idxPut ] = value;
-            idxPut = (idxPut+1)%size;
+            queue[idxPut] = value;
+            idxPut = (idxPut + 1) % size;
             count++;
             cNotEmpty.signal();
-        } catch ( InterruptedException ignored ) {
+        } catch (InterruptedException ignored) {
             Thread.currentThread().interrupt();
-        }
-        finally {
+        } finally {
             rl.unlock();
         }
     }
 
     /**
      * Difference from normal implementation: does not signal available space
+     * 
      * @return object at idxGet
      */
     @Override
     public T get() {
 
         T val = null;
-        try{
+        try {
             rl.lock();
-            while ( isEmpty() )
+            while (isEmpty())
                 cNotEmpty.await();
             val = queue[idxGet];
-            idxGet = (idxGet+1) % size;
+            idxGet = (idxGet + 1) % size;
             awaitingRemoval++;
             count--;
 
-        } catch( InterruptedException ignored ) {
+        } catch (InterruptedException ignored) {
             Thread.currentThread().interrupt();
-        }
-        finally {
+        } finally {
             rl.unlock();
         }
         return val;
     }
 
     /**
-     * Signals that one of the objects that has been gotten before has now actually left
+     * Signals that one of the objects that has been gotten before has now actually
+     * left
      * It does not matter which one left
      */
     @Override
-    public void remove(){
-        try{
+    public void remove() {
+        try {
             rl.lock();
             awaitingRemoval--;
             cNotFull.signal();
 
-            } finally {
+        } finally {
             rl.unlock();
         }
     }
@@ -95,20 +99,21 @@ public class MDelayFIFO<T> implements hc.interfaces.IDelayFIFO<T> {
     /**
      * Generates a list snapshot of this array's current state, null-padded
      * Includes items awaiting remove
+     * 
      * @param size size of returned array
      * @return clone of this FIFO's content, oldest items first
      */
     @Override
-    public T[] getSnapshot(int size){
+    public T[] getSnapshot(int size) {
         rl.lock();
         T[] values = (T[]) Array.newInstance(clazz, size);
         int idx;
-        for (int i = 0;i<count+awaitingRemoval;i++){
-            if (i==size)
+        for (int i = 0; i < count + awaitingRemoval; i++) {
+            if (i == size)
                 break;
-            idx = (idxGet-awaitingRemoval+i)%this.size;
-            if (idx<0)
-                idx = this.size+idx;
+            idx = (idxGet - awaitingRemoval + i) % this.size;
+            if (idx < 0)
+                idx = this.size + idx;
             values[i] = queue[idx];
         }
 
@@ -116,18 +121,14 @@ public class MDelayFIFO<T> implements hc.interfaces.IDelayFIFO<T> {
         return values;
     }
 
-
-
-
     @Override
     public boolean isFull() {
-        return count+awaitingRemoval == size;
+        return count + awaitingRemoval == size;
     }
 
     @Override
     public boolean isEmpty() {
         return count == 0;
     }
-
 
 }

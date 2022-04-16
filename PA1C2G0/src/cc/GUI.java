@@ -58,7 +58,8 @@ public class GUI {
         notifyButton.setEnabled(false);
 
         if (UIManager.getLookAndFeel().getName().equals("GTK look and feel"))
-            for (JSpinner spinner : new JSpinner[] {adultPatientsSpinner, childrenPatientsSpinner, seatsSpinner, portSpinner})
+            for (JSpinner spinner : new JSpinner[] { adultPatientsSpinner, childrenPatientsSpinner, seatsSpinner,
+                    portSpinner })
                 spinner.setBorder(new LineBorder(new Color(39, 39, 39), 1, true));
 
         GUI gui = this;
@@ -68,9 +69,11 @@ public class GUI {
                 String host = hostField.getText().trim();
                 int port = (int) portSpinner.getValue();
                 if (port > 65535) {
-                    JOptionPane.showMessageDialog(null, "Port number is too high. Maximum is 65535.", "Input error", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Port number is too high. Maximum is 65535.", "Input error",
+                            JOptionPane.WARNING_MESSAGE);
                 } else if (port < 0) {
-                    JOptionPane.showMessageDialog(null, "Port number is too low. Minimum is 0.", "Input error", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Port number is too low. Minimum is 0.", "Input error",
+                            JOptionPane.WARNING_MESSAGE);
                 } else {
                     commsClient = new TCommsClient(host, port, gui);
                     commsClient.start();
@@ -84,19 +87,26 @@ public class GUI {
                 int children = (int) childrenPatientsSpinner.getValue();
                 int seats = (int) seatsSpinner.getValue();
                 if (adults > 50) {
-                    JOptionPane.showMessageDialog(null, "Adult count is too high. Maximum is 50.", "Input error", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Adult count is too high. Maximum is 50.", "Input error",
+                            JOptionPane.WARNING_MESSAGE);
                 } else if (adults < 0) {
-                    JOptionPane.showMessageDialog(null, "Adult count is too low. Minimum is 0.", "Input error", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Adult count is too low. Minimum is 0.", "Input error",
+                            JOptionPane.WARNING_MESSAGE);
                 } else if (children > 50) {
-                    JOptionPane.showMessageDialog(null, "Child count is too high. Maximum is 50.", "Input error", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Child count is too high. Maximum is 50.", "Input error",
+                            JOptionPane.WARNING_MESSAGE);
                 } else if (children < 0) {
-                    JOptionPane.showMessageDialog(null, "Child count is too low. Minimum is 0.", "Input error", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Child count is too low. Minimum is 0.", "Input error",
+                            JOptionPane.WARNING_MESSAGE);
                 } else if (seats > 10) {
-                    JOptionPane.showMessageDialog(null, "Seat count is too high. Maximum is 10.", "Input error", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Seat count is too high. Maximum is 10.", "Input error",
+                            JOptionPane.WARNING_MESSAGE);
                 } else if (seats < 2) {
-                    JOptionPane.showMessageDialog(null, "Seat count is too low. Minimum is 2.", "Input error", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Seat count is too low. Minimum is 2.", "Input error",
+                            JOptionPane.WARNING_MESSAGE);
                 } else if ((seats & 1) == 1) {
-                    JOptionPane.showMessageDialog(null, "Seat count has to be even.", "Input error", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Seat count has to be even.", "Input error",
+                            JOptionPane.WARNING_MESSAGE);
                 } else {
                     seats /= 2;
                     int[] times = new int[4];

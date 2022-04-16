@@ -24,15 +24,16 @@ public class PriorityWaitingRoom implements IWaitingRoom {
     private final MDelayFIFO<IPatient> patientsRed;
     private final MDelayFIFO<IPatient> patientsYellow;
     private final MDelayFIFO<IPatient> patientsBlue;
-    private int releasedBlue = -1; //way to let a patient know if they've been released -> only affected while inside hall lock
-    private int releasedYellow = -1; //way to let a patient know if they've been released
-    private int releasedRed = -1; //way to let a patient know if they've been released
-    private final AtomicInteger entered =  new AtomicInteger(0);
+    private int releasedBlue = -1; // way to let a patient know if they've been released -> only affected while
+                                   // inside hall lock
+    private int releasedYellow = -1; // way to let a patient know if they've been released
+    private int releasedRed = -1; // way to let a patient know if they've been released
+    private final AtomicInteger entered = new AtomicInteger(0);
     private final int seats;
     private final ReentrantLock rl;
     private final Condition c;
 
-    public PriorityWaitingRoom(IWaitingHall container, IContainer next, String name, int seats){
+    public PriorityWaitingRoom(IWaitingHall container, IContainer next, String name, int seats) {
         this.container = container;
         this.next = next;
         this.name = name;
@@ -44,23 +45,25 @@ public class PriorityWaitingRoom implements IWaitingRoom {
         c = rl.newCondition();
     }
 
-
-
     /**
-     * Remove user<p>
-     * At this point the user has called enter() on their next container<p>
+     * Remove user
+     * <p>
+     * At this point the user has called enter() on their next container
+     * <p>
      * This is called by the patient thread itself
      */
     @Override
-    public void leave(IPatient patient,IContainer next) {
+    public void leave(IPatient patient, IContainer next) {
         MDelayFIFO queue = getPatientQueue(patient);
         queue.remove();
-        container.notifyDone(this,patient);
+        container.notifyDone(this, patient);
     }
 
     /**
-     * Called by patient thread<p>
+     * Called by patient thread
+     * <p>
      * Gets next room only allowed through
+     * 
      * @param patient patient attempting to find next room
      * @return the room patient must move into next
      */
@@ -86,28 +89,30 @@ public class PriorityWaitingRoom implements IWaitingRoom {
     private int getControlNumber(IPatient patient) {
         Severity severity = patient.getSeverity();
         if (severity.equals(Severity.BLUE))
-            return  releasedBlue;
+            return releasedBlue;
         else if (severity.equals(Severity.YELLOW))
             return releasedYellow;
         else if (severity.equals(Severity.RED))
             return releasedRed;
-        throw  new RuntimeException("Unassigned patient in "+this.name);
+        throw new RuntimeException("Unassigned patient in " + this.name);
     }
 
     private MDelayFIFO getPatientQueue(IPatient patient) {
         Severity severity = patient.getSeverity();
         if (severity.equals(Severity.BLUE))
-            return  patientsBlue;
+            return patientsBlue;
         else if (severity.equals(Severity.YELLOW))
             return patientsYellow;
         else if (severity.equals(Severity.RED))
             return patientsRed;
-        throw  new RuntimeException("Unassigned patient in "+this.name);
+        throw new RuntimeException("Unassigned patient in " + this.name);
     }
 
     /**
-     * Called by patient thread<p>
+     * Called by patient thread
+     * <p>
      * Blocks on attempting to enter FIFO if full
+     * 
      * @param tPatient patient thread
      */
     @Override
@@ -122,17 +127,18 @@ public class PriorityWaitingRoom implements IWaitingRoom {
         return name;
     }
 
-
     /**
      * Maps all patients in this room by descending severity and ID
+     * 
      * @return Map(room name, patientID[])
      */
     @Override
     public Map<String, String[]> getState() {
-        HashMap<String,String[]> map = new HashMap();
+        HashMap<String, String[]> map = new HashMap();
         String[] patientText = new String[seats];
         int assigned = 0;
-        for (IPatient[] patientList: new IPatient[][]{patientsRed.getSnapshot(seats),patientsYellow.getSnapshot(seats),patientsBlue.getSnapshot(seats)}) {
+        for (IPatient[] patientList : new IPatient[][] { patientsRed.getSnapshot(seats),
+                patientsYellow.getSnapshot(seats), patientsBlue.getSnapshot(seats) }) {
             for (int i = 0; i < seats - assigned; i++) {
                 IPatient patient = patientList[i];
                 if (patient == null)
@@ -140,11 +146,11 @@ public class PriorityWaitingRoom implements IWaitingRoom {
                 patientText[assigned] = patient.getDisplayValue();
                 assigned++;
             }
-            if (assigned==seats)
+            if (assigned == seats)
                 break;
         }
 
-        map.put(this.name,patientText);
+        map.put(this.name, patientText);
         return map;
     }
 
@@ -167,27 +173,27 @@ public class PriorityWaitingRoom implements IWaitingRoom {
     }
 
     /**
-     * Called from monitor only<p>
+     * Called from monitor only
+     * <p>
      * Causes this room to tell the oldest user to get out if any exists
      */
     @Override
     public void notifyDone() {
         try {
             rl.lock();
-            IPatient patient=null;
-            if(!patientsRed.isEmpty()) {
+            IPatient patient = null;
+            if (!patientsRed.isEmpty()) {
                 patient = patientsRed.get();
                 releasedRed = patient.getRoomNumber();
-            }
-            else if(!patientsYellow.isEmpty()){
+            } else if (!patientsYellow.isEmpty()) {
                 patient = patientsYellow.get();
                 releasedYellow = patient.getRoomNumber();
 
-            }else if(!patientsBlue.isEmpty()){
+            } else if (!patientsBlue.isEmpty()) {
                 patient = patientsBlue.get();
                 releasedBlue = patient.getRoomNumber();
             }
-            if (patient!=null)
+            if (patient != null)
                 c.signalAll();
         } finally {
             rl.unlock();
@@ -196,6 +202,7 @@ public class PriorityWaitingRoom implements IWaitingRoom {
 
     /**
      * Returns the next expected departure
+     * 
      * @return patient, or <i>NULL</i> if empty
      */
     @Override
@@ -214,6 +221,7 @@ public class PriorityWaitingRoom implements IWaitingRoom {
 
     /**
      * Overrides the next field in cases where it might be ambiguous
+     * 
      * @param next the container to set as following after this one
      */
     @Override

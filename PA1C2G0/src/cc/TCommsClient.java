@@ -8,7 +8,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 /**
- * Class responsible for sending messages to the server and parsing received messages
+ * Class responsible for sending messages to the server and parsing received
+ * messages
  */
 public class TCommsClient extends Thread {
 
@@ -19,7 +20,8 @@ public class TCommsClient extends Thread {
     private int port;
     private GUI gui;
 
-    /**Instances a comms client that connects to a remote HCP server
+    /**
+     * Instances a comms client that connects to a remote HCP server
      *
      * @param host host of the server, ex: localhost, google.com
      * @param port host server port number
@@ -32,7 +34,8 @@ public class TCommsClient extends Thread {
 
     /**
      * Establishes connection to server and attempts to parse any data received
-     * Receives movement requisitions (REQ  {@literal <ROOM>}; ) or finish notifications (DONE)
+     * Receives movement requisitions (REQ {@literal <ROOM>}; ) or finish
+     * notifications (DONE)
      */
     @Override
     public void run() {
@@ -69,12 +72,13 @@ public class TCommsClient extends Thread {
 
     /**
      * Sends a "start simulation" message to server
-     * @param adults number of adults in simulation
-     * @param children number of children in simulation
-     * @param seats number of seats in ETH
-     * @param evalTime time required for nurse evaluation
+     * 
+     * @param adults    number of adults in simulation
+     * @param children  number of children in simulation
+     * @param seats     number of seats in ETH
+     * @param evalTime  time required for nurse evaluation
      * @param medicTime time required for doctor appointment
-     * @param payTime time required for payment
+     * @param payTime   time required for payment
      * @param getUpTime time required for getting up and moving between rooms
      */
     public void startSim(int adults, int children, int seats, int evalTime, int medicTime, int payTime, int getUpTime) {
@@ -134,6 +138,7 @@ public class TCommsClient extends Thread {
 
     /**
      * Authorize a given room to notify their vacancy
+     * 
      * @param id the name of the authorized room
      */
     public void authorize(String id) {

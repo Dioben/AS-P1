@@ -19,7 +19,7 @@ public class TCommsServer extends Thread {
         this.gui = gui;
     }
 
-    public void run() { //run socket thread creation indefinitely
+    public void run() { // run socket thread creation indefinitely
         try {
             serverSocket = new ServerSocket(port);
             while (true) {
