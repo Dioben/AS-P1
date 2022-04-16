@@ -7,7 +7,7 @@ public class Main {
      * @param args Command line arguments, unused
      */
     public static void main(String[] args) throws InterruptedException {
-        GUI.setGUILook("GTK+");
+        hc.GUI.setGUILook(new String[] {"GTK+", "Nimbus"});
         new GUI();
     }
 

@@ -23,6 +23,8 @@ public class GUI extends Thread {
     private JLayeredPane[] enHCRSeats;
     private JLayeredPane[] wHARSeats;
     private JLayeredPane[] wHCRSeats;
+    private final JLabel[] loadedIcons = new JLabel[56];
+    private final JLabel[] loadedIconLabels = new JLabel[700];
 
     private JPanel mainPanel;
     private JLabel inLine;
@@ -116,8 +118,8 @@ public class GUI extends Thread {
         frame = new JFrame("HCP");
         frame.setContentPane(this.mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setMinimumSize(new Dimension(1010, 450));
-        frame.setPreferredSize(new Dimension(1010, 450));
+        frame.setMinimumSize(new Dimension(1020, 450));
+        frame.setPreferredSize(new Dimension(1020, 450));
         frame.pack();
         frame.setVisible(true);
         portSpinner.setModel(new SpinnerNumberModel(8000, Integer.MIN_VALUE, Integer.MAX_VALUE, 1));
@@ -366,17 +368,21 @@ public class GUI extends Thread {
                 for (int i = assigned; i < 3; i++)
                     changeSeat(WTHChildSeats[i], null);
                 wHCROverflowLabel.setText("+" + overflow);
+                mainPanel.revalidate();
+                mainPanel.repaint();
             }
         }
     }
 
     private void changeSeat(JLayeredPane seat, String value) {
-        seat.removeAll();
-        seat.revalidate();
-        if (value != null && !value.isBlank())
-            setIcon(seat, value);
-        else
-            seat.repaint();
+        if (seat != null) {
+            seat.removeAll();
+            seat.revalidate();
+            if (value != null && !value.isBlank())
+                setIcon(seat, value);
+            else
+                seat.repaint();
+        }
     }
 
     public void update(Map<String, String[]> info) {
@@ -424,12 +430,17 @@ public class GUI extends Thread {
         ((CardLayout) cardPanel.getLayout()).previous(cardPanel);
     }
 
-    public static void setGUILook(String wantedLook) {
+    public static void setGUILook(String[] wantedLooks) {
         UIManager.LookAndFeelInfo[] looks = UIManager.getInstalledLookAndFeels();
         String chosenLook = null;
-        for (UIManager.LookAndFeelInfo look : looks)
-            if (wantedLook.equals(look.getName()))
-                chosenLook = look.getClassName();
+        for (String wantedLook : wantedLooks) {
+            if (chosenLook == null)
+                for (UIManager.LookAndFeelInfo look : looks)
+                    if (wantedLook.equals(look.getName())) {
+                        chosenLook = look.getClassName();
+                        break;
+                    }
+        }
         if (chosenLook == null)
             chosenLook = UIManager.getSystemLookAndFeelClassName();
         try {
@@ -622,34 +633,85 @@ public class GUI extends Thread {
     private void setIcon(JLayeredPane seat, String patientCode) {
         String imagePath;
         boolean isChild = patientCode.charAt(0) == 'C';
+        int pos = isChild ? 28 : 0;
         if (patientCode.length() > 3)
             switch (patientCode.charAt(3)) {
-                case 'B' -> imagePath = isChild ? "resources/childBlue.png" : "resources/adultBlue.png";
-                case 'Y' -> imagePath = isChild ? "resources/childYellow.png" : "resources/adultYellow.png";
-                case 'R' -> imagePath = isChild ? "resources/childRed.png" : "resources/adultRed.png";
-                default -> imagePath = isChild ? "resources/child.png" : "resources/adult.png";
+                case 'B':
+                    imagePath = isChild ? "resources/childBlue.png" : "resources/adultBlue.png";
+                    pos += 21;
+                    break;
+                case 'Y':
+                    imagePath = isChild ? "resources/childYellow.png" : "resources/adultYellow.png";
+                    pos += 14;
+                    break;
+                case 'R':
+                    imagePath = isChild ? "resources/childRed.png" : "resources/adultRed.png";
+                    pos += 7;
+                    break;
+                default:
+                    imagePath = isChild ? "resources/child.png" : "resources/adult.png";
+                    break;
             }
         else
             imagePath = isChild ? "resources/child.png" : "resources/adult.png";
-        ImageIcon imageIcon = new ImageIcon(imagePath);
-        JLabel iconLabel = new JLabel(imageIcon);
+
         Insets seatBorderInsets = seat.getBorder().getBorderInsets(null);
         int seatWidthBorders = seat.getPreferredSize().width + (seatBorderInsets.left - seatBorderInsets.right);
         int seatHeightBorders = seat.getPreferredSize().height + (seatBorderInsets.top - seatBorderInsets.bottom);
-        int iconWidth = iconLabel.getIcon().getIconWidth();
-        int iconHeight = iconLabel.getIcon().getIconHeight();
-        iconLabel.setBounds(seatWidthBorders/2-iconWidth/2, seatHeightBorders/2-iconHeight/2, iconWidth, iconHeight);
-        seat.add(iconLabel, 1);
+
+        int seatSize;
+        if (seatWidthBorders == 48 && seatHeightBorders == 48)
+            seatSize = 0;
+        else if (seatWidthBorders == 40 && seatHeightBorders == 40)
+            seatSize = 1;
+        else if (seatWidthBorders == 44 && seatHeightBorders == 46)
+            seatSize = 2;
+        else if (seatWidthBorders == 40 && seatHeightBorders == 44)
+            seatSize = 3;
+        else if (seatWidthBorders == 44 && seatHeightBorders == 48)
+            seatSize = 4;
+        else if (seatWidthBorders == 36 && seatHeightBorders == 42)
+            seatSize = 5;
+        else if (seatWidthBorders == 44 && seatHeightBorders == 40)
+            seatSize = 6;
+        else
+            seatSize = -1;
+
+        pos += seatSize;
+
+        JLabel loadedIcon = loadedIcons[pos];
+        if (loadedIcon != null) {
+            seat.add(loadedIcon, 1);
+        } else {
+            ImageIcon imageIcon = new ImageIcon(imagePath);
+            JLabel iconLabel = new JLabel(imageIcon);
+            int iconWidth = iconLabel.getIcon().getIconWidth();
+            int iconHeight = iconLabel.getIcon().getIconHeight();
+            iconLabel.setBounds(seatWidthBorders/2-iconWidth/2, seatHeightBorders/2-iconHeight/2, iconWidth, iconHeight);
+            seat.add(iconLabel, 1);
+            loadedIcons[pos] = iconLabel;
+        }
 
         try {
-            JLabel idLabel = new JLabel(patientCode.substring(1, 3));
-            idLabel.setHorizontalAlignment(SwingConstants.CENTER);
-            Font oldFont = idLabel.getFont();
-            int idLabelWidth = (int) ceil(oldFont.getStringBounds("50", new FontRenderContext(new AffineTransform(), true, true)).getWidth()) + 4;
-            idLabel.setBounds(seat.getPreferredSize().width - idLabelWidth - seatBorderInsets.right + 2, seatHeightBorders - oldFont.getSize() - seatBorderInsets.bottom + 2, idLabelWidth, oldFont.getSize());
-            idLabel.setOpaque(true);
-            idLabel.setBorder(new LineBorder(new Color(39, 39, 39), 1, true));
-            seat.add(idLabel, 0);
-        } catch (StringIndexOutOfBoundsException ignored) {}
+            String patientNumber = patientCode.substring(1, 3);
+            pos = (100 * seatSize) + Integer.parseInt(patientNumber);
+            JLabel loadedIconLabel = loadedIconLabels[pos];
+            if (loadedIconLabel != null) {
+                seat.add(loadedIconLabel, 0);
+            } else {
+                JLabel idLabel = new JLabel(patientNumber);
+                idLabel.setHorizontalAlignment(SwingConstants.CENTER);
+                Font oldFont = idLabel.getFont();
+                int idLabelWidth = (int) ceil(oldFont.getStringBounds("50", new FontRenderContext(new AffineTransform(), true, true)).getWidth()) + 4;
+                idLabel.setBounds(seat.getPreferredSize().width - idLabelWidth - seatBorderInsets.right + 2, seatHeightBorders - oldFont.getSize() - seatBorderInsets.bottom + 2, idLabelWidth, oldFont.getSize());
+                idLabel.setOpaque(true);
+                idLabel.setBorder(new LineBorder(new Color(39, 39, 39), 1, true));
+                seat.add(idLabel, 0);
+                loadedIconLabels[pos] = idLabel;
+            }
+        } catch (StringIndexOutOfBoundsException | NumberFormatException ignored) {
+            // the first 2 lines of this try seems to fail sometimes, no idea why
+        }
+
     }
 }

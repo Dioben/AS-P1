@@ -65,17 +65,18 @@ public abstract class TServiceWorker extends Thread implements hc.interfaces.ISe
      * @return whether the patient was accepted, not expected to fail
      */
     public boolean providePatient(IPatient patient){
+        boolean val = false;
         try {
             rl.lock();
             if (!isBusy()){
                 this.customer = patient;
                 c.signal();
-                return true;
+                val = true;
             }
-            return false;
         } finally {
             rl.unlock();
         }
+        return val;
     }
 
 

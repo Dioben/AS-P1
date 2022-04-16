@@ -123,19 +123,16 @@ public class MPaymentHall implements IHall {
     @Override
     public void notifyDone(IRoom room,IPatient left) {
         rl.lock();
-
         instance.notifyMovement(left.getDisplayValue(),nextRoomName); //notify patient removal
         if (!backlog.isEmpty()) {
             IPatient patient = backlog.get();
             released = patient.getRoomNumber();
             cashierAvailable = false;
             cashierAvailableSignal.signalAll();
-        }else{
+        } else {
             cashierAvailable = true;
         }
-
         rl.unlock();
-
     }
 
 

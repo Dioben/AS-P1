@@ -42,8 +42,8 @@ public class GUI {
         JFrame frame = new JFrame("CCP");
         frame.setContentPane(this.mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setMinimumSize(new Dimension(380, 340));
-        frame.setPreferredSize(new Dimension(280, 340));
+        frame.setMinimumSize(new Dimension(400, 340));
+        frame.setPreferredSize(new Dimension(400, 340));
         frame.pack();
         frame.setVisible(true);
 
@@ -233,12 +233,17 @@ public class GUI {
         resetFormButton.setEnabled(true);
     }
 
-    public static void setGUILook(String wantedLook) {
-        LookAndFeelInfo[] looks = UIManager.getInstalledLookAndFeels();
+    public static void setGUILook(String[] wantedLooks) {
+        UIManager.LookAndFeelInfo[] looks = UIManager.getInstalledLookAndFeels();
         String chosenLook = null;
-        for (LookAndFeelInfo look : looks)
-            if (wantedLook.equals(look.getName()))
-                chosenLook = look.getClassName();
+        for (String wantedLook : wantedLooks) {
+            if (chosenLook == null)
+                for (UIManager.LookAndFeelInfo look : looks)
+                    if (wantedLook.equals(look.getName())) {
+                        chosenLook = look.getClassName();
+                        break;
+                    }
+        }
         if (chosenLook == null)
             chosenLook = UIManager.getSystemLookAndFeelClassName();
         try {

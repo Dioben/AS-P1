@@ -113,6 +113,8 @@ public class TCommsHandler extends Thread {
      * @param command Full command string passed to socket, parsing is done internally
      */
     private void startInstance(String[] command) {
+        if (instance != null)
+            instance.cleanUp();
         int adults = Integer.parseInt(command[1]);
         int children = Integer.parseInt(command[2]);
         int seats = Integer.parseInt(command[3]);
@@ -145,6 +147,7 @@ public class TCommsHandler extends Thread {
         writeLock.lock();
         out.println("DONE");
         writeLock.unlock();
+        instance.cleanUp();
         logger.printState("STOP");
         gui.setStateLabel("Finished");
     }
