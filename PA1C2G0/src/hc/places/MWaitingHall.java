@@ -318,13 +318,16 @@ public class MWaitingHall implements IWaitingHall, ICallCenterWaiter {
         assignedChild--;
         if (!childBacklogRed.isEmpty()) {
             IPatient patient = childBacklogRed.get();
-            releasedRedChild = patient.getRoomNumber();
+            int rn = patient.getRoomNumber();
+            releasedRedChild = releasedRedChild > rn ? releasedRedChild : rn;
         } else if (!childBacklogYellow.isEmpty()) {
             IPatient patient = childBacklogYellow.get();
-            releasedYellowChild = patient.getRoomNumber();
+            int rn = patient.getRoomNumber();
+            releasedYellowChild = releasedYellowChild > rn ? releasedYellowChild : rn;
         } else if (!childBacklogBlue.isEmpty()) {
             IPatient patient = childBacklogBlue.get();
-            releasedBlueChild = patient.getRoomNumber();
+            int rn = patient.getRoomNumber();
+            releasedBlueChild = releasedBlueChild > rn ? releasedBlueChild : rn;
         }
 
         childRoomAvailable.signalAll();
@@ -340,13 +343,16 @@ public class MWaitingHall implements IWaitingHall, ICallCenterWaiter {
         assignedAdult--;
         if (!adultBacklogRed.isEmpty()) {
             IPatient patient = adultBacklogRed.get();
-            releasedRedAdult = patient.getRoomNumber();
+            int rn = patient.getRoomNumber();
+            releasedRedAdult = releasedRedAdult > rn ? releasedRedAdult : rn;
         } else if (!adultBacklogYellow.isEmpty()) {
             IPatient patient = adultBacklogYellow.get();
-            releasedYellowAdult = patient.getRoomNumber();
+            int rn = patient.getRoomNumber();
+            releasedYellowAdult = releasedYellowAdult > rn ? releasedYellowAdult : rn;
         } else if (!adultBacklogBlue.isEmpty()) {
             IPatient patient = adultBacklogBlue.get();
-            releasedBlueAdult = patient.getRoomNumber();
+            int rn = patient.getRoomNumber();
+            releasedBlueAdult = releasedBlueAdult > rn ? releasedBlueAdult : rn;
         }
         adultRoomAvailable.signalAll();
 

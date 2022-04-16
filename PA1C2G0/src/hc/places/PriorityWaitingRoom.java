@@ -24,10 +24,9 @@ public class PriorityWaitingRoom implements IWaitingRoom {
     private final MDelayFIFO<IPatient> patientsRed;
     private final MDelayFIFO<IPatient> patientsYellow;
     private final MDelayFIFO<IPatient> patientsBlue;
-    private int releasedBlue = -1; // way to let a patient know if they've been released -> only affected while
-                                   // inside hall lock
-    private int releasedYellow = -1; // way to let a patient know if they've been released
-    private int releasedRed = -1; // way to let a patient know if they've been released
+    private int releasedBlue = -1;
+    private int releasedYellow = -1;
+    private int releasedRed = -1;
     private final AtomicInteger entered = new AtomicInteger(0);
     private final int seats;
     private final ReentrantLock rl;
@@ -184,14 +183,16 @@ public class PriorityWaitingRoom implements IWaitingRoom {
             IPatient patient = null;
             if (!patientsRed.isEmpty()) {
                 patient = patientsRed.get();
-                releasedRed = patient.getRoomNumber();
+                int rn = patient.getRoomNumber();
+                releasedRed = releasedRed > rn ? releasedRed : rn;
             } else if (!patientsYellow.isEmpty()) {
                 patient = patientsYellow.get();
-                releasedYellow = patient.getRoomNumber();
-
+                int rn = patient.getRoomNumber();
+                releasedYellow = releasedYellow > rn ? releasedYellow : rn;
             } else if (!patientsBlue.isEmpty()) {
                 patient = patientsBlue.get();
-                releasedBlue = patient.getRoomNumber();
+                int rn = patient.getRoomNumber();
+                releasedBlue = releasedBlue > rn ? releasedBlue : rn;
             }
             if (patient != null)
                 c.signalAll();
