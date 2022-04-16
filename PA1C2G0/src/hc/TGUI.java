@@ -15,7 +15,7 @@ import java.util.Map;
 
 import static java.lang.Math.ceil;
 
-public class GUI extends Thread {
+public class TGUI extends Thread {
 
     private final IFIFO<Map<String, String[]>> updates;
     private final JFrame frame;
@@ -111,8 +111,8 @@ public class GUI extends Thread {
     private JLabel wHCROverflowLabel;
     private JLabel loadingLabel;
 
-    public GUI() {
-        GUI gui = this;
+    public TGUI() {
+        TGUI gui = this;
         updates = new MFIFO(Map.class, 50);
 
         frame = new JFrame("HCP");

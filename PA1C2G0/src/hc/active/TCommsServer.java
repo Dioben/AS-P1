@@ -1,6 +1,6 @@
 package hc.active;
 
-import hc.GUI;
+import hc.TGUI;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -12,9 +12,9 @@ import java.net.ServerSocket;
 public class TCommsServer extends Thread {
     private ServerSocket serverSocket;
     private int port;
-    private GUI gui;
+    private TGUI gui;
 
-    public TCommsServer(int port, GUI gui) {
+    public TCommsServer(int port, TGUI gui) {
         this.port = port;
         this.gui = gui;
     }

@@ -34,7 +34,7 @@ public class HCInstance {
     private AtomicInteger gone = new AtomicInteger(0);
     private final int seats;
     private final IPatient[] patients;
-    private final GUI display;
+    private final TGUI display;
 
     /**
      * Instance a health center
@@ -53,7 +53,7 @@ public class HCInstance {
      * @param logger        a logger implementation
      */
     public HCInstance(int adults, int children, int seats, int evalTime, int medicTime, int payTime, int getUpTime,
-            TCommsHandler tCommsHandler, boolean mode, GUI gui, ILogger logger) {
+                      TCommsHandler tCommsHandler, boolean mode, TGUI gui, ILogger logger) {
         this.adults = adults;
         this.children = children;
         this.seats = seats;

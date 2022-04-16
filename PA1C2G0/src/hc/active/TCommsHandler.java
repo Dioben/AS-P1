@@ -1,6 +1,6 @@
 package hc.active;
 
-import hc.GUI;
+import hc.TGUI;
 import hc.HCInstance;
 import hc.utils.MHCPLogger;
 import hc.interfaces.ILogger;
@@ -24,10 +24,10 @@ public class TCommsHandler extends Thread {
     private String mode = "AUTO";
     private final ReentrantLock writeLock; // socket writers are supposed to be thread safe but let's make sure
     private HCInstance instance;
-    private final GUI gui;
+    private final TGUI gui;
     private final ILogger logger;
 
-    public TCommsHandler(Socket accept, GUI gui) {
+    public TCommsHandler(Socket accept, TGUI gui) {
         comms = accept;
         writeLock = new ReentrantLock();
         this.gui = gui;
