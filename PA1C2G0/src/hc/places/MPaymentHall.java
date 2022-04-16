@@ -146,7 +146,6 @@ public class MPaymentHall implements IHall {
         rl.lock();
         patient.setPaymentNumber(entered);
         patient.setRoomNumber(entered);
-        patient.setSeverity(Severity.UNASSIGNED);
         entered++;
         rl.unlock();
     }
