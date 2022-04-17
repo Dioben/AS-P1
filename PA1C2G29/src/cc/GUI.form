@@ -157,18 +157,10 @@
                           </component>
                           <component id="ed097" class="javax.swing.JButton" binding="suspendButton" default-binding="true">
                             <constraints>
-                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
-                            </constraints>
-                            <properties>
-                              <text value="Suspend"/>
-                            </properties>
-                          </component>
-                          <component id="4ebb" class="javax.swing.JButton" binding="resumeButton" default-binding="true">
-                            <constraints>
                               <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties>
-                              <text value="Resume"/>
+                              <text value="Suspend"/>
                             </properties>
                           </component>
                           <component id="e8a7" class="javax.swing.JButton" binding="stopButton" default-binding="true">
@@ -185,6 +177,14 @@
                             </constraints>
                             <properties>
                               <text value="End"/>
+                            </properties>
+                          </component>
+                          <component id="4ebb" class="javax.swing.JButton" binding="resumeButton" default-binding="true">
+                            <constraints>
+                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                            </constraints>
+                            <properties>
+                              <text value="Resume"/>
                             </properties>
                           </component>
                         </children>
@@ -260,7 +260,7 @@
                         </constraints>
                         <properties>
                           <labelFor value="e22f"/>
-                          <text value="Number of children patients:"/>
+                          <text value="Number of child patients:"/>
                         </properties>
                       </component>
                       <component id="e22f" class="javax.swing.JSpinner" binding="childrenPatientsSpinner">
